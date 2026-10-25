@@ -1,0 +1,24 @@
+name: Many Hands fairness gate
+description: Fails a pull request when a generated match line scapegoats one player, and suggests a fair rewrite.
+branding:
+  icon: shield
+  color: purple
+inputs:
+  files:
+    description: Glob patterns (one per line or comma-separated) of JSON files, each a list of {"chain_id", "text"} lines.
+    required: true
+  api-url:
+    description: The Many Hands API to check against.
+    default: https://ca-manyhands-7kzrrno7qr6zo.orangedune-9d42108b.eastus2.azurecontainerapps.io
+  fail-on:
+    description: unfair (default) or watch.
+    default: unfair
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: python3 "${{ github.action_path }}/gate.py"
+      env:
+        GATE_FILES: ${{ inputs.files }}
+        GATE_API: ${{ inputs.api-url }}
+        GATE_FAIL_ON: ${{ inputs.fail-on }}

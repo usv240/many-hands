@@ -1,0 +1,20 @@
+name: fairness gate
+
+# Any generated recap line in examples/recaps is checked against the live Many Hands API.
+# A line that scapegoats one player fails the pull request, with a fair rewrite in the summary.
+on:
+  pull_request:
+    paths: ["examples/recaps/**"]
+  push:
+    branches: [main]
+    paths: ["examples/recaps/**"]
+  workflow_dispatch:
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./actions/fairness-gate
+        with:
+          files: examples/recaps/*.json
