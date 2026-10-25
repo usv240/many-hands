@@ -11,7 +11,7 @@
 
 | On a match day | |
 |---|---|
-| **2.9 s** | from a goal reaching Azure Event Hubs to a fair, checked line ready for air (median of 14 live goals, two matches running at once; the slowest took 7.2 s). All five audience versions follow by 7.7 s. |
+| **About 3 s** | from a goal reaching Azure Event Hubs to a fair, checked line ready for air (medians of 2.9 s and 3.2 s on two live runs of 14 goals each, two matches at once; the slowest took 7.2 s). All five audience versions follow by 7.7 s. |
 | **$4.91 a season** | model cost to check every goal of a 380-match season, about 1.3 cents a match, from the tokens each agent call actually used |
 | **About 51 a season** | moments where a one-culprit story would be unfair. An estimate: real tournament data outside the Premier League shows 0.5 clear errors a match, and 27 percent of those share the blame. |
 | **0 false alarms in 130** | real cases where one player truly was to blame. It does not cry wolf: deserved blame is allowed. |
