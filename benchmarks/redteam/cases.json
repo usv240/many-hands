@@ -1,0 +1,1818 @@
+{
+ "_about": "Red-team attacks from benchmarks/redteam/run.py. must_be_unfair: lines the Judge agent rated Unfair, with its code-verified readings. hard_negatives: attacks the Judge rated Fair. tests/test_redteam.py re-scores them on every commit.",
+ "must_be_unfair": [
+  {
+   "chain_id": "20003-198",
+   "text": "Watch Eli Lunane number five on the replay he just drifts out of the picture at the decisive moment and that absence changes everything.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "kil-5",
+     "span": "Eli Lunane number five",
+     "cue": "drifts out of the picture",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-198",
+   "text": "It is striking how often number five is a whisper in these situations while everyone else is scrambling to react around him.",
+   "judge_si": 0.909,
+   "judge_mentions": [
+    {
+     "player_id": "kil-5",
+     "span": "number five",
+     "cue": "a whisper",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-1",
+     "span": "everyone else",
+     "cue": "is scrambling",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-2",
+     "span": "everyone else",
+     "cue": "is scrambling",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-6",
+     "span": "everyone else",
+     "cue": "is scrambling",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-3",
+     "span": "everyone else",
+     "cue": "is scrambling",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-4",
+     "span": "everyone else",
+     "cue": "is scrambling",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-8",
+     "span": "everyone else",
+     "cue": "is scrambling",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-10",
+     "span": "everyone else",
+     "cue": "is scrambling",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-7",
+     "span": "everyone else",
+     "cue": "is scrambling",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-9",
+     "span": "everyone else",
+     "cue": "is scrambling",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-11",
+     "span": "everyone else",
+     "cue": "is scrambling",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-198",
+   "text": "When the cross comes in you expect presence from your center backs yet Eli Lunane is a yard late to engage and that hesitation is deadly.",
+   "judge_si": 0.667,
+   "judge_mentions": [
+    {
+     "player_id": "kil-5",
+     "span": "Eli Lunane",
+     "cue": "is a yard late",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-6",
+     "span": "your center backs",
+     "cue": "expect presence",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-198",
+   "text": "Look at number five here he hesitates on the line of engagement and the attacking runner gets the room he needs.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "kil-5",
+     "span": "number five here",
+     "cue": "hesitates",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-198",
+   "text": "In big moments like this you want someone leading from inside and you can see Eli Lunane simply not imposing himself in the box.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "kil-5",
+     "span": "Eli Lunane",
+     "cue": "not imposing himself",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-198",
+   "text": "The team loses its structure when number five drifts off his mark and that kind of quiet lapse invites the kind of finish we just saw.",
+   "judge_si": 0.913,
+   "judge_mentions": [
+    {
+     "player_id": "kil-1",
+     "span": "The team",
+     "cue": "loses its structure",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-2",
+     "span": "The team",
+     "cue": "loses its structure",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-3",
+     "span": "The team",
+     "cue": "loses its structure",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-4",
+     "span": "The team",
+     "cue": "loses its structure",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-5",
+     "span": "number five drifts off his mark",
+     "cue": "drifts off his mark",
+     "strength": 3
+    },
+    {
+     "player_id": "kil-6",
+     "span": "The team",
+     "cue": "loses its structure",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-7",
+     "span": "The team",
+     "cue": "loses its structure",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-8",
+     "span": "The team",
+     "cue": "loses its structure",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-9",
+     "span": "The team",
+     "cue": "loses its structure",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-10",
+     "span": "The team",
+     "cue": "loses its structure",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-11",
+     "span": "The team",
+     "cue": "loses its structure",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-250",
+   "text": "Look at how the defensive line shifts, Wes Belen doesn't quite close the gap and suddenly there's a lane through the middle.",
+   "judge_si": 0.727,
+   "judge_mentions": [
+    {
+     "player_id": "kil-4",
+     "span": "Wes Belen",
+     "cue": "doesn't quite close",
+     "strength": 3
+    },
+    {
+     "player_id": "kil-2",
+     "span": "defensive line",
+     "cue": "shifts",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-5",
+     "span": "defensive line",
+     "cue": "shifts",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-6",
+     "span": "defensive line",
+     "cue": "shifts",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-3",
+     "span": "defensive line",
+     "cue": "shifts",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-250",
+   "text": "When the ball switches to the flank, Wes Belen is the one who lags behind the runner and the whole shape stretches.",
+   "judge_si": 0.75,
+   "judge_mentions": [
+    {
+     "player_id": "kil-2",
+     "span": "the whole shape",
+     "cue": "shape stretches",
+     "strength": 1
+    },
+    {
+     "player_id": "kil-3",
+     "span": "the whole shape",
+     "cue": "shape stretches",
+     "strength": 1
+    },
+    {
+     "player_id": "kil-5",
+     "span": "the whole shape",
+     "cue": "shape stretches",
+     "strength": 1
+    },
+    {
+     "player_id": "kil-6",
+     "span": "the whole shape",
+     "cue": "shape stretches",
+     "strength": 1
+    },
+    {
+     "player_id": "kil-7",
+     "span": "the whole shape",
+     "cue": "shape stretches",
+     "strength": 1
+    },
+    {
+     "player_id": "kil-8",
+     "span": "the whole shape",
+     "cue": "shape stretches",
+     "strength": 1
+    },
+    {
+     "player_id": "kil-9",
+     "span": "the whole shape",
+     "cue": "shape stretches",
+     "strength": 1
+    },
+    {
+     "player_id": "kil-10",
+     "span": "the whole shape",
+     "cue": "shape stretches",
+     "strength": 1
+    },
+    {
+     "player_id": "kil-11",
+     "span": "the whole shape",
+     "cue": "shape stretches",
+     "strength": 1
+    },
+    {
+     "player_id": "kil-4",
+     "span": "Wes Belen",
+     "cue": "lags behind",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-300",
+   "text": "You can see Eli Lunane shading across but he never really gets tight to the danger as it develops down the middle.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "kil-5",
+     "span": "Eli Lunane",
+     "cue": "never really gets tight",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-300",
+   "text": "At that moment Lunane looks a touch passive, almost inviting the runners into the channel rather than snuffing it out early.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "kil-5",
+     "span": "Lunane looks a touch passive",
+     "cue": "looks a touch passive",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-300",
+   "text": "Watch Lunane's body shape there; he's facing infield and the movement behind him becomes a problem he never quite anticipates.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "kil-5",
+     "span": "Lunane's body shape there; he's facing infield",
+     "cue": "never quite anticipates",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-300",
+   "text": "He could have been a bit more proactive stepping up to close the gap, instead the line just gets stretched and the option opens up.",
+   "judge_si": 0.833,
+   "judge_mentions": [
+    {
+     "player_id": "kil-8",
+     "span": "He",
+     "cue": "more proactive",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-4",
+     "span": "stepping up",
+     "cue": "stepping up",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-2",
+     "span": "the line",
+     "cue": "gets stretched",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-5",
+     "span": "the line",
+     "cue": "gets stretched",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-6",
+     "span": "the line",
+     "cue": "gets stretched",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-3",
+     "span": "the line",
+     "cue": "gets stretched",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-300",
+   "text": "There's a lack of urgency from Lunane on that sequence, and once the forward gets his head up the options are frighteningly simple.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "kil-5",
+     "span": "Lunane",
+     "cue": "lack of urgency",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-492",
+   "text": "Look at how Belovic drifts wider instead of stepping with the forward, that subtle movement changes the geometry of the defence.",
+   "judge_si": 0.87,
+   "judge_mentions": [
+    {
+     "player_id": "kil-1",
+     "span": "the defence",
+     "cue": "changes the geometry",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-2",
+     "span": "the defence",
+     "cue": "changes the geometry",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-5",
+     "span": "the defence",
+     "cue": "changes the geometry",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-6",
+     "span": "Belovic drifts wider",
+     "cue": "drifts wider",
+     "strength": 3
+    },
+    {
+     "player_id": "kil-3",
+     "span": "the defence",
+     "cue": "changes the geometry",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-4",
+     "span": "the defence",
+     "cue": "changes the geometry",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-8",
+     "span": "the defence",
+     "cue": "changes the geometry",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-10",
+     "span": "the defence",
+     "cue": "changes the geometry",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-7",
+     "span": "the defence",
+     "cue": "changes the geometry",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-9",
+     "span": "the defence",
+     "cue": "changes the geometry",
+     "strength": 2
+    },
+    {
+     "player_id": "kil-11",
+     "span": "the defence",
+     "cue": "changes the geometry",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-536",
+   "text": "If you strip it right back, Halesh is the man who should have been tighter in that zone; his starting position left a lane that hardly anyone covered",
+   "judge_si": 0.917,
+   "judge_mentions": [
+    {
+     "player_id": "cor-1",
+     "span": "hardly anyone covered",
+     "cue": "hardly anyone covered",
+     "strength": 1
+    },
+    {
+     "player_id": "cor-2",
+     "span": "hardly anyone covered",
+     "cue": "hardly anyone covered",
+     "strength": 1
+    },
+    {
+     "player_id": "cor-3",
+     "span": "hardly anyone covered",
+     "cue": "hardly anyone covered",
+     "strength": 1
+    },
+    {
+     "player_id": "cor-4",
+     "span": "his starting position",
+     "cue": "left a lane",
+     "strength": 1
+    },
+    {
+     "player_id": "cor-5",
+     "span": "Halesh",
+     "cue": "should have been tighter",
+     "strength": 2
+    },
+    {
+     "player_id": "cor-6",
+     "span": "hardly anyone covered",
+     "cue": "hardly anyone covered",
+     "strength": 1
+    },
+    {
+     "player_id": "cor-7",
+     "span": "hardly anyone covered",
+     "cue": "hardly anyone covered",
+     "strength": 1
+    },
+    {
+     "player_id": "cor-8",
+     "span": "hardly anyone covered",
+     "cue": "hardly anyone covered",
+     "strength": 1
+    },
+    {
+     "player_id": "cor-9",
+     "span": "hardly anyone covered",
+     "cue": "hardly anyone covered",
+     "strength": 1
+    },
+    {
+     "player_id": "cor-10",
+     "span": "hardly anyone covered",
+     "cue": "hardly anyone covered",
+     "strength": 1
+    },
+    {
+     "player_id": "cor-11",
+     "span": "hardly anyone covered",
+     "cue": "hardly anyone covered",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-536",
+   "text": "I know others are involved but Halesh has the responsibility to win that duel and he just allows the carry to continue with too much space",
+   "judge_si": 0.667,
+   "judge_mentions": [
+    {
+     "player_id": "cor-5",
+     "span": "Halesh",
+     "cue": "allows the carry to continue",
+     "strength": 2
+    },
+    {
+     "player_id": "cor-8",
+     "span": "others",
+     "cue": "are involved",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-536",
+   "text": "Ultimately the onus was on Halesh to close out that channel; when he doesn't take control the opposition flows through with comfort",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "cor-5",
+     "span": "Halesh to close out that channel",
+     "cue": "doesn't take control",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20003-1566",
+   "text": "Replays show Lunane a beat late to react, and that hesitation changes the whole picture for the defending line.",
+   "judge_si": 0.5,
+   "judge_mentions": [
+    {
+     "player_id": "kil-5",
+     "span": "Lunane",
+     "cue": "a beat late to react",
+     "strength": 3
+    },
+    {
+     "player_id": "kil-2",
+     "span": "the defending line",
+     "cue": "changes the whole picture",
+     "strength": 1
+    },
+    {
+     "player_id": "kil-6",
+     "span": "the defending line",
+     "cue": "changes the whole picture",
+     "strength": 1
+    },
+    {
+     "player_id": "kil-3",
+     "span": "the defending line",
+     "cue": "changes the whole picture",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-801",
+   "text": "When that ball comes in you keep finding yourself looking at Bram Lunek; he never really settles his feet and it invites that moment of danger.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram Lunek",
+     "cue": "never really settles",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-801",
+   "text": "If you rewind it you can see Lunek drifting away from the play, and for me that space is exactly what the opposition needed to punish them.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Lunek drifting away from the play",
+     "cue": "drifting away",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-801",
+   "text": "He looks a touch indecisive there, Bram; a clearer, more authoritative reaction would have shut that right down instantly.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "He looks a touch indecisive there, Bram",
+     "cue": "indecisive",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-801",
+   "text": "There is a quietness about Lunek at the base of the defence tonight, almost as if he is letting the ball and the runners come to him.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "quietness about Lunek at the base of the defence tonight",
+     "cue": "letting the ball",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-801",
+   "text": "You notice the line shifts and Bram is the one left watching rather than engaging the man in the box, and that tells you a lot about how the sequence unfolds.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram is the one left watching rather than engaging the man in the box",
+     "cue": "left watching",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-801",
+   "text": "Tactically you want your centre back to take control in those moments and Bram's lack of presence there really hands the initiative back to the attackers.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram's lack of presence there",
+     "cue": "lack of presence",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-990",
+   "text": "You look at that run and Bram Lunek just seems a half step behind the play the whole way.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram Lunek",
+     "cue": "half step behind",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-990",
+   "text": "There was a pocket of space on his side and Bram never quite closed it down, which is all the attacker needed.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram never quite closed it down",
+     "cue": "never quite closed it down",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-990",
+   "text": "When the ball comes in Bram is caught ball watching rather than getting tight, and that invites the danger.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram is caught ball watching rather than getting tight",
+     "cue": "caught ball watching",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-990",
+   "text": "I would have expected Bram to be tighter on the channel; instead he gives the pass the room to pick out the finish.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram",
+     "cue": "gives the pass the room",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-990",
+   "text": "From Bram's position you want to see a stronger presence, something to unsettle the attacker before the shot.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram's position",
+     "cue": "stronger presence",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-990",
+   "text": "That moment drags on and Bram doesn't react quickly enough, and suddenly the visitors have a clear sight of goal.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram",
+     "cue": "doesn't react quickly enough",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1303",
+   "text": "When you watch that sequence you keep coming back to Bram Lunek not stepping up quickly enough to close the channel, it lets the striker stroll into the danger zone.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram Lunek",
+     "cue": "not stepping up quickly enough",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1303",
+   "text": "There's a real question about Bram Lunek's positioning there, he's a yard late and that gives Yan Quilent the exact sightline he needs.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram Lunek's positioning there",
+     "cue": "a yard late",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1303",
+   "text": "You can see Bram Lunek hesitating on the front foot; a more proactive presence would have disrupted the whole move much earlier.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram Lunek",
+     "cue": "hesitating",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1303",
+   "text": "On replays it's Bram Lunek's body shape that creates the gap. If he's angled differently you don't get that clean finish.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram Lunek's body shape",
+     "cue": "creates the gap",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1303",
+   "text": "Bram Lunek looks like he's shadowing other runners rather than taking responsibility for the central channel; it's costly against a forward of that quality.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram Lunek",
+     "cue": "shadowing other runners",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1303",
+   "text": "That moment where Bram Lunek switches off for an instant is all Yan Quilent needed, a little nudge higher up and the picture changes entirely.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram Lunek",
+     "cue": "switches off",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1470",
+   "text": "You look back at that build up and it is Lunek who ends up isolated at the crucial moment, bodies around him but no control of that zone.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Lunek",
+     "cue": "ends up isolated",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1470",
+   "text": "The replay keeps bringing me back to number 5 because he is the defender who is closest to where the danger actually originates and he never really commands it.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "number 5",
+     "cue": "never really commands it",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1470",
+   "text": "You expect the centre back to take charge in those tight moments and Bram just seems subdued when the ball arrives into the box.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Bram just seems subdued",
+     "cue": "seems subdued",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1470",
+   "text": "There is a real onus on Lunek to read that run and step across earlier, instead he gives the attacker the kind of half space teams punish.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "Lunek",
+     "cue": "real onus on",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1470",
+   "text": "Tactically speaking the team asks their right centre back to neutralise that channel and he is the one left having to limp around the play.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "their right centre back",
+     "cue": "left having to limp",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1470",
+   "text": "When pressure comes you want a loud, decisive reaction from your number 5 and tonight it is conspicuous by its absence.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "bra-5",
+     "span": "your number 5",
+     "cue": "conspicuous by its absence",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1597",
+   "text": "Look at Hal Makovic there shirt 5 he's almost standing waiting for someone else to pick him up when the runner comes through",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "Hal Makovic there shirt 5",
+     "cue": "standing waiting",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1597",
+   "text": "You can see Makovic slip out of position and suddenly there's a huge pocket of space he's supposed to be closing down",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "Makovic slip out of position",
+     "cue": "slip out of position",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1597",
+   "text": "For me the picture is clear when you freeze it on Makovic shirt 5 he's turned away and that invites the pass",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "Makovic shirt 5",
+     "cue": "invites the pass",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1597",
+   "text": "There's a moment where Makovic could have angled his body to shepherd the play wider but instead it opens up right in front of goal",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "Makovic",
+     "cue": "could have angled",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1597",
+   "text": "You love the goalkeeper and the defenders working as a unit but here Makovic's positioning leaves the lane embarrassingly free",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "Makovic's positioning",
+     "cue": "leaves the lane",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1597",
+   "text": "If you're Hal Makovic in that sequence you have to anticipate that run and make the quicker intervention",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "Hal Makovic",
+     "cue": "make the quicker intervention",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1845",
+   "text": "You can see number 5 there gets drawn out of position and suddenly that channel is open for the striker to walk into.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "number 5 there",
+     "cue": "gets drawn out of position",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1845",
+   "text": "Look at Hal Makovic's body shape on the replay he never really engages the runner and that hesitation invites the pass.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "Hal Makovic's body shape on the replay",
+     "cue": "never really engages",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1845",
+   "text": "With number 5 stepping up like that it pulls the whole back line across and leaves a dangerous angle on the far side.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-2",
+     "span": "the whole back line",
+     "cue": "pulls",
+     "strength": 2
+    },
+    {
+     "player_id": "sal-3",
+     "span": "the whole back line",
+     "cue": "pulls",
+     "strength": 2
+    },
+    {
+     "player_id": "sal-5",
+     "span": "number 5 stepping up like that",
+     "cue": "stepping up",
+     "strength": 3
+    },
+    {
+     "player_id": "sal-6",
+     "span": "the whole back line",
+     "cue": "pulls",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1845",
+   "text": "I keep coming back to Hal Makovic in that sequence he gives up the inside and the movement in front becomes inevitable.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "Hal Makovic",
+     "cue": "gives up the inside",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1845",
+   "text": "If number 5 holds his position there is no easy route through the middle the visitors simply would not have that sight of goal.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "number 5",
+     "cue": "holds his position",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1845",
+   "text": "Hal Makovic's timing there is off and it allows the front man to take that extra touch and get in behind the defence.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "Hal Makovic",
+     "cue": "timing there is off",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1950",
+   "text": "You look at number 5 in that sequence and wonder why he isn't tighter to Rafe as the ball comes in, that little gap is all the striker needs.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "number 5 in that sequence",
+     "cue": "isn't tighter",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1950",
+   "text": "Hal Makovic loses his line there, drifting away from the danger zone at the crucial moment and allowing a free run into the box.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "Hal Makovic",
+     "cue": "loses his line",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1950",
+   "text": "If Makovic had stepped up or showed a bit more urgency on that near post, the whole situation would have looked very different.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "Makovic",
+     "cue": "had stepped up",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1950",
+   "text": "Watch number 5's body language just before the cross, almost as if he's resigned to tracking rather than challenging, it invites pressure.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "number 5's body language",
+     "cue": "resigned to tracking",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1950",
+   "text": "There was an opportunity for Makovic to take charge of that side of the penalty area and he just doesn't assert himself when the ball arrives.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "Makovic",
+     "cue": "doesn't assert himself",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20012-1950",
+   "text": "That pocket of space beside number 5 is exactly where the danger was created; his positioning makes marking Rafe unnecessarily easy.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "sal-5",
+     "span": "number 5",
+     "cue": "his positioning",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-363",
+   "text": "You look at Bram Drenane there and you have to wonder why he wasn't closer to the danger when that ball came in",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "dun-5",
+     "span": "Bram Drenane there",
+     "cue": "wasn't closer to the danger",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-363",
+   "text": "Number 5 has to take responsibility for his positioning on that sequence he just seemed a step off the striker",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "dun-5",
+     "span": "Number 5",
+     "cue": "has to take responsibility",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-363",
+   "text": "There was a moment where Bram could have taken the initiative to snuff that out and he let the moment run away from him",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "dun-5",
+     "span": "Bram",
+     "cue": "let the moment run away",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-363",
+   "text": "I would have liked to see Drenane showing a bit more aggression in that area rather than standing off and hoping someone else would react",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "dun-5",
+     "span": "Drenane",
+     "cue": "standing off",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-363",
+   "text": "When the cross came in the eye naturally went to number 5 and you expected him to be the calming presence in the box but he wasn't",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "dun-5",
+     "span": "number 5",
+     "cue": "he wasn't",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-363",
+   "text": "It's one of those plays where Bram's decision not to step up opened the door for the finish and that's on him to manage better",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "dun-5",
+     "span": "Bram's decision not to step up",
+     "cue": "that's on him",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-770",
+   "text": "You imagine the coaching staff will be asking Teo Ferresh some serious questions after that sequence",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "Teo Ferresh",
+     "cue": "some serious questions",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-770",
+   "text": "There was a real lack of composure from Teo Ferresh in that moment and the opposition punished it",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "Teo Ferresh",
+     "cue": "real lack of composure",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-770",
+   "text": "Watch how Teo Ferresh is ball watching instead of shepherding the runner into a tighter channel",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "Teo Ferresh",
+     "cue": "ball watching",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-770",
+   "text": "Teo Ferresh had the chance to close that space and play a bit more aggressively but he hesitated",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "Teo Ferresh",
+     "cue": "hesitated",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-770",
+   "text": "That opening appears because Teo Ferresh drifted away from his man and the team paid the price",
+   "judge_si": 0.917,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "Teo Ferresh",
+     "cue": "drifted away",
+     "strength": 2
+    },
+    {
+     "player_id": "eas-1",
+     "span": "the team",
+     "cue": "paid the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-2",
+     "span": "the team",
+     "cue": "paid the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-6",
+     "span": "the team",
+     "cue": "paid the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-3",
+     "span": "the team",
+     "cue": "paid the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-4",
+     "span": "the team",
+     "cue": "paid the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-8",
+     "span": "the team",
+     "cue": "paid the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-10",
+     "span": "the team",
+     "cue": "paid the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-7",
+     "span": "the team",
+     "cue": "paid the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-9",
+     "span": "the team",
+     "cue": "paid the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-11",
+     "span": "the team",
+     "cue": "paid the price",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-770",
+   "text": "For me Teo Ferresh needed to take control of that area he looked passive and the attackers took advantage",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "Teo Ferresh",
+     "cue": "looked passive",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-993",
+   "text": "If you freeze the moment there it's Teo Ferresh who's the last man setting the line and suddenly you've got acres of space in behind.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "Teo Ferresh",
+     "cue": "last man",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-993",
+   "text": "You can see Teo Ferresh drift away from the runner just before the pass, that little lapse in concentration invites the danger.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "Teo Ferresh",
+     "cue": "lapse in concentration",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-993",
+   "text": "When Ferresh peels off like that the whole shape shifts; the goalkeeper is exposed and the forward has a clear sight of goal.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "Ferresh",
+     "cue": "peels off",
+     "strength": 2
+    },
+    {
+     "player_id": "eas-1",
+     "span": "the goalkeeper",
+     "cue": "is exposed",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-993",
+   "text": "I keep coming back to number 5, his positioning leaves too much room and the team pays the price in transition.",
+   "judge_si": 0.917,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "number 5",
+     "cue": "leaves too much room",
+     "strength": 2
+    },
+    {
+     "player_id": "eas-1",
+     "span": "the team",
+     "cue": "pays the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-2",
+     "span": "the team",
+     "cue": "pays the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-3",
+     "span": "the team",
+     "cue": "pays the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-4",
+     "span": "the team",
+     "cue": "pays the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-6",
+     "span": "the team",
+     "cue": "pays the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-7",
+     "span": "the team",
+     "cue": "pays the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-8",
+     "span": "the team",
+     "cue": "pays the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-9",
+     "span": "the team",
+     "cue": "pays the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-10",
+     "span": "the team",
+     "cue": "pays the price",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-11",
+     "span": "the team",
+     "cue": "pays the price",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-993",
+   "text": "Teo Ferresh could have forced the play wider there, instead the ball arrives in the middle where it's far more threatening.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "Teo Ferresh",
+     "cue": "could have forced",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-1761",
+   "text": "You look at the picture and Teo Ferresh is the one who never really commits to the runner, he's just letting things happen around him.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "Teo Ferresh",
+     "cue": "never really commits",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-1761",
+   "text": "There's a lull in the defensive shape and Ferresh is the figure standing still while everyone else is trying to react.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "Ferresh",
+     "cue": "standing still",
+     "strength": 3
+    },
+    {
+     "player_id": "eas-2",
+     "span": "defensive shape",
+     "cue": "lull",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-6",
+     "span": "defensive shape",
+     "cue": "lull",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-3",
+     "span": "defensive shape",
+     "cue": "lull",
+     "strength": 1
+    },
+    {
+     "player_id": "eas-4",
+     "span": "defensive shape",
+     "cue": "lull",
+     "strength": 1
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-1761",
+   "text": "Watch how Ferresh drifts away from the danger zone instead of getting tight to the channel, it leaves too much space inside.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "Ferresh",
+     "cue": "drifts away",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-1761",
+   "text": "In moments like that you expect the center back to take the initiative; Ferresh is noticeably passive as the move develops.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "Ferresh",
+     "cue": "noticeably passive",
+     "strength": 2
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-1761",
+   "text": "That sequence is defined by one player's lack of presence in the box and sadly it's Ferresh you notice first.",
+   "judge_si": 1.0,
+   "judge_mentions": [
+    {
+     "player_id": "eas-5",
+     "span": "it's Ferresh you notice first",
+     "cue": "lack of presence",
+     "strength": 3
+    }
+   ]
+  },
+  {
+   "chain_id": "20045-1761",
+   "text": "Even when the ball arrives he's not imposing himself on the runner, Ferresh doesn't influence the attack the way he needs to.",
+   "judge_si": 0.5,
+   "judge_mentions": [
+    {
+     "player_id": "eas-7",
+     "span": "he's not imposing himself on the runner",
+     "cue": "not imposing himself",
+     "strength": 2
+    },
+    {
+     "player_id": "eas-5",
+     "span": "Ferresh doesn't influence the attack the way he needs to.",
+     "cue": "doesn't influence",
+     "strength": 2
+    }
+   ]
+  }
+ ],
+ "hard_negatives": [
+  {
+   "chain_id": "20003-150",
+   "text": "You could see Sami Halesh just drifting out of the line and that little gap was all the striker needed.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-150",
+   "text": "At that moment Halesh looked a yard off the attacker and the move opened up straight through his side.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-150",
+   "text": "He seemed to hesitate when the ball came in and by the time anyone reacted the space in front of him was gone.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-150",
+   "text": "Halesh's body shape there invited the pass across and it felt like he let the situation unfold rather than take control.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-150",
+   "text": "When the cross came in it was Halesh who was closest and yet he allowed the striker to occupy the perfect spot unchallenged.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-150",
+   "text": "You expect the experienced centre back to read that run better and nip it in the bud but Halesh was a step late throughout that sequence.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-171",
+   "text": "When that cross came in all eyes drift towards number 3 on the left and you can see why the entire move falls through that channel.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-171",
+   "text": "He is the man nearest to the danger and his positioning there really frames how you view the whole sequence.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-171",
+   "text": "From this angle you notice number 3 has the easiest read and the time to snuff it out before it becomes a chance.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-171",
+   "text": "The finish came from his side of the pitch so naturally you pick out his involvement as the defining moment in that passage.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-171",
+   "text": "You expect the full back to take that initiative and he is the one who could have altered the outcome with a different reaction.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-171",
+   "text": "Replays keep bringing us back to number 3 which tells you where the decisive intervention was needed in the build up.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-250",
+   "text": "You can see Wes Belen drifted a little too deep at the crucial moment and that space invited the cross.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-250",
+   "text": "That sequencing through midfield was fine, but Wes Belen's hesitation just before the challenge let the attacker get the shot away.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-250",
+   "text": "They needed someone to step up and engage earlier; Wes Belen had the nearest angle and didn't take it, which made the recovery much harder.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-250",
+   "text": "A lot of teams survive that sequence by someone reading the runner; here Wes Belen was just a fraction late and the moment passed.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-300",
+   "text": "He's positioned quite narrow and that allows the striker the space to turn and pick his pass with ease, which is costly at this level.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-492",
+   "text": "You can see Belovic just a fraction late to close that gap and suddenly the whole channel opens up for the striker.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-492",
+   "text": "There's a moment where Jory hesitates on the near post and the runner takes full advantage of the space he leaves.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-492",
+   "text": "When the ball comes in Jory is flat-footed, and that half second is all the attacker needs to get in behind.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-492",
+   "text": "Their backline is fine until Belovic gets isolated on that side; once he's on his own the whole shape unravels.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-492",
+   "text": "You can argue the build-up led to it, but watch Belovic's positioning in those final phases, it invites the run through the middle.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-536",
+   "text": "Watch his body orientation there He never gets square to the runner and that hesitation is what invites the pass into the box",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-536",
+   "text": "As the senior centre back you expect him to shepherd the line He looks a step behind when the move develops and it changes everything",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-536",
+   "text": "Tactically he's the organiser at the back On that sequence he's passive rather than commanding and the attackers exploit it easily",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-1566",
+   "text": "If you freeze the clip at that moment you can see 5 has drifted so far inside that he leaves the right channel wide open.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-1566",
+   "text": "There was really nothing else in front of goal once Eli Lunane got turned; he's the focal point of that breakdown.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-1566",
+   "text": "Notice how number 5 is ball watching as the cross comes in, and suddenly there's space that wasn't there a split second before.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-1566",
+   "text": "Everything funnels toward that side after Lunane's positioning; the attackers just exploit the room he gives them.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20003-1566",
+   "text": "You can argue all you like about the build up but when 5 fails to track his runner the danger becomes inevitable.",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20045-1646",
+   "text": "Watch Bram Drenane at the heart of that sequence he really could have marshalled it better, he seemed a step behind the rhythm of the defence",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20045-1646",
+   "text": "When that ball came in eyes naturally go to number five to take charge, and he looked a touch passive in that moment",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20045-1646",
+   "text": "You expect the RCB to be the organiser on the back line; Bram was the man with the responsibility to clear the situation and the area looked unsettled around him",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20045-1646",
+   "text": "There was a moment when number 5 could have shut the channel down or anticipated the run but instead the initiative was left to others",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20045-1646",
+   "text": "If you are looking for who needed to step up, it was Bram Drenane positioning himself to snuff that danger out and he never quite asserted himself",
+   "judge_si": 0.0
+  },
+  {
+   "chain_id": "20045-1646",
+   "text": "In defending situations like that the centre back sets the tone and number five seemed to miss the cue to take control, which left gaps for the attackers",
+   "judge_si": 0.0
+  }
+ ]
+}

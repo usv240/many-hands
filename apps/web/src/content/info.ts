@@ -209,6 +209,12 @@ export const INFO = {
     why: "Each has one job, and the one that decides fairness is never an AI.",
     tech: "Microsoft Agent Framework workflow on Microsoft Foundry: Investigator, Narrator and Auditor in a loop of at most two revisions, then a fair-by-construction template; Personalizer fan-out; every variant re-audited; fails closed.",
   },
+  redTeam: {
+    title: "Red team",
+    what: "An attacker agent tries to get unfair lines past the Auditor; a separate judge agent decides which were unfair.",
+    why: "A fairness check is only as good as the hardest attack it has survived.",
+    tech: "Hot Take and Judge are separate gpt-5-mini agents; Judge quotes are verified in code. Every attack is saved in benchmarks/redteam/cases.json and re-scored by the test suite on every commit.",
+  },
 } satisfies Record<string, InfoEntry>;
 
 export type InfoId = keyof typeof INFO;

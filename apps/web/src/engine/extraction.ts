@@ -1,26 +1,18 @@
 // Browser port of packages/narrative_core/extraction.py (RuleExtractor). Same rules, same order,
 // so the site gives the same answer as the API even when the API is unreachable.
+import lexicon from "../../../../packages/narrative_core/lexicon.json";
 import type { RosterEntry, Shares } from "./types";
 
-const STRENGTH_WORDS: [number, string[]][] = [
-  [3, ["howler", "cost them", "cost us", "all on", "entirely", "solely", "to blame", "gifted",
-       "handed them", "calamit", "disaster", "lost them", "threw it away", "inexcusable",
-       "unforgivable", "liabilit", "blunder"]],
-  [2, ["mistake", "error", "fault", "culprit", "guilty", "let them in", "switched off",
-       "caught out", "beaten too easily", "sloppy", "careless", "ball-watching",
-       "ball watching", "asleep", "should have done better", "nowhere"]],
-  [1, ["lost the ball", "gave the ball away", "misplaced", "heavy touch", "too high",
-       "out of position", "failed to", "could not", "couldn't", "didn't track",
-       "did not track", "slow to", "late to", "left", "allowed", "stepped out"]],
-];
-const CREDIT_WORDS = ["brilliant", "superb", "assist", "created", "unlocked", "won it", "clever",
-  "excellent", "perfect", "great", "wonderful", "scored", "finished"];
+// One lexicon for both engines, including cues learned from red-team attacks.
+type Level = "1" | "2" | "3";
+const STRENGTH_WORDS: [number, string[]][] = (["3", "2", "1"] as Level[]).map(
+  (s) => [Number(s), [...lexicon.strength[s], ...lexicon.learned[s]]]);
+const CREDIT_WORDS: string[] = lexicon.credit;
 const COMMON_WORDS = new Set(`a an the it that this these those he she they we you his her their its
 number no what when after then before but and or so if yes not another one two three first second
 half minute minutes goal shot pass cross corner penalty var referee keeper striker defence defense
 midfield team home away`.split(/\s+/));
-const TEAM_WORDS = ["the defence", "the defense", "the back line", "the backline", "the team",
-  "the whole team", "everyone", "the midfield", "the back four", "the side"];
+const TEAM_WORDS: string[] = lexicon.team;
 const DEFENCE_WORDS = new Set(["the defence", "the defense", "the back line", "the backline", "the back four"]);
 const ROLE_MAP: Record<string, string[]> = {
   keeper: ["GK"], goalkeeper: ["GK"], striker: ["ST"],

@@ -45,6 +45,18 @@ export interface Results {
     last_touch_story_unfair_share: number;
   };
   calibration: { statistic: string; real: number; simulated: number; difference_pct: number }[];
+  redteam: {
+    attacks: number;
+    held_out: RedTeamSplit;
+    all: RedTeamSplit;
+    controls: { lines: number; unfair_rules: number; unfair_with_reader: number };
+    caveat: string;
+  };
+}
+
+export interface RedTeamSplit {
+  judge_unfair: number; caught_rules: number; caught_with_reader: number;
+  hard_negatives: number; hard_negatives_unfair_rules: number; hard_negatives_unfair_with_reader: number;
 }
 
 /** The demo moment used on the landing page: a goal where blame is genuinely shared. */

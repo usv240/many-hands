@@ -1,0 +1,92 @@
+{
+ "_about": "Blame cues for the rule extractor, shared by the Python and browser engines. Strength 3 = sole blame, 2 = clear, 1 = mild. Entries under 'learned' were added after a red-team attack got past the Auditor; each is covered by a regression test in benchmarks/redteam/cases.json.",
+ "strength": {
+  "3": [
+   "howler",
+   "cost them",
+   "cost us",
+   "all on",
+   "entirely",
+   "solely",
+   "to blame",
+   "gifted",
+   "handed them",
+   "calamit",
+   "disaster",
+   "lost them",
+   "threw it away",
+   "inexcusable",
+   "unforgivable",
+   "liabilit",
+   "blunder"
+  ],
+  "2": [
+   "mistake",
+   "error",
+   "fault",
+   "culprit",
+   "guilty",
+   "let them in",
+   "switched off",
+   "caught out",
+   "beaten too easily",
+   "sloppy",
+   "careless",
+   "ball-watching",
+   "ball watching",
+   "asleep",
+   "should have done better",
+   "nowhere"
+  ],
+  "1": [
+   "lost the ball",
+   "gave the ball away",
+   "misplaced",
+   "heavy touch",
+   "too high",
+   "out of position",
+   "failed to",
+   "could not",
+   "couldn't",
+   "didn't track",
+   "did not track",
+   "slow to",
+   "late to",
+   "left",
+   "allowed",
+   "stepped out"
+  ]
+ },
+ "learned": {
+  "3": [],
+  "2": [],
+  "1": []
+ },
+ "credit": [
+  "brilliant",
+  "superb",
+  "assist",
+  "created",
+  "unlocked",
+  "won it",
+  "clever",
+  "excellent",
+  "perfect",
+  "great",
+  "wonderful",
+  "scored",
+  "finished"
+ ],
+ "team": [
+  "the defence",
+  "the defense",
+  "the back line",
+  "the backline",
+  "the team",
+  "the whole team",
+  "everyone",
+  "the midfield",
+  "the back four",
+  "the side"
+ ]
+}

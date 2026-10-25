@@ -10,28 +10,24 @@ in the text, and unknown names are reported rather than guessed.
 
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from pydantic import BaseModel, Field, model_validator
 
+# The blame cues live in lexicon.json, shared with the browser engine. "learned" cues were added
+# after a red-team attack got past the Auditor (see benchmarks/redteam).
+LEXICON_PATH = Path(__file__).with_name("lexicon.json")
+LEXICON = json.loads(LEXICON_PATH.read_text(encoding="utf-8"))
 STRENGTH_WORDS: list[tuple[int, tuple[str, ...]]] = [
-    (3, ("howler", "cost them", "cost us", "all on", "entirely", "solely", "to blame",
-         "gifted", "handed them", "calamit", "disaster", "lost them", "threw it away",
-         "inexcusable", "unforgivable", "liabilit", "blunder")),
-    (2, ("mistake", "error", "fault", "culprit", "guilty", "let them in", "switched off",
-         "caught out", "beaten too easily", "sloppy", "careless", "ball-watching",
-         "ball watching", "asleep", "should have done better", "nowhere")),
-    (1, ("lost the ball", "gave the ball away", "misplaced", "heavy touch", "too high",
-         "out of position", "failed to", "could not", "couldn't", "didn't track",
-         "did not track", "slow to", "late to", "left", "allowed", "stepped out")),
+    (s, tuple(LEXICON["strength"][str(s)]) + tuple(LEXICON["learned"][str(s)])) for s in (3, 2, 1)
 ]
-CREDIT_WORDS = ("brilliant", "superb", "assist", "created", "unlocked", "won it", "clever",
-                "excellent", "perfect", "great", "wonderful", "scored", "finished")
+CREDIT_WORDS = tuple(LEXICON["credit"])
 # Capitalised words that are not names. Anything else unknown is reported as unresolved.
 COMMON_WORDS = frozenset(["a", "an", "the", "it", "that", "this", "these", "those", "he", "she", "they", "we", "you", "his", "her", "their", "its", "number", "no", "what", "when", "after", "then", "before", "but", "and", "or", "so", "if", "yes", "not", "another", "one", "two", "three", "first", "second", "half", "minute", "minutes", "goal", "shot", "pass", "cross", "corner", "penalty", "var", "referee", "keeper", "striker", "defence", "defense", "midfield", "team", "home", "away"])
-TEAM_WORDS = ("the defence", "the defense", "the back line", "the backline", "the team",
-              "the whole team", "everyone", "the midfield", "the back four", "the side")
+TEAM_WORDS = tuple(LEXICON["team"])
 
 
 class Mention(BaseModel):

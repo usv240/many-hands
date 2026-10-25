@@ -13,6 +13,9 @@ inputs:
   fail-on:
     description: unfair (default) or watch.
     default: unfair
+  deep:
+    description: Also read each line with the gpt-5-mini reader for implied blame (true by default).
+    default: "true"
 runs:
   using: composite
   steps:
@@ -22,3 +25,4 @@ runs:
         GATE_FILES: ${{ inputs.files }}
         GATE_API: ${{ inputs.api-url }}
         GATE_FAIL_ON: ${{ inputs.fail-on }}
+        GATE_DEEP: ${{ inputs.deep }}

@@ -109,6 +109,8 @@ class AuditIn(BaseModel):
     text: str = Field(min_length=1, max_length=2000, description="The line to check")
     policy: PolicyIn = PolicyIn()
     method: str = Field("combined", pattern="^(combined|vaep|lasttouch)$")
+    deep: bool = Field(False, description="Also read the line with gpt-5-mini for implied blame. "
+                       "The score is still computed in code. Rules alone miss most implied blame.")
 
 
 # ---------------------------------------------------------------------- routes
@@ -178,7 +180,7 @@ def counterfactual(chain_id: str, action_id: int) -> dict:
 
 
 @app.post("/v1/audit")
-def audit_line(body: AuditIn) -> dict:
+async def audit_line(body: AuditIn) -> dict:
     L = store.ledger_for_chain(body.chain_id)
     m = L.moment(body.chain_id)
     r = L.responsibility(body.chain_id, body.method)
@@ -186,14 +188,19 @@ def audit_line(body: AuditIn) -> dict:
         policy = Policy(body.policy.watch_above, body.policy.unfair_above)
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from exc
-    result = audit(body.text, r.shares, store.roster(int(L.game_id)), m.conceding_team_id,
-                   policy, goal=m.goal)
+    roster = store.roster(int(L.game_id))
+    extraction, read_by_model = None, False
+    if body.deep:
+        from services.agents.extractor import deep_extract
+        extraction, read_by_model = await deep_extract(body.text, roster, m.conceding_team_id)
+    result = audit(body.text, r.shares, roster, m.conceding_team_id, policy, extraction=extraction, goal=m.goal)
     out = result.to_dict()
     out["chain_id"] = body.chain_id
     out["evidence_named"] = [{"player_id": p, "name": L.name(p), "shirt": L.shirt(p),
                               "share": round(s, 3)} for p, s in
                              sorted(r.shares.items(), key=lambda kv: -kv[1])]
-    out["model_versions"] = {"extractor": "rules-0.1", "ledger": "vaep-synthetic-0.1"}
+    out["model_versions"] = {"extractor": "rules-0.1" + (" + gpt-5-mini reader" if read_by_model else ""),
+                             "ledger": "vaep-synthetic-0.1"}
     return native(out)
 
 

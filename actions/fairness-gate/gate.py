@@ -17,13 +17,14 @@ import urllib.request
 API = os.environ.get("GATE_API", "").rstrip("/")
 FILES = os.environ.get("GATE_FILES", "")
 FAIL_ON = os.environ.get("GATE_FAIL_ON", "unfair")
+DEEP = os.environ.get("GATE_DEEP", "true").lower() == "true"
 ORDER = {"fair": 0, "watch": 1, "unfair": 2}
 
 
 def check(chain_id: str, text: str) -> dict:
-    body = json.dumps({"chain_id": chain_id, "text": text}).encode()
+    body = json.dumps({"chain_id": chain_id, "text": text, "deep": DEEP}).encode()
     req = urllib.request.Request(f"{API}/v1/audit", data=body, headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=30) as r:
+    with urllib.request.urlopen(req, timeout=60) as r:
         return json.loads(r.read())
 
 

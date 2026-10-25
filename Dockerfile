@@ -6,6 +6,8 @@ WORKDIR /web
 COPY apps/web/package.json apps/web/package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY apps/web/ ./
+# The blame lexicon is shared with the Python engine.
+COPY packages/narrative_core/lexicon.json /packages/narrative_core/lexicon.json
 RUN npm run build
 
 # 2. Python API, agents and engine

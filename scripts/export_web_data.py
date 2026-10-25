@@ -49,6 +49,7 @@ def results() -> dict:
             "last_touch_story_unfair_share": syn["last_touch_story_unfair_share"],
         },
         "calibration": cal.to_dict(orient="records"),
+        "redteam": json.loads((ROOT / "benchmarks/redteam/reader_results.json").read_text()),
     }
 
 

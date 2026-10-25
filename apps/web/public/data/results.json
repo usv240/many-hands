@@ -223,5 +223,31 @@
    "simulated": 18.523,
    "difference_pct": 7.7
   }
- ]
+ ],
+ "redteam": {
+  "reader_calls_succeeded": 120,
+  "attacks": 120,
+  "held_out": {
+   "judge_unfair": 23,
+   "caught_rules": 1,
+   "caught_with_reader": 23,
+   "hard_negatives": 6,
+   "hard_negatives_unfair_rules": 0,
+   "hard_negatives_unfair_with_reader": 0
+  },
+  "all": {
+   "judge_unfair": 83,
+   "caught_rules": 7,
+   "caught_with_reader": 79,
+   "hard_negatives": 36,
+   "hard_negatives_unfair_rules": 2,
+   "hard_negatives_unfair_with_reader": 7
+  },
+  "controls": {
+   "lines": 63,
+   "unfair_rules": 0,
+   "unfair_with_reader": 0
+  },
+  "caveat": "Judge and reader are separate agents but share the gpt-5-mini model; not human labels."
+ }
 }

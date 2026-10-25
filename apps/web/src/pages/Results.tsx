@@ -10,7 +10,8 @@ const ci = (m: Metric, f = pct) => `${f(m.mean)} (${f(m.ci95_low)} to ${f(m.ci95
 const dist = (x: number) => x.toFixed(3);
 
 /** Paired horizontal bars, ours versus baseline, with a table toggle. */
-function Compare({ title, rows, lowerIsBetter }: { title: string; lowerIsBetter?: boolean;
+function Compare({ title, rows, lowerIsBetter, labels = ["Many Hands", "Last-touch blame"] }:
+  { title: string; lowerIsBetter?: boolean; labels?: [string, string];
   rows: { label: string; ours: number; base: number; fmt: (x: number) => string }[] }) {
   const [table, setTable] = useState(false);
   return (
@@ -20,13 +21,13 @@ function Compare({ title, rows, lowerIsBetter }: { title: string; lowerIsBetter?
         <Switch label="Show as table" checked={table} onChange={(_, d) => setTable(d.checked)} />
       </figcaption>
       <div className="mh-legend">
-        <span className="mh-legend-item"><span className="mh-swatch mh-series-ours" aria-hidden />Many Hands</span>
-        <span className="mh-legend-item"><span className="mh-swatch mh-series-base" aria-hidden />Last-touch blame</span>
+        <span className="mh-legend-item"><span className="mh-swatch mh-series-ours" aria-hidden />{labels[0]}</span>
+        <span className="mh-legend-item"><span className="mh-swatch mh-series-base" aria-hidden />{labels[1]}</span>
         {lowerIsBetter && <span className="mh-legend-item">Lower is better</span>}
       </div>
       {table ? (
         <table className="mh-table">
-          <thead><tr><th>Metric</th><th>Many Hands</th><th>Last-touch</th></tr></thead>
+          <thead><tr><th>Metric</th><th>{labels[0]}</th><th>{labels[1]}</th></tr></thead>
           <tbody>{rows.map((r) => <tr key={r.label}><td>{r.label}</td><td>{r.fmt(r.ours)}</td><td>{r.fmt(r.base)}</td></tr>)}</tbody>
         </table>
       ) : rows.map((r) => (
@@ -95,6 +96,27 @@ export default function Results() {
           <li>{s.justified_cases} of {s.moments} moments ({pct(s.justified_cases / s.moments)}) had one player holding 60 percent or more of the true responsibility.</li>
         </ul>
       </section>
+
+      {data.redteam && (
+        <section className="mh-section" aria-labelledby="redteam">
+          <h2 id="redteam"><Term id="redTeam">Red team: can an attacker sneak scapegoating past the Auditor?</Term></h2>
+          <p><L s={`An attacker agent wrote ${data.redteam.attacks} lines that sound like normal punditry but quietly pin a goal on one player. A separate judge agent said which were unfair. We then checked how many our Auditor caught.`}
+                t={`Hot Take and Judge are separate gpt-5-mini agents. Judge quotes are verified in code; the Scapegoat Index is computed in code. Match ${"20045"} was held out before anything was learned.`} /></p>
+          <Compare title="Subtle scapegoating caught, on a match held out in advance"
+            labels={["Rules plus gpt-5-mini reader", "Word rules alone"]} rows={[
+            { label: "Share of the judge's unfair lines caught", ours: data.redteam.held_out.caught_with_reader / data.redteam.held_out.judge_unfair,
+              base: data.redteam.held_out.caught_rules / data.redteam.held_out.judge_unfair, fmt: pct },
+          ]} />
+          <ul className="mh-facts">
+            <li>Held-out match: <strong>{data.redteam.held_out.caught_with_reader} of {data.redteam.held_out.judge_unfair}</strong> caught with the reader, {data.redteam.held_out.caught_rules} with word rules alone.</li>
+            <li>All matches: {data.redteam.all.caught_with_reader} of {data.redteam.all.judge_unfair} caught with the reader (77 on a rerun), {data.redteam.all.caught_rules} with rules alone.</li>
+            <li>Fair control lines flagged Unfair: <strong>{data.redteam.controls.unfair_with_reader} of {data.redteam.controls.lines}</strong>.</li>
+            <li>The cost: borderline attacker lines the judge rated fair were flagged Unfair {data.redteam.all.hard_negatives_unfair_with_reader} of {data.redteam.all.hard_negatives} times with the reader, {data.redteam.all.hard_negatives_unfair_rules} with rules alone. A producer still decides.</li>
+            <li>Learning the attackers' phrasing into the word list did not generalise (5 of 23 on the held-out match), so we did not use it.</li>
+            <li>Every attack is now a permanent test that runs on every commit. {data.redteam.caveat}</li>
+          </ul>
+        </section>
+      )}
 
       <section className="mh-section" aria-labelledby="limits">
         <h2 id="limits">Measured limits</h2>

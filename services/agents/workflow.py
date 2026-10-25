@@ -16,6 +16,7 @@ Every model step has a deterministic fallback, and every step is recorded in the
 
 from __future__ import annotations
 
+import asyncio
 import json
 import re
 import time
@@ -27,6 +28,7 @@ from narrative_core.audit import JUSTIFIED_SHARE, audit, fair_rewrite
 from narrative_core.scapegoat import Policy
 
 from services.agents import models
+from services.agents.extractor import deep_extract
 
 MAX_REVISIONS = 2
 
@@ -223,8 +225,10 @@ class Auditor(Executor):
             if ev.request.simulate_auditor_outage:
                 raise RuntimeError("fairness check unavailable (simulated)")
             store = _store()
-            res = audit(d.text, ev.shares, store.roster(ev.facts["game_id"]), ev.facts["conceding_team_id"],
-                        Policy(*ev.request.policy), goal=ev.facts["goal"]).to_dict()
+            roster = store.roster(ev.facts["game_id"])
+            extraction, read_by_model = await deep_extract(d.text, roster, ev.facts["conceding_team_id"])
+            res = audit(d.text, ev.shares, roster, ev.facts["conceding_team_id"], Policy(*ev.request.policy),
+                        extraction=extraction, goal=ev.facts["goal"]).to_dict()
         except Exception as exc:
             ev.trace.append(Step("Auditor", "could not run: held, nothing airs", _ms(t0), str(exc)))
             await ctx.yield_output(_result(ev, None, None, d, [], held=str(exc)))
@@ -235,7 +239,9 @@ class Auditor(Executor):
             res["reasons"] = bad_facts + res["reasons"]
         d.history.append({"text": d.text, "source": d.source, "si": res["si"], "verdict": res["verdict"],
                           "fact_errors": bad_facts})
-        ev.trace.append(Step("Auditor", f"scored {res['si']:.2f}, {res['verdict']}", _ms(t0), d.text))
+        how = "rules and gpt-5-mini reader" if read_by_model else "rules"
+        ev.trace.append(Step("Auditor", f"scored {res['si']:.2f}, {res['verdict']} ({how}; score in code)", _ms(t0),
+                             d.text, model=read_by_model))
         if res["verdict"] == "unfair" and d.revisions < MAX_REVISIONS:
             d.reasons = res["reasons"] + [res["contrastive"]]
             await ctx.send_message(d)                      # back to the Narrator
@@ -284,14 +290,18 @@ class Personalizer(Executor):
                 ev.trace.append(Step("Personalizer", "offline mode, used templates", _ms(t0)))
         store = _store()
         roster = store.roster(ev.facts["game_id"])
+        audiences = (("analyst", "Analyst"), ("casual", f"Casual fan of {ev.facts['conceding_team']}"),
+                     ("club", f"Fan of {ev.facts['attacking_team']}"), ("focus", "Player focus"),
+                     ("es", "Spanish speaker"))
+        texts_by_key = {k: models.clean(str(texts.get(k, ""))) or a.draft.text for k, _ in audiences}
+        # Translations are checked on the English source; every version is read in parallel.
+        sources = {k: (a.draft.text if k == "es" else texts_by_key[k]) for k, _ in audiences}
+        reads = await asyncio.gather(*(deep_extract(sources[k], roster, ev.facts["conceding_team_id"]) for k, _ in audiences))
         variants = []
-        for key, label in (("analyst", "Analyst"), ("casual", f"Casual fan of {ev.facts['conceding_team']}"),
-                           ("club", f"Fan of {ev.facts['attacking_team']}"), ("focus", "Player focus"),
-                           ("es", "Spanish speaker")):
-            text = models.clean(str(texts.get(key, ""))) or a.draft.text
-            source_text = a.draft.text if key == "es" else text  # translations are checked on the English source
-            res = audit(source_text, ev.shares, roster, ev.facts["conceding_team_id"],
-                        Policy(*ev.request.policy), goal=ev.facts["goal"])
+        for (key, label), (extraction, _) in zip(audiences, reads, strict=True):
+            text = texts_by_key[key]
+            res = audit(sources[key], ev.shares, roster, ev.facts["conceding_team_id"],
+                        Policy(*ev.request.policy), extraction=extraction, goal=ev.facts["goal"])
             variants.append({"id": key, "audience": label, "text": text, "si": res.si, "verdict": res.verdict,
                              "aired": res.verdict != "unfair",
                              "note": "Checked on the English source before translation." if key == "es" else None})
