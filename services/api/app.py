@@ -10,9 +10,11 @@ Run locally:
 
 from __future__ import annotations
 
+import asyncio
 import json
 import os
 import sys
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 import pandas as pd
@@ -31,7 +33,16 @@ from narrative_core.scapegoat import Policy  # noqa: E402
 DATA_DIR = Path(os.environ.get("MANYHANDS_DATA", ROOT / "demo_data"))
 VERSION = "0.1.0"
 
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    from services.api.live import hub
+    await hub.start()
+    yield
+    await hub.stop()
+
+
 app = FastAPI(
+    lifespan=lifespan,
     title="Many Hands API",
     version=VERSION,
     description=(
@@ -205,6 +216,62 @@ async def broadcast(body: BroadcastIn) -> dict:
     result = await run(Request(body.chain_id, body.text, (body.policy.watch_above, body.policy.unfair_above),
                                body.featured, body.simulate_auditor_outage))
     return native(asdict(result))
+
+
+# ---------------------------------------------------------------------- live feed
+SSE_END = chr(10) * 2  # a Server-Sent Events message ends with a blank line
+
+
+def sse(payload: dict) -> str:
+    return "data: " + json.dumps(payload) + SSE_END
+
+@app.post("/v1/matches/{game_id}/kickoff")
+async def kickoff(game_id: int, start_action: int | None = None) -> dict:
+    """Publish a match to Azure Event Hubs, starting shortly before its next goal. Goals wake the agents."""
+    from services.api.live import hub
+    L = store.ledgers.get(game_id)
+    if L is None:
+        raise HTTPException(404, f"unknown match {game_id}")
+    return await hub.kickoff(L, start_action)
+
+
+@app.post("/v1/matches/{game_id}/stop")
+def stop(game_id: int) -> dict:
+    from services.api.live import hub
+    return {"stopped": hub.stop_match(game_id)}
+
+
+@app.get("/v1/matches/{game_id}/live")
+async def live_stream(game_id: int):
+    """Server-Sent Events: every event from the hub, and every agent result as it lands."""
+    from fastapi.responses import StreamingResponse
+
+    from services.api.live import hub
+    if game_id not in store.ledgers:
+        raise HTTPException(404, f"unknown match {game_id}")
+
+    async def gen():
+        q = hub.subscribe(game_id)
+        try:
+            yield sse({"type": "hello", "transport": hub.transport})
+            while True:
+                try:
+                    msg = await asyncio.wait_for(q.get(), timeout=15)
+                    yield sse(native(msg))
+                except TimeoutError:
+                    yield ": keep-alive" + SSE_END
+        finally:
+            hub.unsubscribe(game_id, q)
+
+    return StreamingResponse(gen(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
+@app.get("/v1/metrics")
+def metrics() -> dict:
+    """Measured time from a goal reaching Event Hubs to a fair, audited line being ready."""
+    from services.api.live import hub
+    return hub.metrics()
 
 
 # ---------------------------------------------------------------------- website

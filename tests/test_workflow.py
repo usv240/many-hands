@@ -49,3 +49,9 @@ def test_fair_incoming_line_passes_untouched():
 def test_unknown_chain_raises():
     with pytest.raises(HTTPException):
         go(Request("nope"))
+
+
+def test_wrong_scoreline_never_airs():
+    r = go(Request(CHAIN, incoming="Corran Vale go 1-0 up after loose balls from number 8 and number 9."))
+    assert r.history[0]["verdict"] == "unfair" and r.history[0]["fact_errors"]
+    assert "1-0" not in (r.line or "")

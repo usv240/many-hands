@@ -19,6 +19,7 @@ from agent_framework import Agent
 TIMEOUT_S = float(os.environ.get("MANYHANDS_MODEL_TIMEOUT", "12"))
 FAST = {"reasoning": {"effort": "minimal"}}  # measured: 1.3 s per line versus 5.6 s by default
 DASHES = re.compile(r"\s*[‒–—―]\s*")
+QUOTES = str.maketrans({"‘": "'", "’": "'", "“": '"', "”": '"'})
 
 
 def _env() -> dict[str, str]:
@@ -40,21 +41,26 @@ def model_name() -> str:
     return _env().get("AZURE_OPENAI_DEPLOYMENT", "gpt-5-mini")
 
 
-@lru_cache(maxsize=1)
-def _client():
-    from agent_framework.foundry import FoundryChatClient
+def async_credential():
+    """Managed identity on Azure; your `azd auth login` locally. Never a key."""
     from azure.identity.aio import AzureDeveloperCliCredential, ManagedIdentityCredential
 
     env = _env()
     if env.get("IDENTITY_ENDPOINT") or env.get("MSI_ENDPOINT"):  # running on Azure
-        credential = ManagedIdentityCredential(client_id=env.get("AZURE_CLIENT_ID"))
-    else:
-        azd = Path(env.get("LOCALAPPDATA", "")) / "Programs" / "Azure Dev CLI"
-        if not shutil.which("azd") and azd.exists():
-            os.environ["PATH"] = os.environ.get("PATH", "") + os.pathsep + str(azd)
-        credential = AzureDeveloperCliCredential()
+        return ManagedIdentityCredential(client_id=env.get("AZURE_CLIENT_ID"))
+    azd = Path(env.get("LOCALAPPDATA", "")) / "Programs" / "Azure Dev CLI"
+    if not shutil.which("azd") and azd.exists():
+        os.environ["PATH"] = os.environ.get("PATH", "") + os.pathsep + str(azd)
+    return AzureDeveloperCliCredential()
+
+
+@lru_cache(maxsize=1)
+def _client():
+    from agent_framework.foundry import FoundryChatClient
+
+    env = _env()
     return FoundryChatClient(project_endpoint=env["AZURE_AI_PROJECT_ENDPOINT"], model=model_name(),
-                             credential=credential)
+                             credential=async_credential())
 
 
 def agent(name: str, instructions: str) -> Agent:

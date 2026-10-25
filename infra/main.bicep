@@ -61,6 +61,20 @@ module app 'modules/app.bicep' = {
     projectEndpoint: foundry.outputs.projectEndpoint
     deploymentName: foundry.outputs.deploymentName
     appInsightsConnectionString: monitoring.outputs.appInsightsConnectionString
+    eventHubsNamespace: 'evh-manyhands-${token}'
+    eventHubName: 'match-events'
+  }
+}
+
+module eventhubs 'modules/eventhubs.bicep' = {
+  scope: rg
+  name: 'eventhubs'
+  params: {
+    location: location
+    tags: tags
+    namespaceName: 'evh-manyhands-${token}'
+    appPrincipalId: app.outputs.identityPrincipalId
+    userPrincipalId: principalId
   }
 }
 
@@ -72,3 +86,5 @@ output AZURE_OPENAI_DEPLOYMENT string = foundry.outputs.deploymentName
 output APPLICATIONINSIGHTS_CONNECTION_STRING string = monitoring.outputs.appInsightsConnectionString
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = app.outputs.registryEndpoint
 output SERVICE_APP_URL string = app.outputs.appUrl
+output EVENTHUB_NAMESPACE string = eventhubs.outputs.namespace
+output EVENTHUB_NAME string = eventhubs.outputs.hubName

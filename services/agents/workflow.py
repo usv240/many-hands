@@ -17,6 +17,7 @@ Every model step has a deterministic fallback, and every step is recorded in the
 from __future__ import annotations
 
 import json
+import re
 import time
 from dataclasses import asdict, dataclass, field
 from typing import Any, Never
@@ -114,6 +115,7 @@ class Investigator(Executor):
         roster = store.roster(int(L.game_id))
         shares = L.responsibility(req.chain_id).shares
         names = store.roster_df.drop_duplicates("team_id").set_index("team_id")["team"].to_dict()
+        score = _score_after(L, req.chain_id, names)
         facts = {
             "minute": summary["minute"], "goal": summary["goal"],
             "attacking_team": names[summary["attacking_team_id"]],
@@ -121,6 +123,7 @@ class Investigator(Executor):
             "conceding_team_id": summary["conceding_team_id"],
             "game_id": int(L.game_id),
             "shooter": L.name(summary["shooter_id"]),
+            "score_after": score,
             "actions": summary["n_actions"],
             "contributors": [{"who": _label(roster, r["player_id"]), "share_pct": round(100 * r["share"]),
                               "what": r["reason"]} for r in summary["responsibility"]],
@@ -141,7 +144,8 @@ NARRATOR_RULES = (
     "at most 25 words, from the facts only. Never invent players, numbers or events. Refer to "
     "defending players by shirt number. Blame must match the responsibility shares: name a single "
     "player as the cause only if their share is 60 percent or more; otherwise share it among the "
-    "players with 15 percent or more, or describe the move without blame. Calm, broadcast tone. "
+    "players with 15 percent or more, or describe the move without blame. If you give a score, use "
+    "score_after exactly; never state any other number. Calm, broadcast tone. "
     "No dashes. Output only the line."
 )
 
@@ -177,6 +181,28 @@ class Narrator(Executor):
         return Draft(ev, _template(ev), "template", revisions, history)
 
 
+SCORELINE = re.compile(r"(?<![0-9])(\d{1,2})\s*-\s*(\d{1,2})(?![0-9])")
+
+
+def _score_after(ledger, chain_id: str, names: dict) -> dict:
+    m = ledger.moment(chain_id)
+    a = ledger.actions
+    shots = a[(a.type_name == "shot") & (a.result_name == "success") & (a.action_id <= m.shot_action_id)]
+    teams = list(dict.fromkeys(a.team_id))
+    goals = {t: int((shots.team_id == t).sum()) for t in teams}
+    return {"text": " ".join(f"{names[t]} {goals[t]}" for t in teams), "goals": [goals[t] for t in teams]}
+
+
+def _fact_errors(text: str, facts: dict) -> list[str]:
+    """Numbers the code can check: any scoreline must be the real score after this moment."""
+    real = sorted(facts.get("score_after", {}).get("goals", []))
+    errors = []
+    for x, y in SCORELINE.findall(text):
+        if real and sorted([int(x), int(y)]) != real:
+            errors.append(f"The line says {x}-{y}, but the score after this moment is {facts['score_after']['text']}.")
+    return errors
+
+
 def _template(ev: Evidence) -> str:
     from narrative_core.extraction import Roster
     store = _store()
@@ -199,7 +225,12 @@ class Auditor(Executor):
             ev.trace.append(Step("Auditor", "could not run: held, nothing airs", _ms(t0), str(exc)))
             await ctx.yield_output(_result(ev, None, None, d, [], held=str(exc)))
             return
-        d.history.append({"text": d.text, "source": d.source, "si": res["si"], "verdict": res["verdict"]})
+        bad_facts = _fact_errors(d.text, ev.facts)
+        if bad_facts:  # a wrong number is treated like unfair blame: it cannot air
+            res["verdict"] = "unfair"
+            res["reasons"] = bad_facts + res["reasons"]
+        d.history.append({"text": d.text, "source": d.source, "si": res["si"], "verdict": res["verdict"],
+                          "fact_errors": bad_facts})
         ev.trace.append(Step("Auditor", f"scored {res['si']:.2f}, {res['verdict']}", _ms(t0), d.text))
         if res["verdict"] == "unfair" and d.revisions < MAX_REVISIONS:
             d.reasons = res["reasons"] + [res["contrastive"]]

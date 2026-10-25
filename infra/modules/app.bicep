@@ -109,8 +109,8 @@ resource app 'Microsoft.App/containerApps@2024-03-01' = {
           { name: 'EVENTHUB_NAME', value: eventHubName }
         ]
       }]
-      // One warm replica so a judge never waits for a cold start; scales out under load.
-      scale: { minReplicas: 1, maxReplicas: 3 }
+      // One warm replica: never a cold start for a judge, and one consumer of the live feed.
+      scale: { minReplicas: 1, maxReplicas: 1 }
     }
   }
 }

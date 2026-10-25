@@ -25,6 +25,8 @@ dependencies = [
     "agent-framework-core>=1.0",
     "azure-identity>=1.17",
     "agent-framework-foundry>=1.0",
+    "azure-eventhub>=5.12",
+    "aiohttp>=3.9",
 ]
 
 [dependency-groups]
