@@ -393,13 +393,13 @@ main:focus { outline: none; }
 .mh-hero-card .fui-Button { margin: 0.5rem 0 0.75rem; }
 .mh-statement { font-size: clamp(1.2rem, 2vw, 1.6rem); line-height: 1.4; font-weight: 600; max-width: 60ch; margin: 0.5rem 0 2rem; }
 .mh-statement a { font-size: 0.9rem; font-weight: 400; white-space: nowrap; }
-.mh-facts-row { display: grid; gap: 2rem 2.5rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.mh-facts-row { display: grid; gap: 2rem 2.5rem; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); }
 .mh-fact p:not(.mh-fact-num), .mh-stat p:not(.mh-stat-num) { max-width: 38ch; }
-.mh-outcomes { display: grid; gap: 1.5rem 3rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin: 1.5rem 0 3rem; }
+.mh-outcomes { display: grid; gap: 1.5rem 3rem; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); margin: 1.5rem 0 3rem; }
 .mh-outcomes dt { font-size: clamp(3rem, 6vw, 4.6rem); font-weight: 750; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; color: var(--colorBrandForeground1); }
 .mh-outcomes dd { margin: 0.6rem 0 0; font-size: 1.05rem; max-width: 36ch; }
 .mh-subhead { font-size: 1.05rem; color: var(--colorNeutralForeground2); margin-bottom: 1rem; }
-.mh-uses { list-style: none; padding: 0; margin: 1.25rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 0.25rem 2.5rem; }
+.mh-uses { list-style: none; padding: 0; margin: 1.25rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 0.25rem 2.5rem; }
 .mh-uses li { display: grid; grid-template-columns: 40px 1fr; gap: 0.25rem 0.9rem; padding: 1rem 0; align-items: start; }
 .mh-uses li h3 { margin: 0.1rem 0 0.2rem; }
 .mh-uses li p { margin: 0; color: var(--colorNeutralForeground2); }

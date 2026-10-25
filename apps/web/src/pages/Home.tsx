@@ -48,8 +48,8 @@ export default function Home() {
   const live = liveAi(health);
   const [agentRun, setAgentRun] = useState<{ busy: boolean; result?: AgentResult; error?: string }>({ busy: false });
   // Measured live on every goal: the fair line ready for air, and all five audience versions ready.
-  const [timing, setTiming] = useState<{ line: number | null; all: number | null }>({ line: null, all: null });
-  useEffect(() => { getMetrics().then((m) => setTiming({ line: m?.line_p50_s ?? null, all: m?.p50_s ?? null })); }, []);
+  const [timing, setTiming] = useState<{ line: number | null; all: number | null; n: number }>({ line: null, all: null, n: 0 });
+  useEffect(() => { getMetrics().then((m) => setTiming({ line: m?.line_p50_s ?? null, all: m?.p50_s ?? null, n: m?.goals_processed ?? 0 })); }, []);
 
   const showcase = useMemo(() => {
     const data = match.data;
@@ -77,7 +77,7 @@ export default function Home() {
         <div className="mh-hero-text">
           <h1>Nobody concedes alone.</h1>
           <p className="mh-lead mh-lead-strong">
-            Microsoft Foundry agents trace every goal back through every player who caused it, catch scapegoating
+            Microsoft Foundry agents trace every goal back through every player who contributed to it, catch scapegoating
             lines before they air, and rewrite them fairly, seconds after the goal.
           </p>
           <p className="mh-lead">
@@ -245,9 +245,16 @@ export default function Home() {
         <h2 id="proof">What it means on a match day</h2>
         <dl className="mh-outcomes">
           <div>
-            <dt>{timing.line ? `${timing.line.toFixed(1)} s` : "Seconds"}</dt>
-            <dd>from a goal reaching Azure Event Hubs to a fair, checked line ready for the lower third
-              {timing.all ? `; all five audience versions follow by ${timing.all.toFixed(1)} s` : ""}. Median, measured live on every goal.</dd>
+            {timing.line ? (<>
+              <dt>{timing.line.toFixed(1)} s</dt>
+              <dd>from a goal reaching Azure Event Hubs to a fair, checked line ready for the lower third
+                {timing.all ? `; all five audience versions follow by ${timing.all.toFixed(1)} s` : ""}. Median of the {timing.n} live goals since the server last started.</dd>
+            </>) : (<>
+              <dt>{results.data ? `${results.data.operations.line_ready_s.p50.toFixed(1)} s` : "Seconds"}</dt>
+              <dd>from a goal to a fair, checked line ready for the lower third; all five audience versions
+                follow by {results.data ? `${results.data.operations.all_versions_s.p50.toFixed(1)} s` : "a few seconds more"}. Median
+                of {results.data?.operations.moments ?? 22} goals in our benchmark. Kick off the live feed in the Studio to measure it yourself.</dd>
+            </>)}
           </div>
           <div>
             <dt>{results.data ? `$${results.data.operations.cost_per_season_usd.toFixed(0)}` : "About $5"}</dt>

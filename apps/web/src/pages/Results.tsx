@@ -105,7 +105,7 @@ export default function Results() {
           <section className="mh-section" aria-labelledby="foundry-eval">
             <h2 id="foundry-eval">Checked in Microsoft Foundry Evaluations</h2>
             <p>Every goal's lines went into one Foundry evaluation run with two graders: our Scapegoat Index as a
-              code grader, and an independent model judge that sees only the line and the evidence, never our score.</p>
+              code grader, and a separate model judge, with its own instructions, that sees only the line and the evidence, never our score.</p>
             <div className="mh-table-wrap">
               <table className="mh-table">
                 <thead><tr><th>Lines</th><th>Fair by the Scapegoat Index (code)</th><th>Fair by the independent judge (model)</th></tr></thead>

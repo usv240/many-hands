@@ -1,19 +1,30 @@
 # Many Hands
 
-**Microsoft Foundry agents trace every goal back through every player who caused it, catch scapegoating lines before they air, and rewrite them fairly, about 4 seconds after the goal.**
+**Microsoft Foundry agents trace every goal back through every player who contributed to it, catch scapegoating lines before they air, and have a fair line ready about 3 seconds after the goal.**
+
+> **A pundit is about to say:** "Number 8's howler cost them the goal."  **Unfair**
+> **Many Hands puts on air:** "A loose clearance by number 8 and a misplaced pass from number 9 led to Rafe Quilian's goal."  **Fair**
+
+![The agents on Microsoft Foundry catch a one-culprit line and rewrite it fairly, with every step timed](docs/08-submission/gallery/1-home-agents-fix-the-line.png)
 
 **Live:** https://ca-manyhands-7kzrrno7qr6zo.orangedune-9d42108b.eastus2.azurecontainerapps.io · Judges: open **Judges start here** in the header for a three-minute path.
 
 | On a match day | |
 |---|---|
-| **4.0 s median** (5.1 s p95) | from a goal reaching Azure Event Hubs to a fair, checked line and five audience versions, measured live on every goal |
-| **About 51 a season** | moments in a 380-match season where a one-culprit story would be unfair (0.5 provider-labelled errors per match, 27% of them shared), estimated from real tournament data |
-| **0 of 130** | real cases where one player truly was to blame that it wrongly called unfair: fair both ways |
+| **2.6 s** | from a goal reaching Azure Event Hubs to a fair, checked line ready for air (median of the live goals so far; the slowest 1 in 20 took 3.1 s). All five audience versions follow by 7.3 s. |
+| **$4.91 a season** | model cost to check every goal of a 380-match season, about 1.3 cents a match, from the tokens each agent call actually used |
+| **About 51 a season** | moments where a one-culprit story would be unfair. An estimate: real tournament data outside the Premier League shows 0.5 clear errors a match, and 27 percent of those share the blame. |
+| **0 false alarms in 130** | real cases where one player truly was to blame. It does not cry wolf: deserved blame is allowed. |
+| **21 of 21** | agents' lines graded fair in a Microsoft Foundry evaluation, by our code grader and by a separate model judge with its own instructions (the pundit lines: 19 of 21) |
 
 Built for the Inside the Game Developer Hackathon (Microsoft and the Premier League). All match data in the product is synthetic and fictional.
 
 ## Why
-July 2021, the Euro 2020 final: England lose on penalties, and within hours the three young players who missed are racially abused online. Football is a team game, but its stories name one culprit. Reporters' ratings are biased by the result (Kausel et al. 2019), and online abuse of Premier League players peaks right after key moments, with 68 percent of players abused in half a season (Alan Turing Institute for Ofcom, 2022). AI recaps now write those stories at scale. Platforms remove abuse after it is posted. Many Hands works earlier, on the story itself.
+In July 2021, three young England players missed penalties in the Euro 2020 final and were racially abused online within hours. Football is a team game, but its stories name one culprit, and AI recaps now write those stories at scale. Abuse of Premier League players peaks right after key moments: 68 percent of players were abused in half a season (Alan Turing Institute for Ofcom, 2022), and reporters' ratings follow the result, not the play (Kausel et al. 2019). Platforms remove abuse after it is posted. Many Hands works earlier, on the story itself.
+
+**Why goals.** Blame gathers around goals and big chances, so that is where the agents wake. The same evidence also names the unsung players who built the move, which the Studio shows for every goal.
+
+**Safe by default.** If the model fails, a fair line written from a template airs instead. If the fairness check itself cannot run, nothing airs. Both paths can be tried in the Studio.
 
 ## Try it in three minutes
 1. **Home:** press "Fix it with the agents, live". A pundit's one-culprit line goes to the agents on Microsoft Foundry and comes back fair, with every agent step and its timing.

@@ -99,7 +99,11 @@ def main() -> None:
             page.wait_for_selector(".mh-hero-card .mh-trace", timeout=90000)
             report["timings"]["home_fix_s"] = round(time.time() - t0, 1)
             page.wait_for_timeout(1200)
-            page.locator(".mh-hero").screenshot(path=str(out / "1-home-agents-fix-the-line.png"))
+            box = page.locator(".mh-hero").bounding_box()  # pad the crop so the headline does not touch the frame
+            page.screenshot(path=str(out / "1-home-agents-fix-the-line.png"), full_page=True,
+                            clip={"x": max(0, box["x"] - 40), "y": max(0, box["y"] - 24),
+                                  "width": min(box["width"] + 80, 1440 - max(0, box["x"] - 40)),
+                                  "height": box["height"] + 48})
 
             # 2. Studio: the evidence check, with the replay on the deciding action.
             page.goto(b + "/studio", wait_until="networkidle")

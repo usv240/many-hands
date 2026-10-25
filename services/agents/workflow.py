@@ -148,7 +148,7 @@ class Investigator(Executor):
 NARRATOR_RULES = (
     "You are the Narrator for a live football broadcast. Write ONE line for an on-screen graphic, "
     "at most 25 words, from the facts only. Never invent players, numbers or events. Refer to "
-    "defending players by shirt number. Blame must match the responsibility shares: name a single "
+    "defending players by shirt number only (\"number 8\"), never with their name in brackets. Blame must match the responsibility shares: name a single "
     "player as the cause only if their share is 60 percent or more; otherwise share it among the "
     "players with 15 percent or more, or describe the move without blame. If you mention the score, "
     "use the score given in the facts, written naturally (for example 'Corran Vale lead 3-2'); never "
