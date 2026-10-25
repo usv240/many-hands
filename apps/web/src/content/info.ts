@@ -191,6 +191,24 @@ export const INFO = {
     what: "Ingest, Interpret, Explain, Render, Personalize: the pipeline the hackathon asks for.",
     why: "Each stage is a visible part of the product.",
   },
+  liveFeed: {
+    title: "Live feed",
+    what: "The match arrives as a stream of events through Azure Event Hubs. When a goal arrives, it wakes the AI agents by itself.",
+    why: "In a real studio nobody has time to press a button when a goal goes in.",
+    tech: "Event Hubs (Entra ID only) carries each action; a consumer in the Container App runs the Agent Framework workflow on every decisive moment and streams the result over Server-Sent Events. Time from goal to fair line is measured on every goal.",
+  },
+  evidenceCheck: {
+    title: "Evidence check",
+    what: "The agent picks the one action the verdict depends on most, plays it, and asks you a single question about it.",
+    why: "Data feeds make mistakes. A person who can see the replay settles it in seconds, and the agent knows exactly what to ask.",
+    tech: "Deciding action = the largest lost ball by the most responsible player. No removes it and recomputes responsibility in the browser; Can't tell requires a reason to air any line blaming that player.",
+  },
+  agents: {
+    title: "The agents",
+    what: "Investigator gathers evidence, Narrator writes with gpt-5-mini, Auditor scores in code, Personalizer writes each audience version.",
+    why: "Each has one job, and the one that decides fairness is never an AI.",
+    tech: "Microsoft Agent Framework workflow on Microsoft Foundry: Investigator, Narrator and Auditor in a loop of at most two revisions, then a fair-by-construction template; Personalizer fan-out; every variant re-audited; fails closed.",
+  },
 } satisfies Record<string, InfoEntry>;
 
 export type InfoId = keyof typeof INFO;

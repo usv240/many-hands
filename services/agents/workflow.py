@@ -144,8 +144,9 @@ NARRATOR_RULES = (
     "at most 25 words, from the facts only. Never invent players, numbers or events. Refer to "
     "defending players by shirt number. Blame must match the responsibility shares: name a single "
     "player as the cause only if their share is 60 percent or more; otherwise share it among the "
-    "players with 15 percent or more, or describe the move without blame. If you give a score, use "
-    "score_after exactly; never state any other number. Calm, broadcast tone. "
+    "players with 15 percent or more, or describe the move without blame. If you mention the score, "
+    "use the score given in the facts, written naturally (for example 'Corran Vale lead 3-2'); never "
+    "state any other number and never copy field names from the facts. Calm, broadcast tone. "
     "No dashes. Output only the line."
 )
 
@@ -200,6 +201,9 @@ def _fact_errors(text: str, facts: dict) -> list[str]:
     for x, y in SCORELINE.findall(text):
         if real and sorted([int(x), int(y)]) != real:
             errors.append(f"The line says {x}-{y}, but the score after this moment is {facts['score_after']['text']}.")
+    leaks = models.leaked_fields(text)
+    if leaks:
+        errors.append(f"The line copies internal field names ({', '.join(leaks)}) instead of plain words.")
     return errors
 
 

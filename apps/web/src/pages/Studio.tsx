@@ -7,15 +7,20 @@ import {
 } from "@fluentui/react-icons";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { AgentDesk } from "../components/AgentDesk";
+import { decidingAction, EvidenceCheck, type EvidenceStatus } from "../components/EvidenceCheck";
 import { Info, Term } from "../components/Info";
+import { LiveFeed } from "../components/LiveFeed";
 import { PageHeader } from "../components/Layout";
 import { PitchReplay } from "../components/Pitch";
 import { ResponsibilityBars, ScoreBadge } from "../components/viz";
 import { audit } from "../engine/audit";
 import { append, type LogEntry, verifyLog } from "../engine/auditLog";
 import { Roster } from "../engine/extraction";
+import { onballBlame, type RatedAction } from "../engine/ledger";
 import { type Chain, DEFAULT_POLICY, type MatchData } from "../engine/types";
 import { audienceVersions, type Candidate, candidates, teamName } from "../engine/writer";
+import { liveAi, useHealth } from "../state/api";
 import { loadMatch, loadMatches, SHOWCASE, useAsync } from "../state/data";
 import { getUploaded } from "../state/uploads";
 import { chainLabel } from "./Check";
@@ -26,6 +31,7 @@ const REGIONS = [
   "Pre-air queue: lines waiting to go on screen, each with a fairness score.",
   "Audience versions: the same moment told for different viewers, each checked.",
   "Audit log: every decision, fingerprinted and chained.",
+  "AI desk: the real agents on Microsoft Foundry fix a line, and the live feed through Azure Event Hubs wakes them on every goal.",
 ];
 
 function Region({ n, on, children, className }: { n: number; on: boolean; children: ReactNode; className?: string }) {
@@ -48,7 +54,27 @@ export default function Studio() {
   useEffect(() => {
     if (data) setChainId(params.get("chain") ?? (gameId === SHOWCASE.gameId ? SHOWCASE.chainId : data.chains.find((c) => c.goal)?.chain_id));
   }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
-  const chain = data?.chains.find((c) => c.chain_id === chainId);
+  const baseChain = data?.chains.find((c) => c.chain_id === chainId);
+  const { health } = useHealth();
+  const live = liveAi(health);
+
+  // Evidence check: the producer's answer can remove a data error and change every score below.
+  const [evidence, setEvidence] = useState<EvidenceStatus>("pending");
+  const [excluded, setExcluded] = useState<number[]>([]);
+  useEffect(() => { setEvidence("pending"); setExcluded([]); }, [chainId, gameId]);
+  const chain: Chain | undefined = useMemo(() => {
+    if (!baseChain || !data || !excluded.length) return baseChain;
+    const acts = baseChain.actions.filter((a) => !excluded.includes(a.action_id)) as RatedAction[];
+    const shares = onballBlame(acts, baseChain.conceding_team_id);
+    const responsibility = Object.entries(shares).sort((a, b) => b[1] - a[1]).map(([pid, share]) => {
+      const r = data.roster.find((x) => x.player_id === pid);
+      const old = baseChain.responsibility.find((x) => x.player_id === pid);
+      return { player_id: pid, name: r?.name ?? pid, shirt: r?.shirt ?? null, share, reason: old?.reason ?? "involved in the build-up" };
+    });
+    return { ...baseChain, shares, responsibility };
+  }, [baseChain, data, excluded]);
+  const deciding = baseChain ? decidingAction(baseChain) : null;
+  const unconfirmed = evidence === "unclear" ? deciding?.player_id : undefined;
 
   const [explain, setExplain] = useState(false);
   const [outage, setOutage] = useState(false);
@@ -59,6 +85,8 @@ export default function Studio() {
   const [featured, setFeatured] = useState<string | undefined>();
 
   const queue = useMemo(() => (data && chain ? candidates(data, chain) : []), [data, chain]);
+  const [deskLine, setDeskLine] = useState<string | undefined>();
+  useEffect(() => { setDeskLine(queue.find((q) => q.result.verdict === "unfair")?.text); }, [queue]);
   const versions = useMemo(() => (data && chain ? audienceVersions(data, chain, featured) : []), [data, chain, featured]);
 
   const record = async (c: { text: string; si: number; verdict: string }, action: LogEntry["action"], reason?: string) => {
@@ -117,7 +145,17 @@ export default function Studio() {
 
           <Region n={2} on={explain} className="mh-evidence">
             <h2 className="mh-pane-title"><Term id="evidence">{chainLabel(data, chain.chain_id)}</Term></h2>
-            <PitchReplay actions={chain.actions} data={data} highlight={chain.responsibility.map((c) => c.player_id)} />
+            <PitchReplay actions={chain.actions} data={data} highlight={chain.responsibility.map((c) => c.player_id)}
+                         focusActionId={evidence === "pending" ? deciding?.action_id : undefined} />
+            <EvidenceCheck chain={baseChain!} data={data} status={evidence}
+              onAnswer={async (s, action) => {
+                setEvidence(s);
+                if (s === "rejected") setExcluded([action.action_id]);
+                const pl = data.roster.find((r) => r.player_id === action.player_id);
+                setLog(await append(log, { chain_id: chain.chain_id, si: 0, verdict: "evidence",
+                  text: `Action ${action.action_id}: number ${pl?.shirt ?? "?"} ${action.type_name}, ${action.result_name}`,
+                  action: s === "confirmed" ? "evidence confirmed" : s === "rejected" ? "evidence rejected" : "evidence unclear" }));
+              }} />
             <h3 className="mh-term">Who was responsible<Info id="responsibility" /></h3>
             <ResponsibilityBars team={chain.conceding_team_id === data.match.home.team_id ? "a" : "b"} caption="Responsibility"
               rows={chain.responsibility.map((c) => ({ id: c.player_id, label: `#${c.shirt} ${c.name}`, share: c.share, note: c.reason }))} />
@@ -139,7 +177,10 @@ export default function Studio() {
                 </MessageBarBody>
               </MessageBar>
             ) : null}
-            {queue.map((c) => <QueueCard key={`${chain.chain_id}-${c.id}`} c={c} chain={chain} data={data} disabled={outage} onDecide={record} />)}
+            {queue.map((c) => (
+              <QueueCard key={`${chain.chain_id}-${c.id}-${excluded.join(",")}`} c={c} chain={chain} data={data} disabled={outage}
+                         unconfirmed={unconfirmed} onDecide={record} onSendToAgents={(text) => setDeskLine(text)} />
+            ))}
           </Region>
 
           <Region n={4} on={explain} className="mh-audiences">
@@ -163,6 +204,27 @@ export default function Studio() {
               ))}
             </div>
             <p className="mh-small mh-muted">Offline demo uses the template writer. In production the Personalizer agent writes these with Microsoft Foundry, and every version passes the same check.</p>
+          </Region>
+
+          <Region n={6} on={explain} className="mh-desk-region">
+            <h2 className="mh-pane-title"><Term id="agents">AI desk</Term></h2>
+            <div className="mh-desk-grid">
+              <div>
+                <h3>Fix a line with the agents</h3>
+                <p className="mh-small mh-muted">{deskLine ? <>Line: "{deskLine}"</> : "No line chosen: the agents will write one."}</p>
+                <AgentDesk key={`${chain.chain_id}-${deskLine}`} chainId={chain.chain_id} line={deskLine} live={live}
+                  onResult={async (r) => {
+                    if (r.status === "ready" && r.line && r.audit && deskLine) {
+                      setLog(await append(log, { chain_id: chain.chain_id, text: r.line, si: r.audit.si, verdict: r.audit.verdict, action: "agents fixed it" }));
+                      setAired(r.line);
+                    }
+                  }} />
+              </div>
+              <div>
+                <h3 className="mh-term">Live feed<Info id="liveFeed" /></h3>
+                <LiveFeed data={data} live={live} />
+              </div>
+            </div>
           </Region>
 
           <Region n={5} on={explain} className="mh-log">
@@ -219,9 +281,10 @@ const labelFor = (data: MatchData, pid: string) => {
   return r ? `#${r.shirt} ${r.name}` : pid;
 };
 
-function QueueCard({ c, chain, data, disabled, onDecide }:
-  { c: Candidate; chain: Chain; data: MatchData; disabled: boolean;
-    onDecide: (c: { text: string; si: number; verdict: string }, a: LogEntry["action"], reason?: string) => void }) {
+function QueueCard({ c, chain, data, disabled, unconfirmed, onDecide, onSendToAgents }:
+  { c: Candidate; chain: Chain; data: MatchData; disabled: boolean; unconfirmed?: string;
+    onDecide: (c: { text: string; si: number; verdict: string }, a: LogEntry["action"], reason?: string) => void;
+    onSendToAgents: (text: string) => void }) {
   const [current, setCurrent] = useState(c);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(c.text);
@@ -229,7 +292,9 @@ function QueueCard({ c, chain, data, disabled, onDecide }:
   const [reason, setReason] = useState("");
   const [done, setDone] = useState<string | null>(null);
   const [why, setWhy] = useState(false);
-  const r = current.result;
+  const r = useMemo(() => audit(current.text, chain.shares, new Roster(data.roster), chain.conceding_team_id, undefined, chain.goal),
+    [current.text, chain, data]);
+  const needsReason = r.verdict === "unfair" || (!!unconfirmed && (r.blame[unconfirmed] ?? 0) > 0);
   const recheck = (text: string) => {
     setCurrent({ ...current, text, result: audit(text, chain.shares, new Roster(data.roster), chain.conceding_team_id, undefined, chain.goal) });
   };
@@ -248,7 +313,7 @@ function QueueCard({ c, chain, data, disabled, onDecide }:
       <button type="button" className="mh-linkbtn" aria-expanded={why} onClick={() => setWhy((w) => !w)}>{why ? "Hide why" : "Why this score?"}</button>
       {why && <ul className="mh-reasons">{r.reasons.map((x) => <li key={x}>{x}</li>)}<li>{r.contrastive}</li></ul>}
       {askReason && (
-        <Field label={<span className="mh-term">Reason for airing an Unfair line<Info id="reasonRequired" /></span>} required>
+        <Field label={<span className="mh-term">{r.verdict === "unfair" ? "Reason for airing an Unfair line" : "Reason: this line blames a player whose evidence is unconfirmed"}<Info id="reasonRequired" /></span>} required>
           <Input value={reason} onChange={(_, d) => setReason(d.value)} placeholder="For example: quoting the manager directly" />
         </Field>
       )}
@@ -271,7 +336,7 @@ function QueueCard({ c, chain, data, disabled, onDecide }:
             <span className="mh-term">
               <Button size="small" appearance="primary" icon={<CheckmarkCircle20Regular />} disabled={disabled}
                 onClick={() => {
-                  if (r.verdict === "unfair") { setAskReason(true); return; }
+                  if (needsReason) { setAskReason(true); return; }
                   onDecide({ text: current.text, si: r.si, verdict: r.verdict }, "approved"); setDone("Approved for air.");
                 }}>Approve</Button>
               <Info id="approve" />
@@ -284,6 +349,7 @@ function QueueCard({ c, chain, data, disabled, onDecide }:
                 }}>Use fair version</Button>
             )}
             <Button size="small" icon={<Edit20Regular />} onClick={() => { setDraft(current.text); setEditing(true); }}>Edit</Button>
+            <Button size="small" appearance="subtle" onClick={() => onSendToAgents(current.text)}>Send to the agents</Button>
             <Button size="small" appearance="subtle" icon={<Dismiss20Regular />} disabled={disabled}
               onClick={() => { onDecide({ text: current.text, si: r.si, verdict: r.verdict }, "rejected"); setDone("Rejected. It will not air."); }}>Reject</Button>
           </>

@@ -32,7 +32,6 @@ class Hub:
         env = models._env()
         self.namespace = env.get("EVENTHUB_NAMESPACE") or ""
         self.name = env.get("EVENTHUB_NAME") or "match-events"
-        self.transport = "Azure Event Hubs" if self.namespace else "in-process queue"
         self.local: asyncio.Queue[dict] = asyncio.Queue()
         self.subscribers: dict[int, set[asyncio.Queue]] = defaultdict(set)
         self.backlog: dict[int, deque] = defaultdict(lambda: deque(maxlen=400))
@@ -40,6 +39,10 @@ class Hub:
         self.running: dict[int, asyncio.Task] = {}
         self._consumer: asyncio.Task | None = None
         self._producer = None
+
+    @property
+    def transport(self) -> str:
+        return "Azure Event Hubs" if self.namespace else "in-process queue"
 
     # ------------------------------------------------------------------ plumbing
     async def start(self) -> None:

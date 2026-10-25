@@ -17,6 +17,10 @@ SYL_A = ["Var", "Osk", "Bel", "Tor", "Mak", "Dren", "Hal", "Quil", "Rost", "Sev"
 SYL_B = ["en", "iro", "ard", "ovic", "ane", "esh", "ow", "ain", "ek", "ura", "ent", "ian"]
 SHIRTS = (1, 2, 5, 6, 3, 4, 8, 10, 7, 9, 11)
 
+# Generated surnames that collide with a well-known real player, or read like a word in commentary.
+# Replaced after generation, so no random draw changes and every simulated match stays identical.
+RENAME = {"Varane": "Varnow", "Seven": "Sevanko"}
+
 
 def _attr(rng: np.random.Generator, mean: float, sd: float = 0.07) -> float:
     return float(np.clip(rng.normal(mean, sd), 0.4, 0.97))
@@ -37,7 +41,7 @@ def make_team(index: int, seed: int = 2026) -> Team:
                 break
         players.append(Player(
             pid=f"{tid}-{SHIRTS[i]}",
-            name=f"{rng.choice(FIRST)} {surname}",
+            name=f"{rng.choice(FIRST)} {RENAME.get(surname, surname)}",
             shirt=SHIRTS[i],
             role=role,
             passing=_attr(rng, 0.76 + quality + (0.04 if role in ("DM", "RCM", "LCM") else 0)),

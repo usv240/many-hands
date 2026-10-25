@@ -13,11 +13,16 @@ const verb = (a: Action) => {
  * Replays a chain on a 2D pitch. Play, pause and step buttons (dragging is never required, WCAG
  * 2.5.7); arrow keys step when focused; with reduced motion the whole chain shows at once.
  */
-export function PitchReplay({ actions, data, highlight = [], compact }:
-  { actions: Action[]; data: MatchData; highlight?: string[]; compact?: boolean }) {
+export function PitchReplay({ actions, data, highlight = [], compact, focusActionId }:
+  { actions: Action[]; data: MatchData; highlight?: string[]; compact?: boolean; focusActionId?: number }) {
   const [step, setStep] = useState(() => (reduceMotion() ? actions.length : 1));
   const [playing, setPlaying] = useState(false);
   useEffect(() => { setStep(reduceMotion() ? actions.length : 1); setPlaying(false); }, [actions]);
+  useEffect(() => {
+    if (focusActionId === undefined) return;
+    const i = actions.findIndex((a) => a.action_id === focusActionId);
+    if (i >= 0) { setPlaying(false); setStep(i + 1); }
+  }, [focusActionId, actions]);
   useEffect(() => {
     if (!playing) return;
     if (step >= actions.length) { setPlaying(false); return; }

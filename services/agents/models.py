@@ -67,10 +67,18 @@ def agent(name: str, instructions: str) -> Agent:
     return Agent(client=_client(), name=name, instructions=instructions)
 
 
+FIELD_LEAK = re.compile(r"\b[a-z]+_[a-z_]+\b\s*:?")  # e.g. "score_after:" copied from the facts
+
+
 def clean(text: str) -> str:
-    """House style: no em or en dashes, no surrounding quotes, single line."""
-    text = DASHES.sub(", ", text.strip()).replace("\n", " ")
+    """House style: straight quotes, no em or en dashes, no surrounding quotes, single line."""
+    text = DASHES.sub(", ", text.strip().translate(QUOTES)).replace("\n", " ")
     return text.strip().strip('"').strip()
+
+
+def leaked_fields(text: str) -> list[str]:
+    """Internal field names the model copied from its instructions instead of writing prose."""
+    return [m.group(0).rstrip(": ") for m in FIELD_LEAK.finditer(text.lower())]
 
 
 async def ask(a: Agent, prompt: str, options: dict | None = None) -> str:

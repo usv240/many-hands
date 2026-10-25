@@ -8,7 +8,8 @@ export interface LogEntry {
   text: string;
   si: number;
   verdict: string;
-  action: "approved" | "approved with reason" | "used fair version" | "rejected";
+  action: "approved" | "approved with reason" | "used fair version" | "rejected" | "agents fixed it"
+    | "evidence confirmed" | "evidence rejected" | "evidence unclear";
   reason?: string;
   prev: string;
   hash: string;

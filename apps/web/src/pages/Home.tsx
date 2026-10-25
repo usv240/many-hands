@@ -1,17 +1,19 @@
-import { Accordion, AccordionHeader, AccordionItem, AccordionPanel, Tab, TabList } from "@fluentui/react-components";
+import { Accordion, AccordionHeader, AccordionItem, AccordionPanel, Button, Tab, TabList } from "@fluentui/react-components";
 import {
   ArrowRight16Regular, Bot20Regular, BuildingShop20Regular, Code20Regular, DocumentText20Regular,
-  Eye20Regular, Glasses20Regular, PeopleTeam20Regular, PersonSupport20Regular, PlugConnected20Regular,
-  ShieldCheckmark20Regular, Sparkle20Regular, Tv20Regular, Wrench20Regular,
+  Glasses20Regular, PeopleTeam20Regular, PersonSupport20Regular, PlugConnected20Regular,
+  ShieldCheckmark20Regular, Sparkle20Regular, Tv20Regular,
 } from "@fluentui/react-icons";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { AgentTrace } from "../components/AgentDesk";
 import { Info, Term } from "../components/Info";
 import { PitchReplay } from "../components/Pitch";
 import { ResponsibilityBars, ScaleMeter, ScoreBadge } from "../components/viz";
 import { FAQ } from "../content/learn";
 import { audit } from "../engine/audit";
 import { Roster } from "../engine/extraction";
+import { type AgentResult, broadcast, getMetrics, liveAi, useHealth } from "../state/api";
 import { loadMatch, loadResults, SHOWCASE, useAsync } from "../state/data";
 import { L } from "../state/prefs";
 
@@ -42,6 +44,11 @@ export default function Home() {
   const match = useAsync(() => loadMatch(SHOWCASE.gameId), []);
   const results = useAsync(loadResults, []);
   const [story, setStory] = useState<"tv" | "evidence">("tv");
+  const { health } = useHealth();
+  const live = liveAi(health);
+  const [agentRun, setAgentRun] = useState<{ busy: boolean; result?: AgentResult; error?: string }>({ busy: false });
+  const [p50, setP50] = useState<number | null>(null);
+  useEffect(() => { getMetrics().then((m) => setP50(m?.p50_s ?? null)); }, []);
 
   const showcase = useMemo(() => {
     const data = match.data;
@@ -55,7 +62,8 @@ export default function Home() {
       `Number ${last.shirt} lost it, and the defence could not recover.`,
       `Two loose balls in a row, from ${chain.responsibility.map((c) => `number ${c.shirt}`).join(" and ")}, let them through.`,
     ].map((t) => ({ text: t, r: audit(t, chain.shares, roster, chain.conceding_team_id, undefined, chain.goal) }));
-    return { data, chain, last, examples };
+    const fairSi = audit(examples[0].r.fairRewrite ?? "", chain.shares, roster, chain.conceding_team_id, undefined, chain.goal);
+    return { data, chain, last, examples, fairSi };
   }, [match.data]);
 
   const ext = results.data?.external;
@@ -66,8 +74,11 @@ export default function Home() {
       {/* 1. Hero */}
       <section className="mh-hero">
         <div className="mh-hero-text">
-          <p className="mh-eyebrow">Fair match intelligence for broadcasters, clubs and fans</p>
-          <h1>Trace every goal to everyone who caused it. Check every line before it airs.</h1>
+          <h1>Nobody concedes alone.</h1>
+          <p className="mh-lead mh-lead-strong">
+            Microsoft Foundry agents trace every goal back through every player who caused it, catch scapegoating
+            lines before they air, and rewrite them fairly, about {p50 ? p50.toFixed(0) : "4"} seconds after the goal.
+          </p>
           <p className="mh-lead">
             <L s="When a goal goes in, TV and AI recaps often blame one player. Many Hands shows who really contributed, tells the story for every kind of fan, and stops unfair blame before it reaches the screen."
                d="Many Hands is an AI match insights engine. It measures each player's real share of every key moment, explains it on screen, personalises it for every fan, and checks every sentence for scapegoating before it airs."
@@ -82,17 +93,38 @@ export default function Home() {
         <div className="mh-hero-card" aria-label="Example: the same goal, two lines">
           {showcase ? (
             <>
-              <p className="mh-card-kicker">One goal. Two lines a studio might air.</p>
+              <p className="mh-card-title">A pundit is about to say this about a goal:</p>
               <div className="mh-hero-line">
                 <p>"{showcase.examples[0].text}"</p>
                 <ScoreBadge si={showcase.examples[0].r.si} verdict={showcase.examples[0].r.verdict} />
               </div>
-              <div className="mh-hero-line">
-                <p>"{showcase.examples[0].r.fairRewrite}"</p>
-                <ScoreBadge si={audit(showcase.examples[0].r.fairRewrite!, showcase.chain.shares, new Roster(showcase.data.roster), showcase.chain.conceding_team_id).si}
-                            verdict={audit(showcase.examples[0].r.fairRewrite!, showcase.chain.shares, new Roster(showcase.data.roster), showcase.chain.conceding_team_id).verdict} />
-              </div>
-              <p className="mh-small mh-muted"><Term id="si">Scored with the Scapegoat Index</Term>. Fictional match.</p>
+              {agentRun.result?.line ? (
+                <div className="mh-hero-line is-fixed">
+                  <p>"{agentRun.result.line}"</p>
+                  {agentRun.result.audit && <ScoreBadge si={agentRun.result.audit.si} verdict={agentRun.result.audit.verdict} />}
+                </div>
+              ) : !live ? (
+                <div className="mh-hero-line is-fixed">
+                  <p>"{showcase.examples[0].r.fairRewrite}"</p>
+                  <ScoreBadge si={showcase.fairSi.si} verdict={showcase.fairSi.verdict} />
+                </div>
+              ) : null}
+              {live && !agentRun.result && (
+                <Button appearance="primary" disabled={agentRun.busy}
+                  onClick={async () => {
+                    setAgentRun({ busy: true });
+                    try { setAgentRun({ busy: false, result: await broadcast({ chain_id: SHOWCASE.chainId, text: showcase.examples[0].text }) }); }
+                    catch (e) { setAgentRun({ busy: false, error: (e as Error).message }); }
+                  }}>
+                  {agentRun.busy ? "The agents are rewriting it" : "Fix it with the agents, live"}
+                </Button>
+              )}
+              {agentRun.error && <p className="mh-small mh-bad">{agentRun.error}</p>}
+              {agentRun.result && <AgentTrace result={agentRun.result} />}
+              <p className="mh-small mh-muted">
+                <Term id="si">Scored with the Scapegoat Index</Term>
+                {live ? " Rewritten by gpt-5-mini on Microsoft Foundry; the score is computed in code." : " Fictional match."}
+              </p>
             </>
           ) : <div className="mh-skeleton" style={{ height: 180 }} />}
         </div>
@@ -101,18 +133,23 @@ export default function Home() {
       {/* 2. Problem */}
       <section className="mh-section" aria-labelledby="problem">
         <h2 id="problem">Football is a team game. The blame usually is not.</h2>
-        <div className="mh-grid-3">
-          <article className="mh-card mh-fact">
+        <p className="mh-statement">
+          July 2021, the Euro 2020 final. England lose on penalties, and within hours the three young players who
+          missed are racially abused online. The FA condemns it before dawn.{" "}
+          <a href="https://www.aljazeera.com/sports/2021/7/12/fa-condemns-racist-abuse-of-england-players-after-euro-2020-final" target="_blank" rel="noreferrer">Al Jazeera, 2021</a>
+        </p>
+        <div className="mh-facts-row">
+          <article className="mh-fact">
             <p className="mh-fact-num">68%</p>
             <p>of Premier League players received abusive posts on Twitter in the first half of the 2021 to 2022 season.</p>
             <a className="mh-source" href="https://www.turing.ac.uk/news/publications/tracking-abuse-twitter-against-football-players-2021-22-premier-league-season" target="_blank" rel="noreferrer">Alan Turing Institute for Ofcom, 2022</a>
           </article>
-          <article className="mh-card mh-fact">
+          <article className="mh-fact">
             <p className="mh-fact-num">Peaks</p>
             <p>Abuse peaks right after key moments in a match, and half of it was aimed at just 12 players.</p>
             <a className="mh-source" href="https://www.ofcom.org.uk/online-safety/online-abuse/seven-in-ten-premier-league-footballers-face-twitter-abuse" target="_blank" rel="noreferrer">Ofcom, 2022</a>
           </article>
-          <article className="mh-card mh-fact">
+          <article className="mh-fact">
             <p className="mh-fact-num">Biased</p>
             <p>Reporters rate players higher when their team wins a penalty shoot-out, even players who never took a penalty. The result changes the story.</p>
             <a className="mh-source" href="https://doi.org/10.1016/j.joep.2018.12.006" target="_blank" rel="noreferrer">Kausel, Ventura and Rodriguez, 2019</a>
@@ -204,19 +241,34 @@ export default function Home() {
 
       {/* 6. Proof */}
       <section className="mh-section" aria-labelledby="proof">
-        <h2 id="proof">We measured it. Including where we are weaker.</h2>
-        <div className="mh-grid-3">
-          <article className="mh-card mh-stat">
+        <h2 id="proof">What it means on a match day</h2>
+        <dl className="mh-outcomes">
+          <div>
+            <dt>{p50 ? `${p50.toFixed(1)} s` : "About 4 s"}</dt>
+            <dd>from a goal reaching Azure Event Hubs to a fair, checked line and five audience versions ready for air. Measured live on every goal.</dd>
+          </div>
+          <div>
+            <dt>About 51</dt>
+            <dd>moments in a 380-match season where a one-culprit story would be unfair: 0.5 provider-labelled errors per match, 27 percent of them shared. An estimate from real tournament data.</dd>
+          </div>
+          <div>
+            <dt>0</dt>
+            <dd>times it called deserved blame unfair, in 130 real cases where one player truly was responsible.</dd>
+          </div>
+        </dl>
+        <h3 className="mh-subhead">The evidence behind those numbers</h3>
+        <div className="mh-facts-row">
+          <article className="mh-stat">
             <p className="mh-stat-num">{ext ? `${ext.justified_false_unfair} of ${ext.justified_cases}` : "..."}</p>
             <p><Term id="negativeControl">false alarms</Term> on real cases where one player truly was to blame. Fair means fair both ways.</p>
             <p className="mh-small mh-muted"><Term id="external">Real public data</Term>, provider-labelled errors, Premier League excluded.</p>
           </article>
-          <article className="mh-card mh-stat">
+          <article className="mh-stat">
             <p className="mh-stat-num">{ext ? `${ext.verdicts_if_blamed_alone.unfair} of ${ext.cases}` : "..."}</p>
             <p>real errors where a single-culprit story would be Unfair, because a teammate's lost ball mattered as much or more.</p>
             <p className="mh-small mh-muted">About 1 in 4. Same data set.</p>
           </article>
-          <article className="mh-card mh-stat">
+          <article className="mh-stat">
             <p className="mh-stat-num">{syn ? `${syn.multi_cause.metrics["tv_lam0.0"].toFixed(2)} vs ${syn.multi_cause.metrics.tv_last.toFixed(2)}` : "..."}</p>
             <p>distance from the <Term id="groundTruth">true blame</Term> when blame is shared: Many Hands versus <Term id="lastTouch">last-touch blame</Term>. Lower is better.</p>
             <p className="mh-small mh-muted"><Term id="synthetic">Synthetic league</Term> with known causes.</p>
@@ -228,45 +280,28 @@ export default function Home() {
         </p>
       </section>
 
-      {/* 7. Fair both ways + who */}
+      {/* 7. Who it is for, and how they use it */}
       <section className="mh-section mh-band" aria-labelledby="who">
-        <h2 id="who">Who it is for</h2>
-        <div className="mh-grid-4">
+        <h2 id="who">Who uses it, and how</h2>
+        <ul className="mh-uses">
           {[
-            { icon: <Tv20Regular />, t: "Broadcasters and streamers", d: "Check every graphic and line before it airs, in real time.", to: "/studio" },
-            { icon: <ShieldCheckmark20Regular />, t: "Clubs and leagues", d: "See which players are being over-blamed, and protect them.", to: "/trust" },
-            { icon: <Code20Regular />, t: "AI developers", d: "Add a fairness check to any match recap engine with one call.", to: "/developers" },
-            { icon: <Eye20Regular />, t: "Fans", d: "Understand what really happened, at the depth you like.", to: "/check" },
+            { icon: <Tv20Regular />, t: "Broadcasters and streamers", d: "Every graphic and line is checked before it airs, with a human approving.", to: "/studio", cta: "Open the Studio" },
+            { icon: <DocumentText20Regular />, t: "Editors and pundits", d: "Paste any line about a goal and see how fair it is, and why.", to: "/check", cta: "Check a line" },
+            { icon: <Code20Regular />, t: "AI developers", d: "Add the check to any recap engine through the REST API or the command line.", to: "/developers", cta: "Read the API" },
+            { icon: <Bot20Regular />, t: "AI assistants", d: "GitHub Copilot or any MCP client can use our 8 ledger tools.", to: "/developers#mcp", cta: "Connect over MCP" },
+            { icon: <ShieldCheckmark20Regular />, t: "Clubs and leagues", d: "See which players are being over-blamed, with a tamper-evident record.", to: "/trust", cta: "How it stays honest" },
+            { icon: <BuildingShop20Regular />, t: "Anyone with match files", d: "Bring your own data, sentences and fairness limits. Files never leave your browser.", to: "/byo", cta: "Bring your own" },
           ].map((c) => (
-            <Link key={c.t} to={c.to} className="mh-card mh-card-link">
-              <span className="mh-card-icon" aria-hidden>{c.icon}</span>
-              <h3>{c.t}</h3><p>{c.d}</p>
-            </Link>
+            <li key={c.t}>
+              <span className="mh-use-icon" aria-hidden>{c.icon}</span>
+              <div><h3>{c.t}</h3><p>{c.d}</p></div>
+              <Link to={c.to} className="mh-link-arrow">{c.cta} <ArrowRight16Regular aria-hidden /></Link>
+            </li>
           ))}
-        </div>
+        </ul>
         <div className="mh-fairboth">
           <h3><Term id="justified">Fair both ways</Term></h3>
           <p>Many Hands is not here to excuse mistakes. When the evidence shows one player was mostly responsible, it says so plainly. It also finds the players who did the most to create a goal but never make the headline, and gives them credit.</p>
-        </div>
-      </section>
-
-      {/* 8. Use it your way */}
-      <section className="mh-section" aria-labelledby="use">
-        <h2 id="use">Use it your way</h2>
-        <div className="mh-grid-3">
-          {[
-            { icon: <Tv20Regular />, t: "Studio", d: "The live console for producers.", to: "/studio" },
-            { icon: <DocumentText20Regular />, t: "Check a sentence", d: "Paste any line, get a score in a second.", to: "/check" },
-            { icon: <Code20Regular />, t: "REST API", d: "Call Many Hands from your own software.", to: "/developers" },
-            { icon: <Bot20Regular />, t: "MCP server", d: "Let your AI assistant use our 8 tools.", to: "/developers#mcp" },
-            { icon: <Wrench20Regular />, t: "Command line", d: "Check lines and rerun our benchmarks.", to: "/developers#cli" },
-            { icon: <BuildingShop20Regular />, t: "Bring your own", d: "Your sentences, your limits, your match files.", to: "/byo" },
-          ].map((c) => (
-            <Link key={c.t} to={c.to} className="mh-card mh-card-link mh-card-row">
-              <span className="mh-card-icon" aria-hidden>{c.icon}</span>
-              <div><h3>{c.t}</h3><p>{c.d}</p></div>
-            </Link>
-          ))}
         </div>
       </section>
 
