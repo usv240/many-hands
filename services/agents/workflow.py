@@ -99,6 +99,11 @@ def _ms(t0: float) -> int:
     return int((time.perf_counter() - t0) * 1000)
 
 
+def _si(si: float) -> str:
+    """Two decimals, rounding halves up like the browser's toFixed, so the trace matches the badge."""
+    return f"{int(si * 100 + 0.5) / 100:.2f}"
+
+
 # ---------------------------------------------------------------------------------- context
 def _store():
     from services.api.app import store
@@ -244,7 +249,7 @@ class Auditor(Executor):
         d.history.append({"text": d.text, "source": d.source, "si": res["si"], "verdict": res["verdict"],
                           "fact_errors": bad_facts})
         how = "rules and gpt-5-mini reader" if read_by_model else "rules"
-        ev.trace.append(Step("Auditor", f"scored {res['si']:.2f}, {res['verdict']} ({how}; score in code)", _ms(t0),
+        ev.trace.append(Step("Auditor", f"scored {_si(res['si'])}, {res['verdict']} ({how}; score in code)", _ms(t0),
                              d.text, model=read_by_model))
         if res["verdict"] == "unfair" and d.revisions < MAX_REVISIONS:
             d.reasons = res["reasons"] + [res["contrastive"]]
@@ -255,7 +260,7 @@ class Auditor(Executor):
             res = audit(fallback.text, ev.shares, store.roster(ev.facts["game_id"]), ev.facts["conceding_team_id"],
                         Policy(*ev.request.policy), goal=ev.facts["goal"]).to_dict()
             fallback.history.append({"text": fallback.text, "source": "template", "si": res["si"], "verdict": res["verdict"]})
-            ev.trace.append(Step("Auditor", f"revisions used up: fair template scored {res['si']:.2f}", 0, fallback.text))
+            ev.trace.append(Step("Auditor", f"revisions used up: fair template scored {_si(res['si'])}", 0, fallback.text))
             ev.line_ready_s = round(time.perf_counter() - ev.started, 2)
             await ctx.send_message(Approved(fallback, res))
         else:
