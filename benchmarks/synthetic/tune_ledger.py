@@ -19,7 +19,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "packages"))
 
-from ledger_core import responsibility as R  # noqa: E402
+from ledger_core import responsibility  # noqa: E402
 from ledger_core.responsibility import last_touch_ranking, ranking  # noqa: E402
 from narrative_core.scapegoat import Verdict, scapegoat_index, verdict  # noqa: E402
 
@@ -47,7 +47,7 @@ def main() -> None:
     for min_fraction, only_failures, boost in grid:
         tvs, top1, top3, just_unfair, n_just = [], [], [], 0, 0
         for c, d, truth in chains:
-            shares = R.onball_blame(c, d, min_fraction=min_fraction, only_failures=only_failures,
+            shares = responsibility.onball_blame(c, d, min_fraction=min_fraction, only_failures=only_failures,
                                     last_turnover_boost=boost)
             t_rank = ranking(truth)
             r = ranking(shares)
@@ -67,9 +67,11 @@ def main() -> None:
         last = last_touch_ranking(c.iloc[:-1], d)
         dist = {last[0]: 1.0} if last else {}
         t_rank = ranking(truth)
-        tvs.append(tv(dist, truth)); top1.append(bool(last) and last[0] == t_rank[0])
+        tvs.append(tv(dist, truth))
+        top1.append(bool(last) and last[0] == t_rank[0])
         if truth[t_rank[0]] >= JUSTIFIED:
-            nj += 1; ju += verdict(scapegoat_index({t_rank[0]: 1.0}, dist) if dist else 1.0) is Verdict.UNFAIR
+            nj += 1
+            ju += verdict(scapegoat_index({t_rank[0]: 1.0}, dist) if dist else 1.0) is Verdict.UNFAIR
     rows.append(dict(min_fraction="last-touch", only_failures="", boost="", tv=sum(tvs) / len(tvs),
                      top1=sum(top1) / len(top1), top3=float("nan"), justified_unfair=ju / nj))
     df = pd.DataFrame(rows).sort_values("tv")

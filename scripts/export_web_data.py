@@ -19,6 +19,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "packages"))
 
 from narrative_core.audit import audit  # noqa: E402
+
 from services.api.app import chain, chains, matches, native, roster, store  # noqa: E402
 
 OUT = ROOT / "apps" / "web" / "public" / "data"
@@ -58,7 +59,6 @@ def results() -> dict:
 
 def sample_csv() -> None:
     """A full fictional match as a rated SPADL CSV: the Bring Your Own sample download."""
-    import pandas as pd
     gid = 20045
     L = store.ledgers[gid]
     a = L.actions.copy()
