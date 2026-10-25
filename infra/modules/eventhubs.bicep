@@ -25,6 +25,16 @@ resource hub 'Microsoft.EventHub/namespaces/eventhubs@2024-01-01' = {
   }
 }
 
+// The way back out: approved, audited graphics for the broadcaster's own graphics system.
+resource graphicsHub 'Microsoft.EventHub/namespaces/eventhubs@2024-01-01' = {
+  parent: ns
+  name: 'broadcast-graphics'
+  properties: {
+    partitionCount: 1
+    messageRetentionInDays: 1
+  }
+}
+
 var dataOwner = 'f526a384-b230-433a-b45c-95f59c4a2dec' // Azure Event Hubs Data Owner
 resource appRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   scope: ns
@@ -47,3 +57,4 @@ resource userRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!em
 
 output namespace string = ns.name
 output hubName string = hub.name
+output graphicsHubName string = graphicsHub.name

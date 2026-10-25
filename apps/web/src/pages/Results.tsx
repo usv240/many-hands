@@ -97,6 +97,53 @@ export default function Results() {
         </ul>
       </section>
 
+      {data.foundry_eval && (() => {
+        const g = data.foundry_eval.groups;
+        const agents = g["agents' line"], pundit = g["pundit line"];
+        const code = "Scapegoat Index (code): passed", judge = "Independent fairness judge (model): passed";
+        return (
+          <section className="mh-section" aria-labelledby="foundry-eval">
+            <h2 id="foundry-eval">Checked in Microsoft Foundry Evaluations</h2>
+            <p>Every goal's lines went into one Foundry evaluation run with two graders: our Scapegoat Index as a
+              code grader, and an independent model judge that sees only the line and the evidence, never our score.</p>
+            <div className="mh-table-wrap">
+              <table className="mh-table">
+                <thead><tr><th>Lines</th><th>Fair by the Scapegoat Index (code)</th><th>Fair by the independent judge (model)</th></tr></thead>
+                <tbody>
+                  <tr><td>The agents' lines</td><td>{agents[code]} of {agents.lines}</td><td>{agents[judge]} of {agents.lines}</td></tr>
+                  <tr><td>A pundit's one-culprit line</td><td>{pundit[code]} of {pundit.lines}</td><td>{pundit[judge]} of {pundit.lines}</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="mh-note">The two graders agree. The pundit's line was fair whenever one player really did cause the goal,
+              and unfair only where blame was shared: fair both ways, confirmed by a judge we did not write.{" "}
+              <a href={data.foundry_eval.portal_url} target="_blank" rel="noreferrer">Open the run in Microsoft Foundry</a> (needs project access).</p>
+          </section>
+        );
+      })()}
+
+      {data.operations && (
+        <section className="mh-section" aria-labelledby="ops">
+          <h2 id="ops">Time and cost on a match day</h2>
+          <p>The full agent workflow ran on every one of the {data.operations.moments} goals in the demo matches, through
+            Microsoft Foundry ({data.operations.model}). {data.operations.all_ready} of {data.operations.moments} produced a fair line.</p>
+          <div className="mh-table-wrap">
+            <table className="mh-table">
+              <thead><tr><th>Measured</th><th>Median</th><th>95th percentile</th></tr></thead>
+              <tbody>
+                <tr><td>Fair line ready for the lower third (agent time)</td><td>{data.operations.line_ready_s.p50.toFixed(1)} s</td><td>{data.operations.line_ready_s.p95.toFixed(1)} s</td></tr>
+                <tr><td>All five audience versions ready</td><td>{data.operations.all_versions_s.p50.toFixed(1)} s</td><td>{data.operations.all_versions_s.p95.toFixed(1)} s</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ul className="mh-facts">
+            <li><strong>${data.operations.cost_per_goal_usd.toFixed(4)}</strong> per goal: {data.operations.model_calls_per_goal} model calls and about {data.operations.tokens_per_goal.toLocaleString()} tokens.</li>
+            <li><strong>${data.operations.cost_per_match_usd.toFixed(3)}</strong> per match ({data.operations.decisive_moments_per_match} decisive moments), so about <strong>${data.operations.cost_per_season_usd.toFixed(2)}</strong> for a 380-match season.</li>
+            <li>{data.operations.note} The live Studio shows the measured time on every goal.</li>
+          </ul>
+        </section>
+      )}
+
       {data.redteam && (
         <section className="mh-section" aria-labelledby="redteam">
           <h2 id="redteam"><Term id="redTeam">Red team: can an attacker sneak scapegoating past the Auditor?</Term></h2>

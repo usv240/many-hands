@@ -52,6 +52,16 @@ export interface Results {
     controls: { lines: number; unfair_rules: number; unfair_with_reader: number };
     caveat: string;
   };
+  foundry_eval: {
+    status: string; portal_url: string; items: number;
+    groups: Record<string, Record<string, number>>;
+  };
+  operations: {
+    moments: number; matches: number; all_ready: number; model: string;
+    line_ready_s: { p50: number; p95: number }; all_versions_s: { p50: number; p95: number };
+    model_calls_per_goal: number; tokens_per_goal: number; cost_per_goal_usd: number;
+    cost_per_match_usd: number; cost_per_season_usd: number; decisive_moments_per_match: number; note: string;
+  };
 }
 
 export interface RedTeamSplit {

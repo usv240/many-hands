@@ -107,6 +107,7 @@ resource app 'Microsoft.App/containerApps@2024-03-01' = {
           { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', secretRef: 'appinsights' }
           { name: 'EVENTHUB_NAMESPACE', value: eventHubsNamespace }
           { name: 'EVENTHUB_NAME', value: eventHubName }
+          { name: 'EVENTHUB_GRAPHICS_NAME', value: 'broadcast-graphics' }
         ]
       }]
       // One warm replica: never a cold start for a judge, and one consumer of the live feed.

@@ -39,3 +39,5 @@ def test_goal_on_the_stream_wakes_the_agents():
     assert events >= 5
     assert agent is not None and agent["result"]["status"] == "ready"
     assert agent["latency_s"] >= 0 and agent["result"]["audit"]["verdict"] != "unfair"
+    assert agent["line_latency_s"] is not None and agent["line_latency_s"] <= agent["latency_s"]
+    assert agent["graphic_sent_to"].startswith("broadcast-graphics")

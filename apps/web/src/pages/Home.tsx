@@ -47,8 +47,9 @@ export default function Home() {
   const { health } = useHealth();
   const live = liveAi(health);
   const [agentRun, setAgentRun] = useState<{ busy: boolean; result?: AgentResult; error?: string }>({ busy: false });
-  const [p50, setP50] = useState<number | null>(null);
-  useEffect(() => { getMetrics().then((m) => setP50(m?.p50_s ?? null)); }, []);
+  // Measured live on every goal: the fair line ready for air, and all five audience versions ready.
+  const [timing, setTiming] = useState<{ line: number | null; all: number | null }>({ line: null, all: null });
+  useEffect(() => { getMetrics().then((m) => setTiming({ line: m?.line_p50_s ?? null, all: m?.p50_s ?? null })); }, []);
 
   const showcase = useMemo(() => {
     const data = match.data;
@@ -77,7 +78,7 @@ export default function Home() {
           <h1>Nobody concedes alone.</h1>
           <p className="mh-lead mh-lead-strong">
             Microsoft Foundry agents trace every goal back through every player who caused it, catch scapegoating
-            lines before they air, and rewrite them fairly, about {p50 ? p50.toFixed(0) : "4"} seconds after the goal.
+            lines before they air, and rewrite them fairly, seconds after the goal.
           </p>
           <p className="mh-lead">
             <L s="When a goal goes in, TV and AI recaps often blame one player. Many Hands shows who really contributed, tells the story for every kind of fan, and stops unfair blame before it reaches the screen."
@@ -244,8 +245,13 @@ export default function Home() {
         <h2 id="proof">What it means on a match day</h2>
         <dl className="mh-outcomes">
           <div>
-            <dt>{p50 ? `${p50.toFixed(1)} s` : "About 4 s"}</dt>
-            <dd>from a goal reaching Azure Event Hubs to a fair, checked line and five audience versions ready for air. Measured live on every goal.</dd>
+            <dt>{timing.line ? `${timing.line.toFixed(1)} s` : "Seconds"}</dt>
+            <dd>from a goal reaching Azure Event Hubs to a fair, checked line ready for the lower third
+              {timing.all ? `; all five audience versions follow by ${timing.all.toFixed(1)} s` : ""}. Median, measured live on every goal.</dd>
+          </div>
+          <div>
+            <dt>{results.data ? `$${results.data.operations.cost_per_season_usd.toFixed(0)}` : "About $5"}</dt>
+            <dd>to check every goal of a 380-match season with the agents on Microsoft Foundry: about {results.data ? `${(results.data.operations.cost_per_match_usd * 100).toFixed(1)} cents` : "1 cent"} a match. Measured from real token use on {results.data?.operations.moments ?? 22} goals.</dd>
           </div>
           <div>
             <dt>About 51</dt>

@@ -50,6 +50,9 @@ def results() -> dict:
         },
         "calibration": cal.to_dict(orient="records"),
         "redteam": json.loads((ROOT / "benchmarks/redteam/reader_results.json").read_text()),
+        "foundry_eval": json.loads((ROOT / "benchmarks/foundry_eval/results.json").read_text()),
+        "operations": {k: v for k, v in json.loads((ROOT / "benchmarks/operations/results.json").read_text()).items()
+                       if k != "rows"},
     }
 
 

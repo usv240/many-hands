@@ -6,7 +6,7 @@ import { type AgentResult, kickoff, LIVE_URL } from "../state/api";
 import { Info } from "./Info";
 import { ScoreBadge } from "./viz";
 
-interface LiveGoal { chainId: string; latency: number; result: AgentResult; minute: number }
+interface LiveGoal { chainId: string; latency: number; lineLatency: number | null; result: AgentResult; minute: number; sentTo: string | null }
 
 /**
  * Plays the match through Azure Event Hubs. Nobody presses a button when a goal goes in: the
@@ -48,7 +48,7 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
       }
       if (msg.type === "agent") {
         const minute = data.chains.find((c) => c.chain_id === msg.chain_id)?.minute ?? 0;
-        setGoals((g) => [{ chainId: msg.chain_id, latency: msg.latency_s, result: msg.result, minute }, ...g]);
+        setGoals((g) => [{ chainId: msg.chain_id, latency: msg.latency_s, lineLatency: msg.line_latency_s, result: msg.result, minute, sentTo: msg.graphic_sent_to ?? null }, ...g]);
         setWaking(null);
       }
       if (msg.type === "full-time") { setRunning(false); es.close(); }
@@ -96,10 +96,15 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
           <li key={g.chainId} className="mh-live-goal">
             <div className="mh-row mh-between">
               <strong>{g.minute}'</strong>
-              <span className="mh-live-latency">ready {g.latency.toFixed(1)} s after the goal</span>
+              <span className="mh-live-latency">
+                {g.lineLatency !== null ? `line ready ${g.lineLatency.toFixed(1)} s after the goal, 5 versions ${g.latency.toFixed(1)} s` : `ready ${g.latency.toFixed(1)} s after the goal`}
+              </span>
             </div>
             <p>"{g.result.line}"</p>
-            {g.result.audit && <ScoreBadge si={g.result.audit.si} verdict={g.result.audit.verdict} size="small" />}
+            <div className="mh-row mh-wrap">
+              {g.result.audit && <ScoreBadge si={g.result.audit.si} verdict={g.result.audit.verdict} size="small" />}
+              {g.sentTo && <span className="mh-small mh-muted">Sent to the broadcaster's graphics feed: {g.sentTo}</span>}
+            </div>
           </li>
         ))}
       </ol>

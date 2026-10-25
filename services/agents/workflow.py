@@ -58,6 +58,8 @@ class Evidence:
     facts: dict[str, Any]
     shares: dict[str, float]
     trace: list[Step] = field(default_factory=list)
+    started: float = field(default_factory=time.perf_counter)
+    line_ready_s: float | None = None  # when the fair line was approved: what the lower third needs
 
 
 @dataclass
@@ -89,6 +91,8 @@ class Result:
     model: str
     model_used: bool
     held_reason: str | None = None
+    line_ready_s: float | None = None
+    usage: dict | None = None
 
 
 def _ms(t0: float) -> int:
@@ -252,8 +256,10 @@ class Auditor(Executor):
                         Policy(*ev.request.policy), goal=ev.facts["goal"]).to_dict()
             fallback.history.append({"text": fallback.text, "source": "template", "si": res["si"], "verdict": res["verdict"]})
             ev.trace.append(Step("Auditor", f"revisions used up: fair template scored {res['si']:.2f}", 0, fallback.text))
+            ev.line_ready_s = round(time.perf_counter() - ev.started, 2)
             await ctx.send_message(Approved(fallback, res))
         else:
+            ev.line_ready_s = round(time.perf_counter() - ev.started, 2)
             await ctx.send_message(Approved(d, res))
 
 
@@ -330,6 +336,7 @@ def _result(ev: Evidence, line, audit_res, draft: Draft | None, variants, held: 
         revisions=draft.revisions if draft else 0, history=draft.history if draft else [],
         variants=variants, trace=[asdict(s) for s in ev.trace], model=models.model_name(),
         model_used=any(s.model for s in ev.trace), held_reason=held,
+        line_ready_s=None if held else ev.line_ready_s,
     )
 
 
@@ -349,10 +356,12 @@ def build():
 
 async def run(req: Request) -> Result:
     t0 = time.perf_counter()
+    tally = models.start_usage()
     result = await build().run(req)
     outputs = result.get_outputs()
     if not outputs:
         raise RuntimeError("workflow produced no output")
     out: Result = outputs[-1]
+    out.usage = {**tally, "cost_usd": round(models.usage_cost(tally), 6)}
     out.trace.append(asdict(Step("Workflow", "finished", _ms(t0))))
     return out

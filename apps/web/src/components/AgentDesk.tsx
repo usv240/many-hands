@@ -102,6 +102,7 @@ export function AgentDesk({ chainId, line, live, onResult }:
           )}
           <AgentTrace result={result} />
           <p className="mh-small mh-muted">
+            {result.line_ready_s !== null && `Fair line ready in ${result.line_ready_s.toFixed(1)} s. `}
             {result.model_used ? `Written by ${result.model} on Microsoft Foundry, orchestrated by Microsoft Agent Framework.` : "The model was unavailable, so the fair template was used."}
             {" "}Every number above was measured on this run.
           </p>

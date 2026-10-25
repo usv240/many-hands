@@ -8,6 +8,7 @@ agent uses its deterministic fallback, so the product still works (and says so).
 from __future__ import annotations
 
 import asyncio
+import contextvars
 import os
 import re
 import shutil
@@ -81,7 +82,28 @@ def leaked_fields(text: str) -> list[str]:
     return [m.group(0).rstrip(": ") for m in FIELD_LEAK.finditer(text.lower())]
 
 
+# Token use per workflow run, so the cost of checking a goal is measured, not estimated.
+# Global Standard list prices for gpt-5-mini, USD per million tokens (Azure, Oct 2026).
+PRICE_PER_M = {"input": 0.25, "output": 2.00}
+_usage: contextvars.ContextVar[dict | None] = contextvars.ContextVar("usage", default=None)
+
+
+def start_usage() -> dict:
+    tally = {"calls": 0, "input_tokens": 0, "output_tokens": 0}
+    _usage.set(tally)
+    return tally
+
+
+def usage_cost(tally: dict) -> float:
+    return (tally["input_tokens"] * PRICE_PER_M["input"] + tally["output_tokens"] * PRICE_PER_M["output"]) / 1e6
+
+
 async def ask(a: Agent, prompt: str, options: dict | None = None) -> str:
     """Run an agent with a timeout. Raises on failure so the caller can fall back."""
     response = await asyncio.wait_for(a.run(prompt, options=options or FAST), timeout=TIMEOUT_S)
+    tally = _usage.get()
+    if tally is not None and response.usage_details:
+        tally["calls"] += 1
+        tally["input_tokens"] += int(response.usage_details.get("input_token_count") or 0)
+        tally["output_tokens"] += int(response.usage_details.get("output_token_count") or 0)
     return clean(response.text)

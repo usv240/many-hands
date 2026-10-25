@@ -32,10 +32,14 @@ class Hub:
         env = models._env()
         self.namespace = env.get("EVENTHUB_NAMESPACE") or ""
         self.name = env.get("EVENTHUB_NAME") or "match-events"
+        self.graphics_name = env.get("EVENTHUB_GRAPHICS_NAME") or "broadcast-graphics"
+        self.graphics_sent = 0
+        self._graphics_producer = None
         self.local: asyncio.Queue[dict] = asyncio.Queue()
         self.subscribers: dict[int, set[asyncio.Queue]] = defaultdict(set)
         self.backlog: dict[int, deque] = defaultdict(lambda: deque(maxlen=400))
-        self.latencies: deque[float] = deque(maxlen=200)
+        self.latencies: deque[float] = deque(maxlen=200)       # goal to all five versions ready
+        self.line_latencies: deque[float] = deque(maxlen=200)  # goal to the fair line ready for air
         self.running: dict[int, asyncio.Task] = {}
         self._consumer: asyncio.Task | None = None
         self._producer = None
@@ -53,9 +57,10 @@ class Hub:
         for t in [self._consumer, *self.running.values()]:
             if t:
                 t.cancel()
-        if self._producer is not None:
-            with contextlib.suppress(Exception):
-                await self._producer.close()
+        for producer in (self._producer, self._graphics_producer):
+            if producer is not None:
+                with contextlib.suppress(Exception):
+                    await producer.close()
 
     def _fqdn(self) -> str:
         return f"{self.namespace}.servicebus.windows.net"
@@ -72,6 +77,33 @@ class Hub:
         batch = await self._producer.create_batch()
         batch.add(EventData(json.dumps(payload)))
         await self._producer.send_batch(batch)
+
+    async def publish_graphic(self, game_id: int, chain_id: str, result) -> dict | None:
+        """Send an approved, audited graphic back into Event Hubs for the broadcaster's graphics system.
+
+        Only lines that passed the Auditor are ever sent; a held result sends nothing.
+        """
+        if result.status != "ready" or not result.line or not result.audit:
+            return None
+        graphic = {
+            "kind": "lower-third", "game_id": game_id, "chain_id": chain_id, "line": result.line,
+            "scapegoat_index": result.audit["si"], "verdict": result.audit["verdict"],
+            "versions": {v["id"]: v["text"] for v in result.variants if v["aired"]},
+            "approved_by": "Auditor (policy auto-approve for Fair)", "model": result.model,
+            "duration_s": 7, "sent_at": time.time(),
+        }
+        if self.namespace:
+            from azure.eventhub import EventData
+            from azure.eventhub.aio import EventHubProducerClient
+            if self._graphics_producer is None:
+                self._graphics_producer = EventHubProducerClient(
+                    fully_qualified_namespace=self._fqdn(), eventhub_name=self.graphics_name,
+                    credential=models.async_credential())
+            batch = await self._graphics_producer.create_batch()
+            batch.add(EventData(json.dumps(graphic)))
+            await self._graphics_producer.send_batch(batch)
+        self.graphics_sent += 1
+        return graphic
 
     async def _consume(self) -> None:
         if not self.namespace:
@@ -113,11 +145,22 @@ class Hub:
     async def _wake_agents(self, game_id: int, chain_id: str, published_at: float) -> None:
         from services.agents.workflow import Request, run
         self._fan_out(game_id, {"type": "agent-start", "chain_id": chain_id, "at": time.time()})
+        woke = time.time()
         try:
             result = await run(Request(chain_id))
             latency = time.time() - published_at
             self.latencies.append(latency)
+            line_latency = (woke - published_at) + result.line_ready_s if result.line_ready_s is not None else None
+            if line_latency is not None:
+                self.line_latencies.append(line_latency)
+            sent = None
+            try:
+                sent = await self.publish_graphic(game_id, chain_id, result)
+            except Exception as exc:  # the Studio still shows the line if the graphics hub is unreachable
+                log.warning("graphics publish failed: %s", exc)
             self._fan_out(game_id, {"type": "agent", "chain_id": chain_id, "latency_s": round(latency, 2),
+                                    "line_latency_s": None if line_latency is None else round(line_latency, 2),
+                                    "graphic_sent_to": (f"{self.graphics_name} ({self.transport})" if sent else None),
                                     "result": asdict(result)})
         except Exception as exc:
             self._fan_out(game_id, {"type": "agent-error", "chain_id": chain_id, "error": str(exc)[:200]})
@@ -170,9 +213,13 @@ class Hub:
         self.subscribers[game_id].discard(q)
 
     def metrics(self) -> dict:
-        lat = sorted(self.latencies)
-        pct = (lambda p: round(lat[min(len(lat) - 1, int(p * len(lat)))], 2)) if lat else (lambda p: None)
-        return {"transport": self.transport, "goals_processed": len(lat), "p50_s": pct(0.5), "p95_s": pct(0.95)}
+        def pct(values, p):
+            v = sorted(values)
+            return round(v[min(len(v) - 1, int(p * len(v)))], 2) if v else None
+        return {"transport": self.transport, "goals_processed": len(self.latencies),
+                "graphics_hub": self.graphics_name, "graphics_sent": self.graphics_sent,
+                "line_p50_s": pct(self.line_latencies, 0.5), "line_p95_s": pct(self.line_latencies, 0.95),
+                "p50_s": pct(self.latencies, 0.5), "p95_s": pct(self.latencies, 0.95)}
 
 
 hub = Hub()

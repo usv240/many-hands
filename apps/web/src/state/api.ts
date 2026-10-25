@@ -24,9 +24,14 @@ export interface AgentResult {
   model: string;
   model_used: boolean;
   held_reason: string | null;
+  line_ready_s: number | null;
 }
 
-export interface Metrics { transport: string; goals_processed: number; p50_s: number | null; p95_s: number | null }
+export interface Metrics {
+  transport: string; goals_processed: number;
+  line_p50_s: number | null; line_p95_s: number | null; // goal to the fair line ready for air
+  p50_s: number | null; p95_s: number | null;           // goal to all five audience versions ready
+}
 
 export const LIVE_URL = "https://ca-manyhands-7kzrrno7qr6zo.orangedune-9d42108b.eastus2.azurecontainerapps.io";
 

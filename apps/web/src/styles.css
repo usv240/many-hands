@@ -279,7 +279,7 @@ main:focus { outline: none; }
 .mh-queue--watch { background: color-mix(in srgb, var(--mh-watch-bg) 55%, var(--colorNeutralBackground1)); }
 .mh-queue-card.is-done { opacity: 0.8; }
 .mh-queue-text { font-weight: 600; margin: 0; }
-.mh-audience-grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 0.75rem; }
+.mh-audience-grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); margin-top: 0.75rem; }
 .mh-audience { display: grid; gap: 0.4rem; align-content: start; padding: 1rem; }
 .mh-audience header { display: grid; }
 .mh-table-wrap { overflow-x: auto; }
@@ -387,7 +387,8 @@ main:focus { outline: none; }
 
 /* ---------------------------------------------------------------- landing */
 .mh-hero h1 { font-size: clamp(2.6rem, 6.4vw, 5.2rem); letter-spacing: -0.035em; line-height: 0.98; margin-bottom: 1.25rem; }
-.mh-lead-strong { color: var(--colorNeutralForeground1); font-size: clamp(1.15rem, 1.6vw, 1.35rem); font-weight: 600; max-width: 46ch; }
+.mh-lead-strong { color: var(--colorNeutralForeground1); font-size: clamp(1.15rem, 1.6vw, 1.35rem); font-weight: 600; line-height: 1.4; max-width: 46ch; }
+.mh-lead { line-height: 1.5; }
 .mh-hero-line.is-fixed { background: var(--mh-fair-bg); margin: 0 -0.75rem; padding: 0.85rem 0.75rem; border-radius: 10px; border-top: 0; }
 .mh-hero-card .fui-Button { margin: 0.5rem 0 0.75rem; }
 .mh-statement { font-size: clamp(1.2rem, 2vw, 1.6rem); line-height: 1.4; font-weight: 600; max-width: 60ch; margin: 0.5rem 0 2rem; }
@@ -432,9 +433,10 @@ main:focus { outline: none; }
 .mh-desk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
 .mh-desk-grid h3 { font-size: 1rem; }
 @media (max-width: 900px) { .mh-desk-grid { grid-template-columns: 1fr; } }
-.mh-studio-grid { grid-template-areas: "moments evidence queue" "moments audiences audiences" "desk desk desk" "log log log"; }
-@media (max-width: 1100px) { .mh-studio-grid { grid-template-areas: "moments moments" "evidence queue" "audiences audiences" "desk desk" "log log"; } }
-@media (max-width: 760px) { .mh-studio-grid { grid-template-areas: "moments" "evidence" "queue" "audiences" "desk" "log"; } }
+/* The AI desk sits right under the evidence and the queue: it is the part judges come to see. */
+.mh-studio-grid { grid-template-areas: "moments evidence queue" "moments desk desk" "moments audiences audiences" "log log log"; }
+@media (max-width: 1100px) { .mh-studio-grid { grid-template-areas: "moments moments" "evidence queue" "desk desk" "audiences audiences" "log log"; } }
+@media (max-width: 760px) { .mh-studio-grid { grid-template-areas: "moments" "evidence" "queue" "desk" "audiences" "log"; } }
 
 /* Evidence check: the agent asks, the producer answers */
 .mh-evidence-check { margin: 0.75rem 0; padding: 0.9rem 1rem; border-radius: 12px; background: var(--colorBrandBackground2); display: grid; gap: 0.4rem; }
@@ -454,3 +456,12 @@ main:focus { outline: none; }
 .mh-live-goal p { margin: 0; font-weight: 600; }
 .mh-live-latency { font-size: 0.85rem; color: var(--colorBrandForeground1); font-weight: 650; }
 @media (prefers-reduced-motion: reduce) { .mh-trace-step, .mh-live-goal { animation: none; } }
+
+/* Phone: the hero headline and its card must never push the page sideways */
+@media (max-width: 480px) {
+  .mh-hero h1 { font-size: clamp(2.2rem, 11vw, 2.9rem); overflow-wrap: anywhere; }
+  .mh-hero-card { padding: 1.1rem; }
+  .mh-cta-row .mh-btn { flex: 1 1 auto; justify-content: center; }
+  .mh-trace-step { grid-template-columns: 1fr auto; }
+  .mh-trace-action { grid-column: 1 / -1; }
+}

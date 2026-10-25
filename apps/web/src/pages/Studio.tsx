@@ -203,7 +203,10 @@ export default function Studio() {
                 </article>
               ))}
             </div>
-            <p className="mh-small mh-muted">Offline demo uses the template writer. In production the Personalizer agent writes these with Microsoft Foundry, and every version passes the same check.</p>
+            <p className="mh-small mh-muted">
+              {live ? "Instant drafts from the template writer, checked in your browser. For versions written by gpt-5-mini on Microsoft Foundry, use the AI desk."
+                    : "Drafts from the template writer, checked in your browser. On the hosted site the Personalizer agent writes these with Microsoft Foundry."}
+            </p>
           </Region>
 
           <Region n={6} on={explain} className="mh-desk-region">
