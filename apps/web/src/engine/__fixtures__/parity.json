@@ -1,0 +1,1740 @@
+[
+ {
+  "chain_id": "20003-150",
+  "game_id": 20003,
+  "text": "Number 5's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "cor-5": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-150",
+  "game_id": 20003,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "cor-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-150",
+  "game_id": 20003,
+  "text": "Variro switched off and Oskain could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "cor-2": 0.5,
+   "cor-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-150",
+  "game_id": 20003,
+  "text": "The defence switched off completely.",
+  "si": 0.75,
+  "verdict": "unfair",
+  "blame": {
+   "cor-2": 0.25,
+   "cor-5": 0.25,
+   "cor-6": 0.25,
+   "cor-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-150",
+  "game_id": 20003,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-150",
+  "game_id": 20003,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "cor-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-150",
+  "game_id": 20003,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20003-171",
+  "game_id": 20003,
+  "text": "Number 3's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "cor-3": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-171",
+  "game_id": 20003,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "cor-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-171",
+  "game_id": 20003,
+  "text": "Variro switched off and Oskain could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "cor-2": 0.5,
+   "cor-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-171",
+  "game_id": 20003,
+  "text": "The defence switched off completely.",
+  "si": 0.75,
+  "verdict": "unfair",
+  "blame": {
+   "cor-2": 0.25,
+   "cor-5": 0.25,
+   "cor-6": 0.25,
+   "cor-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-171",
+  "game_id": 20003,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-171",
+  "game_id": 20003,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "cor-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-171",
+  "game_id": 20003,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20003-198",
+  "game_id": 20003,
+  "text": "Number 6's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "kil-6": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-198",
+  "game_id": 20003,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-198",
+  "game_id": 20003,
+  "text": "Sevard switched off and Varesh could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 0.5,
+   "kil-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-198",
+  "game_id": 20003,
+  "text": "The defence switched off completely.",
+  "si": 0.75,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 0.25,
+   "kil-5": 0.25,
+   "kil-6": 0.25,
+   "kil-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-198",
+  "game_id": 20003,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-198",
+  "game_id": 20003,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-198",
+  "game_id": 20003,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20003-250",
+  "game_id": 20003,
+  "text": "Number 4's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "kil-4": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-250",
+  "game_id": 20003,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-250",
+  "game_id": 20003,
+  "text": "Sevard switched off and Varesh could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 0.5,
+   "kil-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-250",
+  "game_id": 20003,
+  "text": "The defence switched off completely.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 0.25,
+   "kil-5": 0.25,
+   "kil-6": 0.25,
+   "kil-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-250",
+  "game_id": 20003,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-250",
+  "game_id": 20003,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-250",
+  "game_id": 20003,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20003-300",
+  "game_id": 20003,
+  "text": "Number 8's howler cost them the game.",
+  "si": 0.475,
+  "verdict": "unfair",
+  "blame": {
+   "kil-8": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-300",
+  "game_id": 20003,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-300",
+  "game_id": 20003,
+  "text": "Sevard switched off and Varesh could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 0.5,
+   "kil-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-300",
+  "game_id": 20003,
+  "text": "The defence switched off completely.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 0.25,
+   "kil-5": 0.25,
+   "kil-6": 0.25,
+   "kil-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-300",
+  "game_id": 20003,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-300",
+  "game_id": 20003,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-300",
+  "game_id": 20003,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20003-492",
+  "game_id": 20003,
+  "text": "Number 6's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "kil-6": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-492",
+  "game_id": 20003,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-492",
+  "game_id": 20003,
+  "text": "Sevard switched off and Varesh could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 0.5,
+   "kil-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-492",
+  "game_id": 20003,
+  "text": "The defence switched off completely.",
+  "si": 0.75,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 0.25,
+   "kil-5": 0.25,
+   "kil-6": 0.25,
+   "kil-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-492",
+  "game_id": 20003,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-492",
+  "game_id": 20003,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-492",
+  "game_id": 20003,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20003-536",
+  "game_id": 20003,
+  "text": "Number 8's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "cor-8": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-536",
+  "game_id": 20003,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "cor-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-536",
+  "game_id": 20003,
+  "text": "Variro switched off and Oskain could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "cor-2": 0.5,
+   "cor-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-536",
+  "game_id": 20003,
+  "text": "The defence switched off completely.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "cor-2": 0.25,
+   "cor-5": 0.25,
+   "cor-6": 0.25,
+   "cor-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-536",
+  "game_id": 20003,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-536",
+  "game_id": 20003,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "cor-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-536",
+  "game_id": 20003,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20003-1243",
+  "game_id": 20003,
+  "text": "Number 3's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "kil-3": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-1243",
+  "game_id": 20003,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-1243",
+  "game_id": 20003,
+  "text": "Sevard switched off and Varesh could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 0.5,
+   "kil-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-1243",
+  "game_id": 20003,
+  "text": "The defence switched off completely.",
+  "si": 0.75,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 0.25,
+   "kil-5": 0.25,
+   "kil-6": 0.25,
+   "kil-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-1243",
+  "game_id": 20003,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-1243",
+  "game_id": 20003,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-1243",
+  "game_id": 20003,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20003-1566",
+  "game_id": 20003,
+  "text": "Number 5's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "kil-5": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-1566",
+  "game_id": 20003,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-1566",
+  "game_id": 20003,
+  "text": "Sevard switched off and Varesh could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 0.5,
+   "kil-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-1566",
+  "game_id": 20003,
+  "text": "The defence switched off completely.",
+  "si": 0.75,
+  "verdict": "unfair",
+  "blame": {
+   "kil-2": 0.25,
+   "kil-5": 0.25,
+   "kil-6": 0.25,
+   "kil-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-1566",
+  "game_id": 20003,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-1566",
+  "game_id": 20003,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "kil-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20003-1566",
+  "game_id": 20003,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20012-801",
+  "game_id": 20012,
+  "text": "Number 2's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "bra-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-801",
+  "game_id": 20012,
+  "text": "Number 5 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-5": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-801",
+  "game_id": 20012,
+  "text": "Lunek switched off and Rostesh could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-5": 0.5,
+   "bra-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-801",
+  "game_id": 20012,
+  "text": "The defence switched off completely.",
+  "si": 0.75,
+  "verdict": "unfair",
+  "blame": {
+   "bra-2": 0.25,
+   "bra-5": 0.25,
+   "bra-6": 0.25,
+   "bra-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-801",
+  "game_id": 20012,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-801",
+  "game_id": 20012,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-801",
+  "game_id": 20012,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20012-990",
+  "game_id": 20012,
+  "text": "Number 8's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "bra-8": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-990",
+  "game_id": 20012,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-990",
+  "game_id": 20012,
+  "text": "Varain switched off and Rostesh could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-2": 0.5,
+   "bra-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-990",
+  "game_id": 20012,
+  "text": "The defence switched off completely.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-2": 0.25,
+   "bra-5": 0.25,
+   "bra-6": 0.25,
+   "bra-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-990",
+  "game_id": 20012,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-990",
+  "game_id": 20012,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-990",
+  "game_id": 20012,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20012-1303",
+  "game_id": 20012,
+  "text": "Number 9's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "bra-9": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1303",
+  "game_id": 20012,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1303",
+  "game_id": 20012,
+  "text": "Varain switched off and Rostesh could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-2": 0.5,
+   "bra-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1303",
+  "game_id": 20012,
+  "text": "The defence switched off completely.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-2": 0.25,
+   "bra-5": 0.25,
+   "bra-6": 0.25,
+   "bra-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1303",
+  "game_id": 20012,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1303",
+  "game_id": 20012,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1303",
+  "game_id": 20012,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20012-1391",
+  "game_id": 20012,
+  "text": "Number 2's howler cost them the game.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1391",
+  "game_id": 20012,
+  "text": "Number 5 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-5": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1391",
+  "game_id": 20012,
+  "text": "Lunek switched off and Rostesh could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-5": 0.5,
+   "bra-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1391",
+  "game_id": 20012,
+  "text": "The defence switched off completely.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-2": 0.25,
+   "bra-5": 0.25,
+   "bra-6": 0.25,
+   "bra-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1391",
+  "game_id": 20012,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1391",
+  "game_id": 20012,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1391",
+  "game_id": 20012,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20012-1470",
+  "game_id": 20012,
+  "text": "Number 10's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "bra-10": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1470",
+  "game_id": 20012,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1470",
+  "game_id": 20012,
+  "text": "Varain switched off and Rostesh could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-2": 0.5,
+   "bra-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1470",
+  "game_id": 20012,
+  "text": "The defence switched off completely.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-2": 0.25,
+   "bra-5": 0.25,
+   "bra-6": 0.25,
+   "bra-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1470",
+  "game_id": 20012,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1470",
+  "game_id": 20012,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "bra-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1470",
+  "game_id": 20012,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20012-1597",
+  "game_id": 20012,
+  "text": "Number 9's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "sal-9": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1597",
+  "game_id": 20012,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "sal-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1597",
+  "game_id": 20012,
+  "text": "Oskain switched off and Ferrura could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "sal-2": 0.5,
+   "sal-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1597",
+  "game_id": 20012,
+  "text": "The defence switched off completely.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "sal-2": 0.25,
+   "sal-5": 0.25,
+   "sal-6": 0.25,
+   "sal-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1597",
+  "game_id": 20012,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1597",
+  "game_id": 20012,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "sal-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1597",
+  "game_id": 20012,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20012-1845",
+  "game_id": 20012,
+  "text": "Number 8's howler cost them the game.",
+  "si": 0.393,
+  "verdict": "watch",
+  "blame": {
+   "sal-8": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1845",
+  "game_id": 20012,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "sal-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1845",
+  "game_id": 20012,
+  "text": "Oskain switched off and Ferrura could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "sal-2": 0.5,
+   "sal-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1845",
+  "game_id": 20012,
+  "text": "The defence switched off completely.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "sal-2": 0.25,
+   "sal-5": 0.25,
+   "sal-6": 0.25,
+   "sal-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1845",
+  "game_id": 20012,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1845",
+  "game_id": 20012,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "sal-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1845",
+  "game_id": 20012,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20012-1950",
+  "game_id": 20012,
+  "text": "Number 1's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "sal-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1950",
+  "game_id": 20012,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "sal-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1950",
+  "game_id": 20012,
+  "text": "Oskain switched off and Ferrura could not save it.",
+  "si": 0.5,
+  "verdict": "unfair",
+  "blame": {
+   "sal-2": 0.5,
+   "sal-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1950",
+  "game_id": 20012,
+  "text": "The defence switched off completely.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "sal-2": 0.25,
+   "sal-5": 0.25,
+   "sal-6": 0.25,
+   "sal-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1950",
+  "game_id": 20012,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1950",
+  "game_id": 20012,
+  "text": "The keeper should have done better.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "sal-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20012-1950",
+  "game_id": 20012,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20045-363",
+  "game_id": 20045,
+  "text": "Number 2's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "dun-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-363",
+  "game_id": 20045,
+  "text": "Number 5 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "dun-5": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-363",
+  "game_id": 20045,
+  "text": "Drenane switched off and Rostain could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "dun-5": 0.5,
+   "dun-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-363",
+  "game_id": 20045,
+  "text": "The defence switched off completely.",
+  "si": 0.75,
+  "verdict": "unfair",
+  "blame": {
+   "dun-2": 0.25,
+   "dun-5": 0.25,
+   "dun-6": 0.25,
+   "dun-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-363",
+  "game_id": 20045,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-363",
+  "game_id": 20045,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "dun-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-363",
+  "game_id": 20045,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20045-770",
+  "game_id": 20045,
+  "text": "Number 1's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "eas-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-770",
+  "game_id": 20045,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "eas-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-770",
+  "game_id": 20045,
+  "text": "Lunow switched off and Rostent could not save it.",
+  "si": 0.5,
+  "verdict": "unfair",
+  "blame": {
+   "eas-2": 0.5,
+   "eas-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-770",
+  "game_id": 20045,
+  "text": "The defence switched off completely.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "eas-2": 0.25,
+   "eas-5": 0.25,
+   "eas-6": 0.25,
+   "eas-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-770",
+  "game_id": 20045,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-770",
+  "game_id": 20045,
+  "text": "The keeper should have done better.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "eas-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-770",
+  "game_id": 20045,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20045-993",
+  "game_id": 20045,
+  "text": "Number 6's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "eas-6": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-993",
+  "game_id": 20045,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "eas-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-993",
+  "game_id": 20045,
+  "text": "Lunow switched off and Rostent could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "eas-2": 0.5,
+   "eas-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-993",
+  "game_id": 20045,
+  "text": "The defence switched off completely.",
+  "si": 0.75,
+  "verdict": "unfair",
+  "blame": {
+   "eas-2": 0.25,
+   "eas-5": 0.25,
+   "eas-6": 0.25,
+   "eas-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-993",
+  "game_id": 20045,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-993",
+  "game_id": 20045,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "eas-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-993",
+  "game_id": 20045,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20045-1646",
+  "game_id": 20045,
+  "text": "Number 5's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "dun-5": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-1646",
+  "game_id": 20045,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "dun-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-1646",
+  "game_id": 20045,
+  "text": "Halesh switched off and Rostain could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "dun-2": 0.5,
+   "dun-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-1646",
+  "game_id": 20045,
+  "text": "The defence switched off completely.",
+  "si": 0.75,
+  "verdict": "unfair",
+  "blame": {
+   "dun-2": 0.25,
+   "dun-5": 0.25,
+   "dun-6": 0.25,
+   "dun-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-1646",
+  "game_id": 20045,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-1646",
+  "game_id": 20045,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "dun-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-1646",
+  "game_id": 20045,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ },
+ {
+  "chain_id": "20045-1761",
+  "game_id": 20045,
+  "text": "Number 7's howler cost them the game.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {
+   "eas-7": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-1761",
+  "game_id": 20045,
+  "text": "Number 2 was at fault for that goal.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "eas-2": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-1761",
+  "game_id": 20045,
+  "text": "Lunow switched off and Rostent could not save it.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "eas-2": 0.5,
+   "eas-1": 0.5
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-1761",
+  "game_id": 20045,
+  "text": "The defence switched off completely.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "eas-2": 0.25,
+   "eas-5": 0.25,
+   "eas-6": 0.25,
+   "eas-3": 0.25
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-1761",
+  "game_id": 20045,
+  "text": "A lovely move of six passes cut them open.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-1761",
+  "game_id": 20045,
+  "text": "The keeper should have done better.",
+  "si": 1.0,
+  "verdict": "unfair",
+  "blame": {
+   "eas-1": 1.0
+  },
+  "unresolved": []
+ },
+ {
+  "chain_id": "20045-1761",
+  "game_id": 20045,
+  "text": "Zed was asleep at the back.",
+  "si": 0.0,
+  "verdict": "fair",
+  "blame": {},
+  "unresolved": [
+   "Zed"
+  ]
+ }
+]

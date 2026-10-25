@@ -1,0 +1,66 @@
+{
+  "cases_total": 275,
+  "cases_evaluated": 178,
+  "excluded_by_reason": {
+    "no_onball_blame": 67,
+    "no_linked_shot": 30
+  },
+  "matches": 150,
+  "goals": 57,
+  "metrics": {
+    "ours_top1": {
+      "mean": 0.7584269662921348,
+      "ci95_low": 0.6927047086991222,
+      "ci95_high": 0.8218486590038314
+    },
+    "ours_top3": {
+      "mean": 0.797752808988764,
+      "ci95_low": 0.7329545454545454,
+      "ci95_high": 0.8563226328824538
+    },
+    "last_top1": {
+      "mean": 0.898876404494382,
+      "ci95_low": 0.8522622053872054,
+      "ci95_high": 0.943502824858757
+    },
+    "last_top3": {
+      "mean": 0.9213483146067416,
+      "ci95_low": 0.883031951386847,
+      "ci95_high": 0.9606796497395016
+    },
+    "random_top1": {
+      "mean": 0.5806759407883003,
+      "ci95_low": 0.5268807785378361,
+      "ci95_high": 0.6351594580133906
+    },
+    "random_top3": {
+      "mean": 0.8965222043873731,
+      "ci95_low": 0.8667052165711382,
+      "ci95_high": 0.925001584953508
+    },
+    "labelled_share": {
+      "mean": 0.7465677711745822,
+      "ci95_low": 0.6811731928695551,
+      "ci95_high": 0.8068773041411417
+    },
+    "si_if_blamed_alone": {
+      "mean": 0.2534322288254179,
+      "ci95_low": 0.19312269585885844,
+      "ci95_high": 0.3188268071304447
+    }
+  },
+  "labelled_share_median": 1.0,
+  "si_if_blamed_alone_verdicts": {
+    "fair": 124,
+    "unfair": 48,
+    "watch": 6
+  },
+  "justified_cases": 130,
+  "justified_cases_unfair_flags": 0,
+  "goals_only": {
+    "ours_top3": 0.8070175438596491,
+    "last_top3": 0.9122807017543859,
+    "labelled_share": 0.7526485979983168
+  },
+  "method_note": "On-ball responsibility only (public event data has no player positions). VAEP trained on Serie A and Bundesliga 2015/16; evaluated on international tournaments. No Premier League data used."
+}

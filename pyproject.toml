@@ -1,0 +1,58 @@
+[project]
+name = "many-hands"
+version = "0.1.0"
+description = "Fair match intelligence: traces every goal to everyone who caused it and checks each line for scapegoating before it airs."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"  # PEP 695 generics
+license = "MIT"
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "pyarrow>=15,<19",  # numpy is held below 2 by pandera 0.17 (via socceraction)
+    "pydantic>=2.6",
+    "socceraction>=1.5",
+    "xgboost>=2.0",
+    "scikit-learn>=1.4",
+    "tqdm>=4.66",
+    # socceraction 1.5 pins pandera 0.17, which needs multimethod 1.x
+    "multimethod>=1.9,<2",
+    "statsbombpy>=1.22.0",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "httpx>=0.27",
+    "mcp>=1.2",
+    "typer>=0.12",
+    "agent-framework-core>=1.0",
+    "azure-identity>=1.17",
+    "agent-framework-foundry>=1.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "hypothesis>=6.100",
+    "ruff>=0.6",
+    "mypy>=1.10",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["packages/ledger_core", "packages/narrative_core"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["packages"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N", "SIM"]
+# E501: long lines are allowed in tables of constants and test data.
+# N806: L is used for "ledger" by convention in this codebase.
+# B008: Policy() defaults are frozen dataclasses, so a shared default is safe.
+ignore = ["E501", "N806", "B008"]

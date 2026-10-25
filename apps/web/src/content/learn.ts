@@ -1,0 +1,59 @@
+export const GLOSSARY: { term: string; simply: string }[] = [
+  { term: "Action", simply: "Anything a player does with or for the ball: a pass, run, tackle, shot or save." },
+  { term: "Action value", simply: "How much an action raised or lowered a team's chance of scoring soon." },
+  { term: "Agent", simply: "An AI program with one job that can use tools and hand work to other agents." },
+  { term: "API", simply: "A way for one piece of software to ask another to do something." },
+  { term: "Audit log", simply: "A record of decisions that cannot be changed without it showing." },
+  { term: "Baseline", simply: "The simple method we compare ourselves against." },
+  { term: "Benchmark", simply: "A fixed test used to measure how well a system works." },
+  { term: "Chain", simply: "The sequence of actions that led to a moment such as a goal." },
+  { term: "Counterfactual", simply: "What would have happened if one thing had gone differently." },
+  { term: "Decisive moment", simply: "A goal or a good chance to score." },
+  { term: "Error (data term)", simply: "A mistake on the ball that leads to the other team getting a shot, as labelled by a data company." },
+  { term: "Expected goals (xG)", simply: "How likely an average player would score from that shot, from 0 to 1." },
+  { term: "Fails closed", simply: "When a safety check breaks, the system stops rather than carrying on unchecked." },
+  { term: "Ground truth", simply: "The real, correct answer, used to grade a method." },
+  { term: "Lower third", simply: "A graphic across the lower part of a TV picture." },
+  { term: "MCP", simply: "Model Context Protocol: a standard way for AI assistants to use outside tools." },
+  { term: "Negative control", simply: "A test case where the right answer is to do nothing, used to check for false alarms." },
+  { term: "Outcome bias", simply: "Judging a decision by how things turned out rather than by how good the decision was." },
+  { term: "Possession", simply: "A spell when one team has the ball." },
+  { term: "Responsibility", simply: "A player's share of what led to a moment." },
+  { term: "Scapegoat Index", simply: "Our 0 to 1 score for how unfairly a sentence spreads blame." },
+  { term: "Scapegoating", simply: "Blaming one person for something several people caused." },
+  { term: "SPADL", simply: "An open, standard way of writing down football actions, from the VAEP research." },
+  { term: "Synthetic data", simply: "Data created by a computer program rather than recorded from real matches." },
+  { term: "Unsung", simply: "A player who contributed a lot without getting noticed." },
+  { term: "VAEP", simply: "Valuing Actions by Estimating Probabilities: the published method we use to value actions." },
+];
+
+export const BASICS: { title: string; body: string }[] = [
+  { title: "A match is a list of events", body: "Data companies record every pass, tackle and shot with the time, the player and the place on the pitch. Many Hands reads that list." },
+  { title: "A goal has a history", body: "Before almost every goal there is a chain of actions by both teams. The last touch is only the end of it." },
+  { title: "Errors are not always alone", body: "Often one mistake really does decide it, and Many Hands says so. Sometimes a lost ball earlier in the move mattered as much. That is the case it exists to catch." },
+  { title: "Chances are not equal", body: "A shot from six yards is far more likely to go in than one from thirty. Expected goals measures this." },
+  { title: "Positions matter too", body: "A defender in the wrong place can cause a goal without touching the ball. Our method for this is still too crude, and we say so on the Results page." },
+];
+
+export const REFERENCES: { cite: string; why: string; href: string }[] = [
+  { cite: "Vidgen, B. et al. (2022). Tracking abuse on Twitter against football players in the 2021 to 2022 Premier League season. Alan Turing Institute for Ofcom.", why: "Abuse is widespread, concentrated on a few players and set off by match events.", href: "https://www.turing.ac.uk/news/publications/tracking-abuse-twitter-against-football-players-2021-22-premier-league-season" },
+  { cite: "Kausel, E. E., Ventura, S., and Rodriguez, A. (2019). Outcome bias in subjective ratings of performance: evidence from the (football) field. Journal of Economic Psychology, 75.", why: "Results distort how players are judged.", href: "https://doi.org/10.1016/j.joep.2018.12.006" },
+  { cite: "Gauriot, R., and Page, L. (2019). Fooled by performance randomness: over-rewarding luck. Review of Economics and Statistics, 101(4).", why: "Luck is mistaken for skill in football judgements.", href: "https://doi.org/10.1162/rest_a_00783" },
+  { cite: "Decroos, T., Bransen, L., Van Haaren, J., and Davis, J. (2019). Actions speak louder than goals: valuing player actions in soccer. KDD 2019.", why: "The action value method at the core of our ledger.", href: "https://doi.org/10.1145/3292500.3330758" },
+  { cite: "Bischofberger, J. et al. (2026). Blame is easier than praise: measuring off-ball defensive performance in football. arXiv:2606.19931.", why: "The idea behind our off-ball responsibility.", href: "https://arxiv.org/abs/2606.19931" },
+  { cite: "Katsaros, M., Yang, K., and Fratamico, L. (2022). Reconsidering tweets: intervening during tweet creation decreases offensive content. ICWSM 2022.", why: "A well-timed prompt reduces offensive posts.", href: "https://doi.org/10.1609/icwsm.v16i1.19308" },
+  { cite: "Miller, T. (2019). Explanation in artificial intelligence: insights from the social sciences. Artificial Intelligence, 267.", why: "Shapes how we explain: contrastive, selected and social.", href: "https://arxiv.org/abs/1706.07269" },
+  { cite: "Amershi, S. et al. (2019). Guidelines for human-AI interaction. CHI 2019.", why: "Microsoft's 18 guidelines that our interface follows.", href: "https://www.microsoft.com/en-us/research/publication/guidelines-for-human-ai-interaction/" },
+  { cite: "Nielsen Norman Group. Dark mode vs. light mode; Tooltip guidelines; Why so many info tips are bad.", why: "How we handle themes and the info buttons.", href: "https://www.nngroup.com/articles/info-tips-bad/" },
+  { cite: "W3C (2023). Web Content Accessibility Guidelines 2.2.", why: "The accessibility standard we build to.", href: "https://www.w3.org/TR/WCAG22/" },
+  { cite: "StatsBomb Open Data.", why: "Public, provider-labelled data used only to validate our model. Premier League excluded.", href: "https://github.com/statsbomb/open-data" },
+];
+
+export const FAQ: { q: string; a: string }[] = [
+  { q: "Is this just excusing bad mistakes?", a: "No. When the evidence puts most of the blame on one player, Many Hands says so plainly. We measured it: on 130 real cases where one player was to blame, it never called that blame unfair." },
+  { q: "Does it censor anyone?", a: "No. It scores a line, explains why, and suggests a fairer version. A human always decides what airs." },
+  { q: "Is the match data real?", a: "The product uses fictional matches from our simulator, as the hackathon requires. To test our model we also used public data from other competitions, never the Premier League." },
+  { q: "How can a computer know who is to blame?", a: "It values every action by how it changed each team's chance of scoring, using a published method. It is not perfect, and the Results page shows exactly where it is weaker." },
+  { q: "Does it stop online abuse?", a: "It cannot prove that on its own. It removes one known trigger, the one-culprit story, and we measure what we can: how fair the story is." },
+  { q: "Can I use it in my own product?", a: "Yes: through the API, the MCP server for AI assistants, or the command line. See Developers." },
+];

@@ -1,0 +1,1549 @@
+[
+ {
+  "game_id": 20003,
+  "shot_action_id": 150,
+  "window_start_action_id": 140,
+  "attacking_team_id": "kil",
+  "conceding_team_id": "cor",
+  "shooter_id": "kil-9",
+  "xg": 0.42288508020916693,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "cor-5",
+    "action_id": 142,
+    "with_danger": 0.020478960185299842,
+    "without_danger": 0.000650184797040984,
+    "effect": 0.01982877538825886
+   }
+  ],
+  "truth": {
+   "cor-5": 1.0
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 171,
+  "window_start_action_id": 161,
+  "attacking_team_id": "kil",
+  "conceding_team_id": "cor",
+  "shooter_id": "kil-9",
+  "xg": 0.3067150827393512,
+  "goal": true,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 198,
+  "window_start_action_id": 188,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.4015999823549271,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "offball",
+    "player_id": "kil-2",
+    "action_id": 188,
+    "with_danger": 0.018559959686575235,
+    "without_danger": 0.017702787045624876,
+    "lapse_dx": 3.5357370875814444,
+    "lapse_dy": 10.769203129133931,
+    "effect": 0.0
+   }
+  ],
+  "truth": {}
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 230,
+  "window_start_action_id": 218,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.11766060487765169,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "kil-6",
+    "action_id": 218,
+    "with_danger": 0.016541331080131658,
+    "without_danger": 0.009245239583165319,
+    "effect": 0.007296091496966339
+   },
+   {
+    "kind": "onball",
+    "player_id": "kil-3",
+    "action_id": 225,
+    "with_danger": 0.01500203566394486,
+    "without_danger": 0.0013492087540261939,
+    "effect": 0.013652826909918666
+   },
+   {
+    "kind": "offball",
+    "player_id": "kil-2",
+    "action_id": 226,
+    "with_danger": 0.0057865392700875585,
+    "without_danger": 0.004537903509077656,
+    "lapse_dx": -0.798453483228938,
+    "lapse_dy": 11.90638373047548,
+    "effect": 0.0
+   }
+  ],
+  "truth": {
+   "kil-6": 0.34828010474127524,
+   "kil-3": 0.6517198952587248
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 250,
+  "window_start_action_id": 239,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.2030016106582118,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "kil-4",
+    "action_id": 249,
+    "with_danger": 0.0367987032845077,
+    "without_danger": 0.005755644044184536,
+    "effect": 0.031043059240323162
+   }
+  ],
+  "truth": {
+   "kil-4": 1.0
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 300,
+  "window_start_action_id": 290,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.13474260953976538,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "kil-8",
+    "action_id": 295,
+    "with_danger": 0.003025778882734355,
+    "without_danger": 0.0,
+    "effect": 0.0
+   },
+   {
+    "kind": "offball",
+    "player_id": "kil-5",
+    "action_id": 296,
+    "with_danger": 0.007059416911058281,
+    "without_danger": 0.010033947876373617,
+    "lapse_dx": 3.1453285963426576,
+    "lapse_dy": 7.124770461609595,
+    "effect": 0.0
+   }
+  ],
+  "truth": {}
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 360,
+  "window_start_action_id": 350,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.1307629686433842,
+  "goal": false,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 472,
+  "window_start_action_id": 462,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.0928651751915514,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "kil-5",
+    "action_id": 467,
+    "with_danger": 0.017870455052092993,
+    "without_danger": 0.0017745334784291336,
+    "effect": 0.01609592157366386
+   },
+   {
+    "kind": "offball",
+    "player_id": "kil-2",
+    "action_id": 468,
+    "with_danger": 0.007315729286311493,
+    "without_danger": 0.0077341487101882656,
+    "lapse_dx": 9.834921333584267,
+    "lapse_dy": 1.4804301015503238,
+    "effect": 0.0
+   }
+  ],
+  "truth": {
+   "kil-5": 1.0
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 486,
+  "window_start_action_id": 475,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.29307671120714496,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "kil-2",
+    "action_id": 479,
+    "with_danger": 0.010550396657640303,
+    "without_danger": 0.004957790598882748,
+    "effect": 0.005592606058757555
+   }
+  ],
+  "truth": {
+   "kil-2": 1.0
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 492,
+  "window_start_action_id": 479,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.05829541988120535,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "kil-2",
+    "action_id": 479,
+    "with_danger": 0.03237946266517424,
+    "without_danger": 0.011346458374021883,
+    "effect": 0.021033004291152357
+   },
+   {
+    "kind": "onball",
+    "player_id": "kil-6",
+    "action_id": 489,
+    "with_danger": 0.02617707739248957,
+    "without_danger": 0.005017606117086434,
+    "effect": 0.021159471275403133
+   }
+  ],
+  "truth": {
+   "kil-2": 0.49850130879318416,
+   "kil-6": 0.5014986912068158
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 536,
+  "window_start_action_id": 526,
+  "attacking_team_id": "kil",
+  "conceding_team_id": "cor",
+  "shooter_id": "kil-9",
+  "xg": 0.3602334660637098,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "cor-8",
+    "action_id": 528,
+    "with_danger": 0.01895453254112848,
+    "without_danger": 0.0023884450057178896,
+    "effect": 0.016566087535410588
+   },
+   {
+    "kind": "offball",
+    "player_id": "cor-2",
+    "action_id": 526,
+    "with_danger": 0.019826144616763172,
+    "without_danger": 0.016131363482018105,
+    "lapse_dx": -1.4858028910890704,
+    "lapse_dy": 9.662054519610498,
+    "effect": 0.0
+   }
+  ],
+  "truth": {
+   "cor-8": 1.0
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 613,
+  "window_start_action_id": 603,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.37708799872410487,
+  "goal": false,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 727,
+  "window_start_action_id": 717,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.12292407922353106,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "kil-3",
+    "action_id": 718,
+    "with_danger": 0.010436447601777974,
+    "without_danger": 0.0012445177293866655,
+    "effect": 0.009191929872391308
+   }
+  ],
+  "truth": {
+   "kil-3": 1.0
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 802,
+  "window_start_action_id": 792,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.2429226049656179,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "kil-3",
+    "action_id": 793,
+    "with_danger": 0.02477208766233,
+    "without_danger": 0.005518094236115743,
+    "effect": 0.01925399342621426
+   }
+  ],
+  "truth": {
+   "kil-3": 1.0
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 808,
+  "window_start_action_id": 796,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.14914492854688433,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "kil-4",
+    "action_id": 805,
+    "with_danger": 0.017035647651842983,
+    "without_danger": 0.002779799650699078,
+    "effect": 0.014255848001143906
+   }
+  ],
+  "truth": {
+   "kil-4": 1.0
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 811,
+  "window_start_action_id": 799,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.09799731709262655,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "kil-4",
+    "action_id": 805,
+    "with_danger": 0.01931489510316942,
+    "without_danger": 0.004370831926633732,
+    "effect": 0.014944063176535688
+   },
+   {
+    "kind": "onball",
+    "player_id": "kil-6",
+    "action_id": 810,
+    "with_danger": 0.017789529479573667,
+    "without_danger": 0.002880605507615545,
+    "effect": 0.014908923971958123
+   }
+  ],
+  "truth": {
+   "kil-4": 0.5005885374954736,
+   "kil-6": 0.4994114625045263
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 1006,
+  "window_start_action_id": 996,
+  "attacking_team_id": "kil",
+  "conceding_team_id": "cor",
+  "shooter_id": "kil-9",
+  "xg": 0.42439643063065663,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "cor-8",
+    "action_id": 1000,
+    "with_danger": 0.007492693821216073,
+    "without_danger": 0.002744601635895772,
+    "effect": 0.004748092185320301
+   }
+  ],
+  "truth": {
+   "cor-8": 1.0
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 1019,
+  "window_start_action_id": 1009,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.07830253938022208,
+  "goal": false,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 1060,
+  "window_start_action_id": 1050,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-8",
+  "xg": 0.07709110257432929,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "kil-3",
+    "action_id": 1054,
+    "with_danger": 0.013872459550200571,
+    "without_danger": 0.0,
+    "effect": 0.013872459550200571
+   }
+  ],
+  "truth": {
+   "kil-3": 1.0
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 1243,
+  "window_start_action_id": 1233,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-7",
+  "xg": 0.019072851538324533,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "kil-3",
+    "action_id": 1233,
+    "with_danger": 0.01945701051109902,
+    "without_danger": 0.0002065973597674347,
+    "effect": 0.019250413151331587
+   }
+  ],
+  "truth": {
+   "kil-3": 1.0
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 1323,
+  "window_start_action_id": 1313,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.18084189621487223,
+  "goal": false,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 1566,
+  "window_start_action_id": 1556,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.44696623689121046,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "kil-5",
+    "action_id": 1560,
+    "with_danger": 0.012651441373496785,
+    "without_danger": 0.0016699832230741155,
+    "effect": 0.01098145815042267
+   }
+  ],
+  "truth": {
+   "kil-5": 1.0
+  }
+ },
+ {
+  "game_id": 20003,
+  "shot_action_id": 1948,
+  "window_start_action_id": 1938,
+  "attacking_team_id": "cor",
+  "conceding_team_id": "kil",
+  "shooter_id": "cor-9",
+  "xg": 0.08794920420733536,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "offball",
+    "player_id": "kil-5",
+    "action_id": 1938,
+    "with_danger": 0.012474634308778399,
+    "without_danger": 0.014045187648124178,
+    "lapse_dx": 1.6319883226667415,
+    "lapse_dy": 9.739033535433279,
+    "effect": 0.0
+   }
+  ],
+  "truth": {}
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 402,
+  "window_start_action_id": 391,
+  "attacking_team_id": "bra",
+  "conceding_team_id": "sal",
+  "shooter_id": "bra-9",
+  "xg": 0.09655153398684495,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "sal-6",
+    "action_id": 398,
+    "with_danger": 0.0026570145641584674,
+    "without_danger": 0.0,
+    "effect": 0.0
+   }
+  ],
+  "truth": {}
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 423,
+  "window_start_action_id": 413,
+  "attacking_team_id": "bra",
+  "conceding_team_id": "sal",
+  "shooter_id": "bra-9",
+  "xg": 0.19178073902392806,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "sal-8",
+    "action_id": 414,
+    "with_danger": 0.03300652001209811,
+    "without_danger": 0.0002521496483311506,
+    "effect": 0.03275437036376696
+   }
+  ],
+  "truth": {
+   "sal-8": 1.0
+  }
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 459,
+  "window_start_action_id": 449,
+  "attacking_team_id": "sal",
+  "conceding_team_id": "bra",
+  "shooter_id": "sal-7",
+  "xg": 0.07748865539956291,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "bra-3",
+    "action_id": 457,
+    "with_danger": 0.025002036087845698,
+    "without_danger": 0.003472489895334028,
+    "effect": 0.02152954619251167
+   }
+  ],
+  "truth": {
+   "bra-3": 1.0
+  }
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 540,
+  "window_start_action_id": 530,
+  "attacking_team_id": "sal",
+  "conceding_team_id": "bra",
+  "shooter_id": "sal-9",
+  "xg": 0.09975329544605326,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "bra-8",
+    "action_id": 537,
+    "with_danger": 0.0027175977620494673,
+    "without_danger": 0.0,
+    "effect": 0.0
+   },
+   {
+    "kind": "offball",
+    "player_id": "bra-4",
+    "action_id": 538,
+    "with_danger": 0.009888635586239956,
+    "without_danger": 0.00507265676244017,
+    "lapse_dx": -0.018169851876631206,
+    "lapse_dy": -8.372069785408307,
+    "effect": 0.004815978823799786
+   }
+  ],
+  "truth": {
+   "bra-4": 1.0
+  }
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 626,
+  "window_start_action_id": 616,
+  "attacking_team_id": "sal",
+  "conceding_team_id": "bra",
+  "shooter_id": "sal-9",
+  "xg": 0.10689502305151195,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "bra-8",
+    "action_id": 616,
+    "with_danger": 0.005925411949537389,
+    "without_danger": 0.00226676544290825,
+    "effect": 0.0
+   }
+  ],
+  "truth": {}
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 801,
+  "window_start_action_id": 791,
+  "attacking_team_id": "sal",
+  "conceding_team_id": "bra",
+  "shooter_id": "sal-9",
+  "xg": 0.4425064835507756,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "bra-8",
+    "action_id": 793,
+    "with_danger": 0.0034866574221648133,
+    "without_danger": 0.004457973814055629,
+    "effect": 0.0
+   },
+   {
+    "kind": "onball",
+    "player_id": "bra-2",
+    "action_id": 798,
+    "with_danger": 0.03975303559518597,
+    "without_danger": 0.0048782517512005515,
+    "effect": 0.034874783843985416
+   }
+  ],
+  "truth": {
+   "bra-2": 1.0
+  }
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 946,
+  "window_start_action_id": 936,
+  "attacking_team_id": "sal",
+  "conceding_team_id": "bra",
+  "shooter_id": "sal-9",
+  "xg": 0.08630181517126301,
+  "goal": false,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 990,
+  "window_start_action_id": 979,
+  "attacking_team_id": "sal",
+  "conceding_team_id": "bra",
+  "shooter_id": "sal-9",
+  "xg": 0.04676256747103142,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "bra-8",
+    "action_id": 987,
+    "with_danger": 0.000863534370174984,
+    "without_danger": 0.0,
+    "effect": 0.0
+   },
+   {
+    "kind": "offball",
+    "player_id": "bra-5",
+    "action_id": 979,
+    "with_danger": 0.014270500408580362,
+    "without_danger": 0.013876792011720492,
+    "lapse_dx": -0.9002398795656835,
+    "lapse_dy": 8.866620234270131,
+    "effect": 0.0
+   }
+  ],
+  "truth": {}
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 1001,
+  "window_start_action_id": 991,
+  "attacking_team_id": "bra",
+  "conceding_team_id": "sal",
+  "shooter_id": "bra-9",
+  "xg": 0.09878631801237348,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "sal-9",
+    "action_id": 995,
+    "with_danger": 0.004650101033299239,
+    "without_danger": 0.0,
+    "effect": 0.004650101033299239
+   }
+  ],
+  "truth": {
+   "sal-9": 1.0
+  }
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 1042,
+  "window_start_action_id": 1032,
+  "attacking_team_id": "sal",
+  "conceding_team_id": "bra",
+  "shooter_id": "sal-9",
+  "xg": 0.3234010082669773,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "bra-1",
+    "action_id": 1040,
+    "with_danger": 0.03923647996469801,
+    "without_danger": 0.002130895284663087,
+    "effect": 0.03710558468003492
+   }
+  ],
+  "truth": {
+   "bra-1": 1.0
+  }
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 1303,
+  "window_start_action_id": 1293,
+  "attacking_team_id": "sal",
+  "conceding_team_id": "bra",
+  "shooter_id": "sal-9",
+  "xg": 0.43892570225550054,
+  "goal": true,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 1391,
+  "window_start_action_id": 1381,
+  "attacking_team_id": "sal",
+  "conceding_team_id": "bra",
+  "shooter_id": "sal-9",
+  "xg": 0.13551381173751617,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "bra-3",
+    "action_id": 1383,
+    "with_danger": 0.015306667924466288,
+    "without_danger": 0.0018649430322331096,
+    "effect": 0.013441724892233178
+   },
+   {
+    "kind": "onball",
+    "player_id": "bra-5",
+    "action_id": 1387,
+    "with_danger": 0.013693601135900188,
+    "without_danger": 0.000175254385417162,
+    "effect": 0.013518346750483027
+   }
+  ],
+  "truth": {
+   "bra-3": 0.4985789752478171,
+   "bra-5": 0.5014210247521829
+  }
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 1470,
+  "window_start_action_id": 1460,
+  "attacking_team_id": "sal",
+  "conceding_team_id": "bra",
+  "shooter_id": "sal-9",
+  "xg": 0.3450235746368759,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "bra-10",
+    "action_id": 1461,
+    "with_danger": 0.011704986191977915,
+    "without_danger": 0.0,
+    "effect": 0.011704986191977915
+   }
+  ],
+  "truth": {
+   "bra-10": 1.0
+  }
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 1597,
+  "window_start_action_id": 1587,
+  "attacking_team_id": "bra",
+  "conceding_team_id": "sal",
+  "shooter_id": "bra-9",
+  "xg": 0.47802372895113426,
+  "goal": true,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 1678,
+  "window_start_action_id": 1668,
+  "attacking_team_id": "bra",
+  "conceding_team_id": "sal",
+  "shooter_id": "bra-9",
+  "xg": 0.07474743913766264,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "sal-3",
+    "action_id": 1669,
+    "with_danger": 0.005875865820500292,
+    "without_danger": 0.0007821785928630773,
+    "effect": 0.005093687227637214
+   }
+  ],
+  "truth": {
+   "sal-3": 1.0
+  }
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 1798,
+  "window_start_action_id": 1788,
+  "attacking_team_id": "bra",
+  "conceding_team_id": "sal",
+  "shooter_id": "bra-9",
+  "xg": 0.19310169501924485,
+  "goal": false,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 1845,
+  "window_start_action_id": 1835,
+  "attacking_team_id": "bra",
+  "conceding_team_id": "sal",
+  "shooter_id": "bra-9",
+  "xg": 0.2337987859277881,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "sal-8",
+    "action_id": 1842,
+    "with_danger": 0.027561932122677407,
+    "without_danger": 0.00021287191244538412,
+    "effect": 0.027349060210232024
+   },
+   {
+    "kind": "offball",
+    "player_id": "sal-6",
+    "action_id": 1835,
+    "with_danger": 0.009259240796532984,
+    "without_danger": 0.011512437433809421,
+    "lapse_dx": 10.260275566604474,
+    "lapse_dy": 2.316021347979944,
+    "effect": 0.0
+   }
+  ],
+  "truth": {
+   "sal-8": 1.0
+  }
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 1881,
+  "window_start_action_id": 1871,
+  "attacking_team_id": "bra",
+  "conceding_team_id": "sal",
+  "shooter_id": "bra-9",
+  "xg": 0.09689591154586479,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "sal-4",
+    "action_id": 1876,
+    "with_danger": 0.006700645193483987,
+    "without_danger": 0.0,
+    "effect": 0.006700645193483987
+   }
+  ],
+  "truth": {
+   "sal-4": 1.0
+  }
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 1893,
+  "window_start_action_id": 1883,
+  "attacking_team_id": "bra",
+  "conceding_team_id": "sal",
+  "shooter_id": "bra-9",
+  "xg": 0.07334958549703503,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "sal-3",
+    "action_id": 1888,
+    "with_danger": 0.012465028635511945,
+    "without_danger": 0.0,
+    "effect": 0.012465028635511945
+   },
+   {
+    "kind": "offball",
+    "player_id": "sal-6",
+    "action_id": 1889,
+    "with_danger": 0.013044179765710566,
+    "without_danger": 0.011257277892452107,
+    "lapse_dx": 7.941346538536944,
+    "lapse_dy": 1.4647641567516967,
+    "effect": 0.0
+   }
+  ],
+  "truth": {
+   "sal-3": 1.0
+  }
+ },
+ {
+  "game_id": 20012,
+  "shot_action_id": 1950,
+  "window_start_action_id": 1939,
+  "attacking_team_id": "bra",
+  "conceding_team_id": "sal",
+  "shooter_id": "bra-9",
+  "xg": 0.40419003930439434,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "sal-8",
+    "action_id": 1943,
+    "with_danger": 0.03394591664238037,
+    "without_danger": 0.0022021278855501114,
+    "effect": 0.03174378875683026
+   },
+   {
+    "kind": "offball",
+    "player_id": "sal-6",
+    "action_id": 1939,
+    "with_danger": 0.06980189367864024,
+    "without_danger": 0.06928979776545198,
+    "lapse_dx": 13.38660252913332,
+    "lapse_dy": -3.534936623041374,
+    "effect": 0.0
+   }
+  ],
+  "truth": {
+   "sal-8": 1.0
+  }
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 68,
+  "window_start_action_id": 58,
+  "attacking_team_id": "dun",
+  "conceding_team_id": "eas",
+  "shooter_id": "dun-9",
+  "xg": 0.2678706378214774,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "eas-5",
+    "action_id": 62,
+    "with_danger": 0.013717785467337635,
+    "without_danger": 0.0,
+    "effect": 0.013717785467337635
+   }
+  ],
+  "truth": {
+   "eas-5": 1.0
+  }
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 178,
+  "window_start_action_id": 168,
+  "attacking_team_id": "eas",
+  "conceding_team_id": "dun",
+  "shooter_id": "eas-9",
+  "xg": 0.2410827623133358,
+  "goal": false,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 338,
+  "window_start_action_id": 327,
+  "attacking_team_id": "dun",
+  "conceding_team_id": "eas",
+  "shooter_id": "dun-9",
+  "xg": 0.10847600279816841,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "eas-5",
+    "action_id": 331,
+    "with_danger": 0.012924501131130672,
+    "without_danger": 0.001703622073606424,
+    "effect": 0.011220879057524249
+   },
+   {
+    "kind": "onball",
+    "player_id": "eas-4",
+    "action_id": 337,
+    "with_danger": 0.023163450466402426,
+    "without_danger": 0.0018370139062669902,
+    "effect": 0.021326436560135435
+   },
+   {
+    "kind": "offball",
+    "player_id": "eas-2",
+    "action_id": 333,
+    "with_danger": 0.012999596211615456,
+    "without_danger": 0.006700344253383292,
+    "lapse_dx": 2.172002445918524,
+    "lapse_dy": 7.359013380465646,
+    "effect": 0.006299251958232164
+   }
+  ],
+  "truth": {
+   "eas-5": 0.2888512359709206,
+   "eas-4": 0.5489915297785694,
+   "eas-2": 0.1621572342505101
+  }
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 363,
+  "window_start_action_id": 352,
+  "attacking_team_id": "eas",
+  "conceding_team_id": "dun",
+  "shooter_id": "eas-9",
+  "xg": 0.10030799911830862,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "dun-8",
+    "action_id": 352,
+    "with_danger": 0.009003589934576388,
+    "without_danger": 0.0027279445826245623,
+    "effect": 0.006275645351951825
+   },
+   {
+    "kind": "onball",
+    "player_id": "dun-2",
+    "action_id": 360,
+    "with_danger": 0.01663406858196619,
+    "without_danger": 0.0007229885186588014,
+    "effect": 0.015911080063307388
+   }
+  ],
+  "truth": {
+   "dun-8": 0.28285586243545735,
+   "dun-2": 0.7171441375645426
+  }
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 379,
+  "window_start_action_id": 369,
+  "attacking_team_id": "dun",
+  "conceding_team_id": "eas",
+  "shooter_id": "dun-9",
+  "xg": 0.09059210408059316,
+  "goal": false,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 448,
+  "window_start_action_id": 438,
+  "attacking_team_id": "dun",
+  "conceding_team_id": "eas",
+  "shooter_id": "dun-9",
+  "xg": 0.09304290626811902,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "eas-8",
+    "action_id": 440,
+    "with_danger": 0.0006282943365413206,
+    "without_danger": 0.0023492648919643524,
+    "effect": 0.0
+   }
+  ],
+  "truth": {}
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 770,
+  "window_start_action_id": 760,
+  "attacking_team_id": "dun",
+  "conceding_team_id": "eas",
+  "shooter_id": "dun-7",
+  "xg": 0.03403071962899508,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "eas-8",
+    "action_id": 763,
+    "with_danger": 0.0076982386590290965,
+    "without_danger": 0.004460246962848986,
+    "effect": 0.0
+   },
+   {
+    "kind": "onball",
+    "player_id": "eas-1",
+    "action_id": 769,
+    "with_danger": 0.026138367763110085,
+    "without_danger": 0.0003921965472324851,
+    "effect": 0.0257461712158776
+   }
+  ],
+  "truth": {
+   "eas-1": 1.0
+  }
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 843,
+  "window_start_action_id": 833,
+  "attacking_team_id": "eas",
+  "conceding_team_id": "dun",
+  "shooter_id": "eas-9",
+  "xg": 0.07066001475949657,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "dun-10",
+    "action_id": 836,
+    "with_danger": 0.00039371601790948,
+    "without_danger": 0.0,
+    "effect": 0.0
+   }
+  ],
+  "truth": {}
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 893,
+  "window_start_action_id": 883,
+  "attacking_team_id": "dun",
+  "conceding_team_id": "eas",
+  "shooter_id": "dun-9",
+  "xg": 0.08531531931283179,
+  "goal": false,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 930,
+  "window_start_action_id": 919,
+  "attacking_team_id": "dun",
+  "conceding_team_id": "eas",
+  "shooter_id": "dun-9",
+  "xg": 0.45326270443695826,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "eas-4",
+    "action_id": 921,
+    "with_danger": 0.012603875496357346,
+    "without_danger": 0.0055908814868669676,
+    "effect": 0.007012994009490379
+   },
+   {
+    "kind": "onball",
+    "player_id": "eas-1",
+    "action_id": 928,
+    "with_danger": 0.032766640757835,
+    "without_danger": 0.005407742489113656,
+    "effect": 0.027358898268721347
+   }
+  ],
+  "truth": {
+   "eas-4": 0.20403281706826196,
+   "eas-1": 0.7959671829317381
+  }
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 993,
+  "window_start_action_id": 983,
+  "attacking_team_id": "dun",
+  "conceding_team_id": "eas",
+  "shooter_id": "dun-9",
+  "xg": 0.2325360475670558,
+  "goal": true,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 1311,
+  "window_start_action_id": 1301,
+  "attacking_team_id": "eas",
+  "conceding_team_id": "dun",
+  "shooter_id": "eas-9",
+  "xg": 0.1949450814408246,
+  "goal": false,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 1357,
+  "window_start_action_id": 1347,
+  "attacking_team_id": "dun",
+  "conceding_team_id": "eas",
+  "shooter_id": "dun-9",
+  "xg": 0.07193925436421611,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "offball",
+    "player_id": "eas-2",
+    "action_id": 1347,
+    "with_danger": 0.0048750329217344575,
+    "without_danger": 0.0025393805056444455,
+    "lapse_dx": 12.707813223333218,
+    "lapse_dy": 0.5349078721889594,
+    "effect": 0.0
+   },
+   {
+    "kind": "offball",
+    "player_id": "eas-6",
+    "action_id": 1347,
+    "with_danger": 0.004296675996321684,
+    "without_danger": 0.005828783220320741,
+    "lapse_dx": 0.29208154062172303,
+    "lapse_dy": -7.662028293622254,
+    "effect": 0.0
+   }
+  ],
+  "truth": {}
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 1411,
+  "window_start_action_id": 1400,
+  "attacking_team_id": "eas",
+  "conceding_team_id": "dun",
+  "shooter_id": "eas-9",
+  "xg": 0.1348703299180856,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "dun-4",
+    "action_id": 1401,
+    "with_danger": 0.014599970402572398,
+    "without_danger": 0.01480427436785684,
+    "effect": 0.0
+   },
+   {
+    "kind": "onball",
+    "player_id": "dun-6",
+    "action_id": 1406,
+    "with_danger": 0.02456991187262344,
+    "without_danger": 0.012991746430402107,
+    "effect": 0.011578165442221332
+   },
+   {
+    "kind": "onball",
+    "player_id": "dun-6",
+    "action_id": 1410,
+    "with_danger": 0.05033281362983428,
+    "without_danger": 0.0022074020282491927,
+    "effect": 0.04812541160158509
+   }
+  ],
+  "truth": {
+   "dun-6": 1.0
+  }
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 1416,
+  "window_start_action_id": 1405,
+  "attacking_team_id": "eas",
+  "conceding_team_id": "dun",
+  "shooter_id": "eas-9",
+  "xg": 0.07643164859954876,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "dun-6",
+    "action_id": 1406,
+    "with_danger": 0.03250336155199205,
+    "without_danger": 0.016976643731789906,
+    "effect": 0.015526717820202145
+   },
+   {
+    "kind": "onball",
+    "player_id": "dun-6",
+    "action_id": 1410,
+    "with_danger": 0.06743507759810347,
+    "without_danger": 0.01264081938027472,
+    "effect": 0.05479425821782875
+   },
+   {
+    "kind": "onball",
+    "player_id": "dun-5",
+    "action_id": 1414,
+    "with_danger": 0.0134905008284447,
+    "without_danger": 0.0014504214345241002,
+    "effect": 0.0120400793939206
+   }
+  ],
+  "truth": {
+   "dun-6": 0.8538134397285817,
+   "dun-5": 0.1461865602714183
+  }
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 1495,
+  "window_start_action_id": 1485,
+  "attacking_team_id": "dun",
+  "conceding_team_id": "eas",
+  "shooter_id": "dun-9",
+  "xg": 0.14223529791564293,
+  "goal": false,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 1640,
+  "window_start_action_id": 1630,
+  "attacking_team_id": "eas",
+  "conceding_team_id": "dun",
+  "shooter_id": "eas-9",
+  "xg": 0.08428900376435644,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "dun-5",
+    "action_id": 1638,
+    "with_danger": 0.021966227862596818,
+    "without_danger": 0.007926555576323848,
+    "effect": 0.01403967228627297
+   }
+  ],
+  "truth": {
+   "dun-5": 1.0
+  }
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 1646,
+  "window_start_action_id": 1636,
+  "attacking_team_id": "eas",
+  "conceding_team_id": "dun",
+  "shooter_id": "eas-9",
+  "xg": 0.4101058609065714,
+  "goal": true,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "dun-5",
+    "action_id": 1638,
+    "with_danger": 0.030661902295935593,
+    "without_danger": 0.02157537876524597,
+    "effect": 0.009086523530689623
+   },
+   {
+    "kind": "onball",
+    "player_id": "dun-5",
+    "action_id": 1642,
+    "with_danger": 0.02518627926434633,
+    "without_danger": 0.0005413780245517819,
+    "effect": 0.024644901239794546
+   }
+  ],
+  "truth": {
+   "dun-5": 1.0
+  }
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 1761,
+  "window_start_action_id": 1751,
+  "attacking_team_id": "dun",
+  "conceding_team_id": "eas",
+  "shooter_id": "dun-9",
+  "xg": 0.09420943314356794,
+  "goal": true,
+  "causes": [],
+  "truth": {}
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 1779,
+  "window_start_action_id": 1769,
+  "attacking_team_id": "dun",
+  "conceding_team_id": "eas",
+  "shooter_id": "dun-9",
+  "xg": 0.4119808002423875,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "eas-8",
+    "action_id": 1769,
+    "with_danger": 0.012891821731750984,
+    "without_danger": 0.001578367829711303,
+    "effect": 0.01131345390203968
+   }
+  ],
+  "truth": {
+   "eas-8": 1.0
+  }
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 1872,
+  "window_start_action_id": 1862,
+  "attacking_team_id": "dun",
+  "conceding_team_id": "eas",
+  "shooter_id": "dun-9",
+  "xg": 0.15194434999697382,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "onball",
+    "player_id": "eas-5",
+    "action_id": 1865,
+    "with_danger": 0.017020045565988396,
+    "without_danger": 0.006656998629839657,
+    "effect": 0.01036304693614874
+   },
+   {
+    "kind": "onball",
+    "player_id": "eas-2",
+    "action_id": 1870,
+    "with_danger": 0.026154408140413598,
+    "without_danger": 0.0027266321315097754,
+    "effect": 0.023427776008903823
+   }
+  ],
+  "truth": {
+   "eas-5": 0.30668228924167207,
+   "eas-2": 0.6933177107583279
+  }
+ },
+ {
+  "game_id": 20045,
+  "shot_action_id": 1907,
+  "window_start_action_id": 1897,
+  "attacking_team_id": "dun",
+  "conceding_team_id": "eas",
+  "shooter_id": "dun-9",
+  "xg": 0.327291495541621,
+  "goal": false,
+  "causes": [
+   {
+    "kind": "offball",
+    "player_id": "eas-4",
+    "action_id": 1897,
+    "with_danger": 0.004570533804210471,
+    "without_danger": 0.0042862619969778045,
+    "lapse_dx": 13.03007399272881,
+    "lapse_dy": 3.269769840185523,
+    "effect": 0.0
+   }
+  ],
+  "truth": {}
+ }
+]

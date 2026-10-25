@@ -1,0 +1,14 @@
+statistic,real,simulated,difference_pct
+actions,2002.3,2018.275,0.8
+passes,847.9,965.775,13.9
+carries,800.9,880.15,9.9
+crosses,21.6,21.725,0.6
+take_ons,31.1,27.55,-11.4
+shots,24.2,23.8,-1.7
+tackles,36.8,32.075,-12.8
+interceptions,27.1,22.2,-18.1
+clearances,44.8,39.65,-11.5
+keeper_saves,5.6,5.35,-4.5
+goals,2.75,2.65,-3.6
+pass_completion,0.808,0.82,1.5
+pass_length_m,17.2,18.523,7.7

@@ -1,0 +1,227 @@
+{
+ "external": {
+  "cases": 178,
+  "matches": 150,
+  "goals": 57,
+  "excluded": {
+   "no_onball_blame": 67,
+   "no_linked_shot": 30
+  },
+  "metrics": {
+   "ours_top1": {
+    "mean": 0.7584269662921348,
+    "ci95_low": 0.6927047086991222,
+    "ci95_high": 0.8218486590038314
+   },
+   "ours_top3": {
+    "mean": 0.797752808988764,
+    "ci95_low": 0.7329545454545454,
+    "ci95_high": 0.8563226328824538
+   },
+   "last_top1": {
+    "mean": 0.898876404494382,
+    "ci95_low": 0.8522622053872054,
+    "ci95_high": 0.943502824858757
+   },
+   "last_top3": {
+    "mean": 0.9213483146067416,
+    "ci95_low": 0.883031951386847,
+    "ci95_high": 0.9606796497395016
+   },
+   "random_top1": {
+    "mean": 0.5806759407883003,
+    "ci95_low": 0.5268807785378361,
+    "ci95_high": 0.6351594580133906
+   },
+   "random_top3": {
+    "mean": 0.8965222043873731,
+    "ci95_low": 0.8667052165711382,
+    "ci95_high": 0.925001584953508
+   },
+   "labelled_share": {
+    "mean": 0.7465677711745822,
+    "ci95_low": 0.6811731928695551,
+    "ci95_high": 0.8068773041411417
+   },
+   "si_if_blamed_alone": {
+    "mean": 0.2534322288254179,
+    "ci95_low": 0.19312269585885844,
+    "ci95_high": 0.3188268071304447
+   }
+  },
+  "verdicts_if_blamed_alone": {
+   "fair": 124,
+   "unfair": 48,
+   "watch": 6
+  },
+  "justified_cases": 130,
+  "justified_false_unfair": 0,
+  "labelled_share_median": 1.0,
+  "note": "On-ball responsibility only (public event data has no player positions). VAEP trained on Serie A and Bundesliga 2015/16; evaluated on international tournaments. No Premier League data used."
+ },
+ "synthetic": {
+  "bench_games": 60,
+  "train_games": 80,
+  "moments": 483,
+  "goals": 113,
+  "justified_cases": 441,
+  "metrics": {
+   "tv_lam0.0": {
+    "mean": 0.14806602727977433,
+    "ci95_low": 0.12920117215256594,
+    "ci95_high": 0.166522819106976
+   },
+   "top1_lam0.0": {
+    "mean": 0.7888198757763976,
+    "ci95_low": 0.7505110062893081,
+    "ci95_high": 0.8244915861081274
+   },
+   "top3_lam0.0": {
+    "mean": 0.8302277432712215,
+    "ci95_low": 0.7916645791583166,
+    "ci95_high": 0.8678097729320995
+   },
+   "justified_unfair_lam0.0": {
+    "mean": 0.18633540372670807,
+    "ci95_low": 0.15204068044874994,
+    "ci95_high": 0.2244125182117308
+   },
+   "tv_last": {
+    "mean": 0.14770305090395533,
+    "ci95_low": 0.1289834861705725,
+    "ci95_high": 0.167395177494881
+   },
+   "top1_last": {
+    "mean": 0.8509316770186336,
+    "ci95_low": 0.8187762920339028,
+    "ci95_high": 0.8795704410796577
+   },
+   "top3_last": {
+    "mean": 0.927536231884058,
+    "ci95_low": 0.8995603975535168,
+    "ci95_high": 0.9525862068965517
+   },
+   "justified_unfair_last": {
+    "mean": 0.062111801242236024,
+    "ci95_low": 0.04206426927697592,
+    "ci95_high": 0.08367368286226624
+   },
+   "last_touch_story_si": {
+    "mean": 0.12078793703231969,
+    "ci95_low": 0.1011891446445314,
+    "ci95_high": 0.14034368329526659
+   }
+  },
+  "multi_cause": {
+   "n": 42,
+   "metrics": {
+    "tv_lam0.0": 0.36669478241509307,
+    "top1_lam0.0": 0.5952380952380952,
+    "top3_lam0.0": 0.7619047619047619,
+    "justified_unfair_lam0.0": 0.0,
+    "tv_lam0.25": 0.37613820659124286,
+    "top1_lam0.25": 0.5952380952380952,
+    "top3_lam0.25": 0.8333333333333334,
+    "justified_unfair_lam0.25": 0.0,
+    "tv_lam0.5": 0.38001483918010204,
+    "top1_lam0.5": 0.5952380952380952,
+    "top3_lam0.5": 0.8333333333333334,
+    "justified_unfair_lam0.5": 0.0,
+    "tv_lam1.0": 0.4015743094662447,
+    "top1_lam1.0": 0.6190476190476191,
+    "top3_lam1.0": 0.8333333333333334,
+    "justified_unfair_lam1.0": 0.0,
+    "tv_lam2.0": 0.4618624132578005,
+    "top1_lam2.0": 0.5952380952380952,
+    "top3_lam2.0": 0.7380952380952381,
+    "justified_unfair_lam2.0": 0.0,
+    "tv_last": 0.5174138998167441,
+    "top1_last": 0.6190476190476191,
+    "top3_last": 0.9047619047619048,
+    "justified_unfair_last": 0.0,
+    "last_touch_story_si": 0.5174138998167441
+   }
+  },
+  "last_touch_story_unfair_share": 0.14906832298136646
+ },
+ "calibration": [
+  {
+   "statistic": "actions",
+   "real": 2002.3,
+   "simulated": 2018.275,
+   "difference_pct": 0.8
+  },
+  {
+   "statistic": "passes",
+   "real": 847.9,
+   "simulated": 965.775,
+   "difference_pct": 13.9
+  },
+  {
+   "statistic": "carries",
+   "real": 800.9,
+   "simulated": 880.15,
+   "difference_pct": 9.9
+  },
+  {
+   "statistic": "crosses",
+   "real": 21.6,
+   "simulated": 21.725,
+   "difference_pct": 0.6
+  },
+  {
+   "statistic": "take_ons",
+   "real": 31.1,
+   "simulated": 27.55,
+   "difference_pct": -11.4
+  },
+  {
+   "statistic": "shots",
+   "real": 24.2,
+   "simulated": 23.8,
+   "difference_pct": -1.7
+  },
+  {
+   "statistic": "tackles",
+   "real": 36.8,
+   "simulated": 32.075,
+   "difference_pct": -12.8
+  },
+  {
+   "statistic": "interceptions",
+   "real": 27.1,
+   "simulated": 22.2,
+   "difference_pct": -18.1
+  },
+  {
+   "statistic": "clearances",
+   "real": 44.8,
+   "simulated": 39.65,
+   "difference_pct": -11.5
+  },
+  {
+   "statistic": "keeper_saves",
+   "real": 5.6,
+   "simulated": 5.35,
+   "difference_pct": -4.5
+  },
+  {
+   "statistic": "goals",
+   "real": 2.75,
+   "simulated": 2.65,
+   "difference_pct": -3.6
+  },
+  {
+   "statistic": "pass_completion",
+   "real": 0.808,
+   "simulated": 0.82,
+   "difference_pct": 1.5
+  },
+  {
+   "statistic": "pass_length_m",
+   "real": 17.2,
+   "simulated": 18.523,
+   "difference_pct": 7.7
+  }
+ ]
+}

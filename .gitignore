@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Data: never committed. Public data is downloaded by scripts; uploads are never stored here.
+.data/
+benchmarks/**/raw/
+benchmarks/**/cache/
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+
+# Azure
+.azure/
+
+# Node
+node_modules/
+
+# OS and editors
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json

@@ -1,0 +1,16 @@
+.venv
+.data
+.env
+.env.*
+.azure
+.git
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+**/node_modules
+apps/web/dist
+benchmarks
+docs
+tests
+scripts
+infra
