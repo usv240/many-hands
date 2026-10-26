@@ -70,7 +70,7 @@ export default function Home() {
   const ext = results.data?.external;
   const syn = results.data?.synthetic;
   const det = results.data?.detection.test_half;
-  const pc = (x: number) => `${Math.round(x * 100)}%`;
+  const pc = (x: number) => `${Number((x * 100).toFixed(1))}%`; // one decimal, so 7.5 percent does not read as 8
 
   return (
     <div className="mh-home">
@@ -268,8 +268,8 @@ export default function Home() {
               Fair lines were called Unfair {det ? pc(det.called_unfair.fair_lines_called_unfair.value) : "2%"} of the time.</dd>
           </div>
           <div>
-            <dt>About 51</dt>
-            <dd>one-culprit stories a 380-match season that the check would call Unfair: 0.5 provider-labelled errors a match, and
+            <dt>51</dt>
+            <dd>one-culprit stories a 380-match season that the check would call Unfair, by our estimate: 0.5 provider-labelled errors a match, and
               27 percent of those lines called Unfair. An estimate from real tournament data.</dd>
           </div>
         </dl>

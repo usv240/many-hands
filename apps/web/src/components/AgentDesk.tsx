@@ -108,9 +108,11 @@ export function AgentDesk({ chainId, line, live, onResult }:
                   <li key={v.id} className={`mh-version${v.aired ? "" : " is-held"}`}>
                     <span className="mh-version-who">{v.audience}</span>
                     <p lang={v.id === "es" ? "es" : undefined}>"{v.text}"</p>
-                    {v.si !== null && v.verdict !== "held"
-                      ? <ScoreBadge si={v.si} verdict={v.verdict} size="small" />
-                      : <span className="mh-small">Held</span>}
+                    <span className="mh-version-badge">
+                      {v.si !== null && v.verdict !== "held"
+                        ? <ScoreBadge si={v.si} verdict={v.verdict} size="small" />
+                        : <span className="mh-small">Held</span>}
+                    </span>
                     {(v.note || !v.aired) && <span className="mh-version-note">{v.note ?? "Held: it did not pass the check, so it will not air."}</span>}
                   </li>
                 ))}

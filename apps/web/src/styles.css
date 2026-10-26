@@ -464,6 +464,7 @@ main:focus { outline: none; }
   padding: 0.6rem 0.75rem; border-radius: 10px; background: var(--colorNeutralBackground2); }
 .mh-version-who { font-weight: 650; font-size: 0.9rem; }
 .mh-version p, .mh-version-note { grid-column: 1 / -1; margin: 0; }
+.mh-version-badge { grid-row: 1; grid-column: 2; justify-self: end; }
 .mh-version-note { font-size: 0.85rem; color: var(--colorNeutralForeground2); }
 .mh-version.is-held { background: color-mix(in srgb, var(--mh-unfair-bg) 50%, var(--colorNeutralBackground2)); }
 @media (prefers-reduced-motion: reduce) { .mh-trace-step, .mh-live-goal { animation: none; } }
