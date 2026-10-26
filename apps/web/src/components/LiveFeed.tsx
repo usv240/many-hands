@@ -140,7 +140,10 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
       )}
       {waking && <p className="mh-live-waking" role="status">Goal at {waking} reached Event Hubs. The agents are writing the line.</p>}
       <ol className="mh-live-goals" aria-live="polite">
-        {goals.map((g) => <LiveGoalItem key={g.chainId} g={g} />)}
+        {goals.map((g) => (
+          <LiveGoalItem key={g.chainId} g={g}
+            onDecided={(status, sentTo) => { upsert(g.chainId, { status, sentTo }); refreshLog(); }} />
+        ))}
       </ol>
       {log && (
         <p className="mh-small mh-muted">
@@ -154,7 +157,8 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
   );
 }
 
-function LiveGoalItem({ g }: { g: LiveGoal }) {
+/** One goal in the live feed. A decision updates the card from the server's answer, so it shows even after the feed is stopped. */
+function LiveGoalItem({ g, onDecided }: { g: LiveGoal; onDecided: (status: LiveGoal["status"], sentTo: string | null) => void }) {
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -164,7 +168,10 @@ function LiveGoalItem({ g }: { g: LiveGoal }) {
 
   const send = async (decision: "approve" | "reject", evidence: Evidence | null = answer) => {
     setBusy(true); setError(null);
-    try { await decide(g.chainId, decision, reason.trim(), undefined, g.check ? evidence ?? undefined : undefined); }
+    try {
+      const out = await decide(g.chainId, decision, reason.trim(), undefined, g.check ? evidence ?? undefined : undefined);
+      onDecided(out.item.status, out.graphic_sent_to);
+    }
     catch (e) { setError((e as Error).message); } finally { setBusy(false); }
   };
 
