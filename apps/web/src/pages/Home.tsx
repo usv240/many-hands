@@ -1,8 +1,5 @@
 import { Accordion, AccordionHeader, AccordionItem, AccordionPanel, Button, Tab, TabList } from "@fluentui/react-components";
-import {
-  ArrowRight16Regular, Bot20Regular, BuildingShop20Regular, Code20Regular, DocumentText20Regular,
-  PersonSupport20Regular, ShieldCheckmark20Regular, Tv20Regular,
-} from "@fluentui/react-icons";
+import { ArrowRight16Regular, PersonSupport20Regular } from "@fluentui/react-icons";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { AgentTrace } from "../components/AgentDesk";
@@ -304,15 +301,14 @@ export default function Home() {
         <h2 id="who">Who uses it, and how</h2>
         <ul className="mh-uses">
           {[
-            { icon: <Tv20Regular />, t: "Broadcasters and streamers", d: "Every line is checked before it airs. Clearly fair lines go out at once; anything else waits for a person.", to: "/studio", cta: "Open the Studio" },
-            { icon: <DocumentText20Regular />, t: "Editors and pundits", d: "Paste any line about a goal and see how fair it is, and why.", to: "/check", cta: "Check a line" },
-            { icon: <Code20Regular />, t: "AI developers", d: "Add the check to any recap engine through the REST API or the command line.", to: "/developers", cta: "Read the API" },
-            { icon: <Bot20Regular />, t: "AI assistants", d: "GitHub Copilot or any MCP client can use the 8 tools that read our Responsibility Ledger.", to: "/developers#mcp", cta: "Connect over MCP" },
-            { icon: <ShieldCheckmark20Regular />, t: "Clubs and leagues", d: "See which players are being over-blamed, with a tamper-evident record.", to: "/trust", cta: "How it stays honest" },
-            { icon: <BuildingShop20Regular />, t: "Anyone with match files", d: "Bring your own data, sentences and fairness limits. Files never leave your browser.", to: "/byo", cta: "Bring your own" },
+            { t: "Broadcasters and streamers", d: "Every line is checked before it airs. Clearly fair lines go out at once; anything else waits for a person.", to: "/studio", cta: "Open the Studio" },
+            { t: "Editors and pundits", d: "Paste any line about a goal and see how fair it is, and why.", to: "/check", cta: "Check a line" },
+            { t: "AI developers", d: "Add the check to any recap engine through the REST API or the command line.", to: "/developers", cta: "Read the API" },
+            { t: "AI assistants", d: "GitHub Copilot or any MCP client can use the 8 tools that read our Responsibility Ledger.", to: "/developers#mcp", cta: "Connect over MCP" },
+            { t: "Clubs and leagues", d: "See which players are being over-blamed, with a tamper-evident record.", to: "/trust", cta: "How it stays honest" },
+            { t: "Anyone with match files", d: "Bring your own data, sentences and fairness limits. Files never leave your browser.", to: "/byo", cta: "Bring your own" },
           ].map((c) => (
             <li key={c.t}>
-              <span className="mh-use-icon" aria-hidden>{c.icon}</span>
               <div><h3>{c.t}</h3><p>{c.d}</p></div>
               <Link to={c.to} className="mh-link-arrow">{c.cta} <ArrowRight16Regular aria-hidden /></Link>
             </li>
