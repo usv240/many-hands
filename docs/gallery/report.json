@@ -64,5 +64,9 @@
     "768 /trust": 0,
     "768 /byo": 0
   },
-  "timings": {}
+  "timings": {
+    "home_fix_s": 10.7,
+    "desk_fix_s": 13.8,
+    "recap_s": 9.6
+  }
 }
