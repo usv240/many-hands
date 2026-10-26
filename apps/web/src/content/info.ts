@@ -254,6 +254,12 @@ export const INFO = {
     what: "The five jobs Many Hands does, in order: take in the match (Ingest), value every action (Interpret), work out who contributed and why (Explain), put it on screen (Render), and tell it differently for each kind of viewer (Personalize).",
     why: "Each stage is a part of the product you can see and try.",
   },
+  voice: {
+    title: "The on-air voice",
+    what: "Hear the line the way viewers would, read by a natural voice from Azure AI Speech, in English or Spanish.",
+    why: "Many viewers hear the story rather than read it. The voice reads only lines that passed the fairness check: a line that failed cannot be spoken.",
+    tech: "POST /v1/speak. Azure AI Speech neural voices (en-GB-SoniaNeural, es-ES-AlvaroNeural) on the Foundry account, signed in with the app's managed identity, no keys. The server keeps the set of lines it approved and refuses any other text; audio is cached per line.",
+  },
   recap: {
     title: "Match recap",
     what: "The whole match in a few sentences, for a casual fan, an analyst or a Spanish speaker. The Recapper agent writes it; the Auditor checks every sentence about a goal against that goal's evidence.",

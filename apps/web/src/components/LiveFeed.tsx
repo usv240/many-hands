@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { MatchData } from "../engine/types";
 import { type AgentResult, decide, getLog, kickoff, LIVE_URL } from "../state/api";
 import { Info } from "./Info";
+import { SpeakButton } from "./SpeakButton";
 import { ScoreBadge } from "./viz";
 
 type Verdict = "fair" | "watch" | "unfair";
@@ -192,6 +193,7 @@ function LiveGoalItem({ g, onDecided }: { g: LiveGoal; onDecided: (status: LiveG
           <p>"{g.line}"</p>
           <div className="mh-row mh-wrap">
             {g.audit && <ScoreBadge si={g.audit.si} verdict={g.audit.verdict} size="small" />}
+            {(g.status === "aired" || g.status === "approved") && g.line && <SpeakButton text={g.line} label="Hear it" />}
             {g.status === "aired" && g.sentTo && <span className="mh-small mh-muted">Aired automatically: sent to {g.sentTo}</span>}
             {g.status === "approved" && <span className="mh-small mh-muted">Approved by you{fair ? "" : " with a reason"}{g.sentTo ? `, sent to ${g.sentTo}` : ""}</span>}
             {g.status === "rejected" && <span className="mh-small mh-muted">Rejected by you. It did not air.</span>}

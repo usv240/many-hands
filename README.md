@@ -2,6 +2,8 @@
 
 **Microsoft Foundry agents trace every goal back through every player who contributed to it, catch scapegoating lines before they air, and put a fair line on air about 3 seconds after the goal.**
 
+Most AI match tools check whether the facts in a line are true. Many Hands checks whether the blame is fair: a line can get every fact right and still make one player the scapegoat.
+
 > **A pundit is about to say:** "Number 8's howler cost them the goal."  **Unfair**
 > **Many Hands puts on air:** "A loose clearance by number 8 and a misplaced pass from number 9 led to Rafe Quilian's goal."  **Fair**
 
@@ -92,6 +94,7 @@ The main line goes on air the moment the Auditor approves it; the audience versi
 | **Microsoft Foundry** | gpt-5-mini deployment for the Narrator, Personalizer, Auditor's reader and the red team; project tracing to Application Insights |
 | **Microsoft Agent Framework** | The workflow graph: Investigator, Narrator and Auditor loop, Personalizer, fallbacks, fail-closed; the Recapper and per-sentence audit for match recaps |
 | **Azure Event Hubs** | The live match feed; a goal on the stream wakes the agents (Entra ID only, no connection strings) |
+| **Azure AI Speech** | The on-air voice: reads approved lines aloud in English and Spanish, and only lines that passed the check (managed identity, no keys) |
 | **Azure Container Apps** | One app serving the website, REST API and live stream; always one warm replica |
 | **Azure Container Registry** | Images built in the cloud |
 | **Managed identity, Entra ID** | No keys anywhere: Foundry, Event Hubs and the registry all use identities |
@@ -121,7 +124,7 @@ azd up                                                     # everything on Azure
 uv run pytest                                              # the Python tests (MANYHANDS_OFFLINE=1 to skip Azure)
 cd apps/web && npm test                                    # the website tests, including engine parity
 ```
-Tests: **162 Python** (unit, property-based, API, agent workflow, match recap, live feed, producer queue and usage limits, and 83 red-team regressions) and **160 web**, including 154 cases where the browser engine must match the Python engine exactly. CI runs them on every push.
+Tests: **165 Python** (unit, property-based, API, agent workflow, match recap, live feed, producer queue and usage limits, and 83 red-team regressions) and **160 web**, including 154 cases where the browser engine must match the Python engine exactly. CI runs them on every push.
 
 ## Repository
 ```

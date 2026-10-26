@@ -3,6 +3,7 @@ import { ArrowRight16Regular, PersonSupport20Regular } from "@fluentui/react-ico
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { AgentTrace } from "../components/AgentDesk";
+import { SpeakButton } from "../components/SpeakButton";
 import { Info, Term } from "../components/Info";
 import { PitchReplay } from "../components/Pitch";
 import { ResponsibilityBars, ScaleMeter, ScoreBadge } from "../components/viz";
@@ -79,7 +80,7 @@ export default function Home() {
             lines before they air, and rewrite them fairly, seconds after the goal.
           </p>
           <p className="mh-lead">
-            <L s="When a goal goes in, TV and AI recaps often blame one player. Many Hands shows who really contributed, tells the story for every kind of fan, and stops unfair blame before it reaches the screen."
+            <L s="When a goal goes in, TV and AI recaps often blame one player. A line can get every fact right and still make one player the scapegoat. Many Hands shows who really contributed, tells the story for every kind of fan, and stops unfair blame before it reaches the screen."
                d="Many Hands is an AI match insights engine. It measures each player's real share of every key moment, explains it on screen, personalises it for every fan, and checks every sentence for scapegoating before it airs."
                t="An event-driven engine that values every action with a published model (VAEP), attributes responsibility for each decisive moment, and runs a write, audit and revise loop that blocks scapegoating lines, measured by our Scapegoat Index." />
           </p>
@@ -119,6 +120,9 @@ export default function Home() {
                 </Button>
               )}
               {agentRun.error && <p className="mh-small mh-bad">{agentRun.error}</p>}
+              {agentRun.result?.line && agentRun.result.audit?.verdict !== "unfair" && (
+                <SpeakButton text={agentRun.result.line} withInfo />
+              )}
               {agentRun.result && <AgentTrace result={agentRun.result} />}
               <p className="mh-small mh-muted">
                 <Term id="si">Scored with the Scapegoat Index</Term>

@@ -125,6 +125,8 @@ class Hub:
         }
         await self._send_graphics(graphic)
         self.graphics_sent += 1
+        from services.api.speech import voice
+        voice.approve(line)  # on air, so the on-air voice may read it
         return graphic
 
     # ------------------------------------------------------------------ editorial control

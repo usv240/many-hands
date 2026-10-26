@@ -230,7 +230,29 @@ async def broadcast(body: BroadcastIn) -> dict:
     models.templates_only(not limits.take_model_run())  # over today's budget: the templates, never an error
     result = await run(Request(body.chain_id, body.text, (body.policy.watch_above, body.policy.unfair_above),
                                body.featured, body.simulate_auditor_outage))
+    from services.api.speech import voice
+    voice.approve_result(result)  # the lines that passed may now be read out
     return native(asdict(result))
+
+
+class SpeakIn(BaseModel):
+    text: str = Field(min_length=1, max_length=400)
+    lang: str = Field("en", pattern="^(en|es)$")
+
+
+@app.post("/v1/speak", dependencies=[Depends(limit("model"))])
+async def speak(body: SpeakIn):
+    """Read a line aloud with Azure AI Speech. Only lines that passed the fairness check can be spoken."""
+    from fastapi.responses import Response
+
+    from services.api.speech import voice
+    if not voice.allowed(body.text):
+        raise HTTPException(403, "Only lines that passed the fairness check are read on air.")
+    try:
+        audio = await voice.speak(body.text, body.lang)
+    except RuntimeError as exc:
+        raise HTTPException(503, str(exc)) from exc
+    return Response(audio, media_type="audio/mpeg", headers={"Cache-Control": "private, max-age=3600"})
 
 
 # ---------------------------------------------------------------------- live feed

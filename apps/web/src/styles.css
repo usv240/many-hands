@@ -515,3 +515,4 @@ main:focus { outline: none; }
    A light plate keeps their colours legible in dark mode. */
 .mh-credit { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; font-size: 0.9rem; color: var(--colorNeutralForeground2); }
 .mh-credit img { height: 24px; width: auto; background: #fff; padding: 6px 10px; border-radius: 8px; box-sizing: content-box; }
+.mh-speak { display: inline-flex; align-items: center; gap: 0.25rem; flex-wrap: wrap; }

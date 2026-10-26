@@ -3,6 +3,7 @@ import { Bot20Regular, ShieldError20Regular } from "@fluentui/react-icons";
 import { useState } from "react";
 import { type AgentResult, broadcast, LIVE_URL } from "../state/api";
 import { Info, Term } from "./Info";
+import { SpeakButton } from "./SpeakButton";
 import { ScoreBadge } from "./viz";
 
 const AGENT_JOB: Record<string, string> = {
@@ -98,6 +99,7 @@ export function AgentDesk({ chainId, line, live, onResult }:
                   <ScoreBadge si={result.audit.si} verdict={result.audit.verdict} size="small" />
                 </div>
               )}
+              {result.line && result.audit?.verdict !== "unfair" && <SpeakButton text={result.line} withInfo />}
             </>
           )}
           {result.status !== "held" && result.variants.length > 0 && (
@@ -114,6 +116,7 @@ export function AgentDesk({ chainId, line, live, onResult }:
                         : <span className="mh-small">Held</span>}
                     </span>
                     {(v.note || !v.aired) && <span className="mh-version-note">{v.note ?? "Held: it did not pass the check, so it will not air."}</span>}
+                    {v.aired && <span className="mh-version-note"><SpeakButton text={v.text} lang={v.id === "es" ? "es" : "en"} label="Hear it" /></span>}
                   </li>
                 ))}
               </ol>

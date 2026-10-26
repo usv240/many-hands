@@ -17,7 +17,7 @@ const CRITERIA: { name: string; asks: string; evidence: { text: string; to?: str
   { name: "Technological Implementation", asks: "Optimised synthetic data; quality engineering; hero technologies; maintainable code.",
     evidence: [
       { text: "Calibrated fictional league: most statistics within 15 percent of 906 real matches; counterfactual ground truth", to: "/results#cal", status: "live" },
-      { text: "Same engine in Python and in the browser, checked case for case by 154 parity tests; 322 tests in total", status: "live" },
+      { text: "Same engine in Python and in the browser, checked case for case by 154 parity tests; 325 tests in total", status: "live" },
       { text: "Microsoft Foundry (gpt-5-mini), Agent Framework workflow, Azure Event Hubs in and out, Container Apps, managed identity, deployed with azd", to: "/studio", status: "live" },
     ] },
   { name: "Agentic Design and Innovation", asks: "Creative agent patterns; orchestration, MCP, multi-agent; novelty.",
