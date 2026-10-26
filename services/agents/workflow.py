@@ -316,7 +316,8 @@ PERSONALIZER_RULES = (
     'only: {"analyst": "...", "casual": "...", "club": "...", "focus": "...", "es": "..."} where '
     "analyst is numbers-first, casual is plain words for a fan of the conceding team with no blame, "
     "club celebrates the move for the scoring team's fans and credits the unsung player, focus follows "
-    "the featured player in context, and es is the approved line translated into Spanish."
+    "the featured player in context, and es is the approved line translated into Spanish, entirely in "
+    "Spanish football words (despeje, pase, regate), never an English word left in."
 )
 
 
