@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 
 from narrative_core.extraction import Extraction, Mention, Roster, RuleExtractor
 
@@ -36,6 +37,19 @@ def _team_text(roster: Roster, team_id: str) -> str:
         f"number {e.shirt} {e.name} ({e.role})" for e in roster.team(team_id))
 
 
+def _names_someone_else(span: str, entry, roster: Roster, team_id: str) -> bool:
+    """True when the quoted words name an opponent and never the defender the reader assigned them to.
+
+    Measured on a live recap: "Ferren's cross provoked the goal" was charged to the defending number 10,
+    because Ferren, an attacker, wears 10 too.
+    """
+    words = set(re.findall(r"[\w']+", span.lower()))
+    own = {w.lower() for w in entry.name.split() if len(w) > 2} | {str(entry.shirt)}
+    others = {w.lower() for e in roster.entries if e.team_id != team_id for w in e.name.split() if len(w) > 2}
+    words_plain = {w.removesuffix("'s") for w in words}
+    return bool(words_plain & others) and not (words_plain & own)
+
+
 async def model_mentions(text: str, roster: Roster, team_id: str) -> list[Mention]:
     raw = await models.ask(models.agent("AuditorReader", READER), f"{_team_text(roster, team_id)}\nLine: {text}")
     data = json.loads(raw[raw.index("{"): raw.rindex("}") + 1])
@@ -46,6 +60,8 @@ async def model_mentions(text: str, roster: Roster, team_id: str) -> list[Mentio
         span = str(b.get("span", "")).strip()
         if entry is None or not span or span.lower() not in low:
             continue  # an invented mention is dropped, never trusted
+        if _names_someone_else(span, entry, roster, team_id):
+            continue  # the quote is about an opponent (who shares a shirt number), not this defender
         out.append(Mention(player_id=entry.player_id, span=span, polarity="blame",
                            strength=max(1, min(3, int(b.get("strength", 1))))))
     return out

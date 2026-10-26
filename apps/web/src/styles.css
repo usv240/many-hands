@@ -488,3 +488,5 @@ main:focus { outline: none; }
 .mh-recap-lines li > p { margin: 0; }
 .mh-recap-lines li.is-replaced { background: var(--mh-fair-bg); }
 .mh-recap-note { grid-column: 1 / -1; font-size: 0.85rem; color: var(--colorNeutralForeground2); }
+.mh-live-check { display: grid; gap: 0.35rem; padding: 0.6rem 0.7rem; border-radius: 10px; background: var(--colorNeutralBackground1); }
+.mh-live-check p { margin: 0; font-weight: 400; }

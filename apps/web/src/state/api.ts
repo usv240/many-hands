@@ -103,11 +103,12 @@ export interface QueueItem {
 
 export interface LogRecord { chain_id: string; decision: string; by: string; reason: string; at: number; hash: string }
 
-export async function decide(chainId: string, decision: "approve" | "reject", reason: string, producer = "Producer in the Studio"):
+export async function decide(chainId: string, decision: "approve" | "reject", reason: string, producer = "Producer in the Studio",
+  evidence?: "confirmed" | "rejected" | "unclear"):
   Promise<{ item: QueueItem; record: LogRecord; graphic_sent_to: string | null }> {
   const r = await fetch(`/v1/queue/${encodeURIComponent(chainId)}/decision`, {
     method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ decision, reason, producer }),
+    body: JSON.stringify({ decision, reason, producer, evidence }),
   });
   if (!r.ok) throw new Error((await r.json().catch(() => null))?.detail ?? `The decision was not recorded (${r.status}).`);
   return r.json();

@@ -70,3 +70,15 @@ def test_invented_span_is_rejected():
     with pytest.raises(ValueError):
         Extraction(text="Number 5 lost it.", mentions=[
             Mention(player_id="cor-5", span="Number 7", strength=3, polarity="blame")])
+
+
+def test_reader_quote_about_an_opponent_is_not_charged_to_a_defender():
+    from narrative_core.extraction import RosterEntry
+
+    from services.agents.extractor import _names_someone_else
+    roster = Roster([RosterEntry("cor-10", "Femi Drenesh", 10, "cor", "CM"),
+                     RosterEntry("kil-10", "Dario Ferren", 10, "kil", "RW")])
+    defender = roster.entries[0]
+    assert _names_someone_else("Ferren's cross provoked the goal", defender, roster, "cor")
+    assert not _names_someone_else("Drenesh let Ferren run", defender, roster, "cor")   # names the defender too
+    assert not _names_someone_else("number 10 never tracked back", defender, roster, "cor")

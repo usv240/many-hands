@@ -22,10 +22,13 @@ from narrative_core.scapegoat import Policy
 from services.agents import models
 from services.agents.extractor import deep_extract
 
+RECAP_TIMEOUT_S = 30  # a recap is ten sentences, not one line
+READS_AT_ONCE = 4     # measured: ten-plus parallel reads tripped the deployment's per-minute request limit
+
 AUDIENCES = {
     "casual": "a casual fan: plain words, no statistics, about 90 words",
     "analyst": "an analyst: who contributed and by how much, with minutes, about 110 words",
-    "es": "a Spanish-speaking fan: write in Spanish, plain words, about 90 words",
+    "es": "a Spanish-speaking fan: write everything in Spanish (shirt numbers as \"el número 8\"), plain words, about 90 words",
 }
 
 RECAPPER_RULES = (
@@ -60,6 +63,7 @@ class Recap:
     replaced: int
     seconds: float
     usage: dict | None = None
+    note: str | None = None              # why the recap was built from the fair lines, when it was
 
 
 def _facts(store, game_id: int) -> tuple[dict, dict]:
@@ -102,7 +106,7 @@ def _template(store, game_id: int, facts: dict, shares: dict, audience: str) -> 
 
 
 async def write(game_id: int, audience: str = "casual", policy: tuple[float, float] = (0.20, 0.40)) -> Recap:
-    from services.agents.workflow import _fact_errors
+    from services.agents.workflow import SCORELINE, _fact_errors
     from services.api.app import store
     if game_id not in store.ledgers:
         raise KeyError(game_id)
@@ -112,31 +116,48 @@ async def write(game_id: int, audience: str = "casual", policy: tuple[float, flo
     tally = models.start_usage()
     facts, shares = _facts(store, game_id)
     roster = store.roster(game_id)
-    title, sentences, used = None, None, False
+    title, sentences, used, note = None, None, False, None
     if models.available():
-        try:
-            raw = await models.ask(models.agent("Recapper", RECAPPER_RULES),
-                                   f"Audience: {AUDIENCES[audience]}\nFacts: {json.dumps(facts, ensure_ascii=False)}")
-            data = json.loads(raw[raw.index("{"): raw.rindex("}") + 1])
-            title = models.clean(str(data["title"]))
-            sentences = [Sentence(models.clean(str(s["text"])), s.get("chain_id") if s.get("chain_id") in shares else None)
-                         for s in data["sentences"] if str(s.get("text", "")).strip()]
-            used = bool(sentences)
-        except Exception:  # noqa: BLE001  the template recap below is fair by construction
-            sentences = None
+        for attempt in range(2):  # one retry: a passing throttle should not cost the reader their recap
+            try:
+                raw = await models.ask(models.agent("Recapper", RECAPPER_RULES),
+                                       f"Audience: {AUDIENCES[audience]}\nFacts: {json.dumps(facts, ensure_ascii=False)}",
+                                       timeout=RECAP_TIMEOUT_S)
+                data = json.loads(raw[raw.index("{"): raw.rindex("}") + 1])
+                title = models.clean(str(data["title"]))
+                sentences = [Sentence(models.clean(str(s["text"])),
+                                      s.get("chain_id") if s.get("chain_id") in shares else None)
+                             for s in data["sentences"] if str(s.get("text", "")).strip()]
+                used = bool(sentences)
+                break
+            except Exception as exc:  # noqa: BLE001  the template recap below is fair by construction
+                note = f"The Recapper could not answer ({type(exc).__name__}), so the recap is built from the fair lines."
+                if attempt == 0:
+                    await asyncio.sleep(1.5)
+    else:
+        note = f"The recap is built from the fair lines ({models.offline_reason()})."
     if not sentences:
         title, sentences = _template(store, game_id, facts, shares, audience)
+    else:
+        note = None
 
     # The Auditor: every sentence, in parallel, against the evidence of the goal it is about. A sentence
     # about no goal is read for blame of either team's players, since there is no evidence to weigh it by.
     g = store.games[store.games.game_id == game_id].iloc[0]
     both = [g.home_team_id, g.away_team_id]
+    gate = asyncio.Semaphore(READS_AT_ONCE)
+
+    async def one(text: str, team: str):
+        async with gate:
+            return await deep_extract(text, roster, team, required=used)
+
     async def read(s: Sentence):
         teams = [shares[s.chain_id][1]] if s.chain_id else both
-        readings = await asyncio.gather(*(deep_extract(s.text, roster, t, required=used) for t in teams))
+        readings = await asyncio.gather(*(one(s.text, t) for t in teams))
         return next((r for r in readings if r[0].blame()), readings[0])  # any blame found, else the first
 
     reads = await asyncio.gather(*(read(s) for s in sentences), return_exceptions=True)
+    real_scores = [sorted(score["goals"]) for _ev, _team, score in shares.values()]
     final = []
     for s, reading in zip(sentences, reads, strict=True):
         if isinstance(reading, BaseException):  # the check could not run on this sentence: it does not air
@@ -157,11 +178,13 @@ async def write(game_id: int, audience: str = "casual", policy: tuple[float, flo
                 final.append(Sentence(s.text, s.chain_id, res.si, res.verdict))
         elif extraction.blame():  # blame with no goal to check it against: dropped
             continue
+        elif any(sorted(map(int, pair)) not in real_scores for pair in SCORELINE.findall(s.text)):
+            continue                     # a score that never happened in this match: dropped
         else:
             final.append(Sentence(s.text, None, 0.0, "fair"))
     return Recap(game_id, audience, title or facts["final_score"], final, used, models.model_name(),
                  sum(s.replaced is not None for s in final), round(time.perf_counter() - t0, 2),
-                 {**tally, "cost_usd": round(models.usage_cost(tally), 6)})
+                 {**tally, "cost_usd": round(models.usage_cost(tally), 6)}, note)
 
 
 def to_dict(r: Recap) -> dict:

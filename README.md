@@ -29,9 +29,10 @@ In July 2021, three young England players missed penalties in the Euro 2020 fina
 ## Try it in three minutes
 1. **Home:** press "Fix it with the agents, live". A pundit's one-culprit line goes to the agents on Microsoft Foundry and comes back fair, with every agent step and its timing.
 2. **Studio:**
-   - **Evidence check:** the agent replays the one action the verdict depends on and asks you a single question.
+   - **Evidence check:** the Investigator picks the one action the verdict depends on, replays it and asks you a single question.
    - **AI desk:** send any line to the agents.
-   - **Live feed:** kick off a match through Azure Event Hubs. Goals wake the agents by themselves; a Fair line goes on air, anything else waits for your decision, and every decision lands in a hash-chained log.
+   - **Live feed:** kick off a match through Azure Event Hubs. Goals wake the agents by themselves; a Fair line goes on air, anything else waits for you with the Investigator's question, and every decision lands in a hash-chained log.
+   - **Match recap:** the Recapper writes the whole match for a casual fan, an analyst or a Spanish speaker; the Auditor checks every sentence against its own goal's evidence.
    - **Pre-air queue:** an Unfair line needs a typed reason to air, and the hash-chained log shows Verify and Tamper.
 3. **Results:** held-out detection against known causes, real public data, a named baseline, a negative control, a red team, and the limits, as numbers.
 
@@ -40,9 +41,9 @@ In July 2021, three young England players missed penalties in the Euro 2020 fina
 |---|---|
 | Ingest | Match events stream through **Azure Event Hubs** (from the calibrated simulator, or your own file) |
 | Interpret | Every action valued with VAEP (Decroos et al. 2019); each player's share of every goal |
-| Explain | Why this player and not that one; the unsung attacker; an evidence check a person settles in seconds |
-| Render | Timed graphics: chain replay, responsibility bars, a lower third that only shows approved lines |
-| Personalize | Analyst, casual fan of each club, featured player and Spanish versions, each checked separately |
+| Explain | Why this player and not that one; the unsung attacker; the one action the verdict depends on, put to a person as a single question |
+| Render | Lower-third events on the `broadcast-graphics` event hub with the goal's match clock and a display time, only for approved lines; chain replay and responsibility bars in the Studio |
+| Personalize | Per goal: analyst, casual fan of each club, featured player and Spanish versions. Per match: a recap for casual, analyst or Spanish readers. Every version and every sentence is checked separately |
 
 **The check** is the Scapegoat Index: the gap between who a line blames and the ledger's estimated contribution, from 0 (aligned) to 1 (fully misplaced). Fair up to 0.20, Watch to 0.40, Unfair above. **The score is computed in code, never by a model.** A model only helps read who a line blames, every quote it reports must appear in the line, and it can add blame the word rules missed but never remove any.
 
@@ -50,18 +51,21 @@ In July 2021, three young England players missed penalties in the Euro 2020 fina
 ```
 goal on Azure Event Hubs -> Investigator -> Narrator <-> Auditor -+-> Fair: on air at once, sent to the broadcast-graphics hub
                             ledger tools    writes and    rules +   |
-                            (also over MCP) rewrites      reader,   +-> anything else: waits for a producer; airing it needs a typed reason
+                            (also over MCP) rewrites      reader,   +-> anything else: waits for a producer, with the Investigator's question; airing it needs an answer and, unless Fair, a reason
                                                           score in  |
                                                           code      +-> Personalizer: 5 audience versions, each audited, follow on the same hub
 
 Every decision (aired by policy, approved, rejected, held) goes into a hash-chained log: GET /v1/log.
+
+Match recap:  Recapper (writes the match, each sentence tagged with its goal) -> Auditor, per sentence, against that goal's evidence
 ```
 The main line goes on air the moment the Auditor approves it; the audience versions follow and never delay it.
 - **Investigator** gathers evidence with the same ledger tools the MCP server exposes.
 - **Narrator** writes or rewrites from the facts only; the Auditor also checks every scoreline against the real score.
 - **Auditor** reads with rules plus a gpt-5-mini reader whose quotes are verified in code. It sends unfair lines back with reasons, at most twice, then uses a template that is fair by construction. If it cannot run, nothing airs.
-- **Personalizer** writes five audience versions, and every one is audited again.
-- **Evidence check (Studio):** before a line about a goal airs, the Studio picks the one action the verdict leans on most (the biggest lost ball by the most responsible player), replays it and asks the producer one question. "No" removes it as a data error and recomputes; "Can't tell" makes any line blaming that player need a typed reason.
+- **Personalizer** writes five audience versions, and every one is audited again, in its own language.
+- **Recapper** writes the whole match as a recap. Each sentence is tagged with the goal it is about; the Auditor scores it against that goal's evidence and checks its score, swaps an unfair or wrong sentence for the fair line, and drops blame that no goal supports.
+- **Investigator's question:** for every line that waits for a producer, the Investigator picks the one action the verdict leans on most (the biggest lost ball by the most responsible player) and asks about it. The line cannot air until it is answered: "No, the data is wrong" stops it; "Can't tell" needs a typed reason. The Studio's evidence check does the same on the pitch replay.
 - **Hot Take and Judge** form a red team: an attacker tries to sneak scapegoating past the Auditor, and a separate judge decides. Every attack is now a permanent test.
 
 ## Evidence
@@ -77,8 +81,8 @@ The main line goes on air the moment the Auditor approves it; the audience versi
 - Off-ball positional blame did not help at any weight, so its weight is 0.
 - The reader and the red team's judge are separate agents but share a base model, and catch rates vary between runs (77 to 79 of 83; 21 to 23 of 23 on the held-out match, and a call that fails falls back to word rules in the benchmark but holds the line in the product). Spanish versions are read in Spanish by the same reader; that is not separately benchmarked.
 - Real data cannot say who was truly to blame, so the real-data numbers describe what the check does; accuracy is measured on the known-cause league.
-- The demo has no sign-in, so anyone with the link can act as the producer. The decision log is kept in memory and copied to Event Hubs (one-day retention). Production would put Entra ID roles in front and keep the log in a database.
-- We have not measured an effect on online abuse, or a broadcaster's adoption.
+- Open by design for judging, with no sign-in: each caller gets 12 model-backed requests a minute, the service a daily model budget (past it the agents answer with their templates), and at most 3 live matches play at once. The decision log is held in memory and copied to Event Hubs, with one-day retention.
+- Scope: it measures whether a story's blame matches the evidence of the goal. It does not measure the story's effect on abuse.
 
 **Rerun every number:** `uv run python packages/sdk/manyhands/cli.py verify --suite synthetic` (and `--suite external`), plus the commands in each RESULTS file.
 
@@ -86,7 +90,7 @@ The main line goes on air the moment the Auditor approves it; the audience versi
 | Technology | Job |
 |---|---|
 | **Microsoft Foundry** | gpt-5-mini deployment for the Narrator, Personalizer, Auditor's reader and the red team; project tracing to Application Insights |
-| **Microsoft Agent Framework** | The workflow graph: Investigator, Narrator and Auditor loop, Personalizer, fallbacks, fail-closed |
+| **Microsoft Agent Framework** | The workflow graph: Investigator, Narrator and Auditor loop, Personalizer, fallbacks, fail-closed; the Recapper and per-sentence audit for match recaps |
 | **Azure Event Hubs** | The live match feed; a goal on the stream wakes the agents (Entra ID only, no connection strings) |
 | **Azure Container Apps** | One app serving the website, REST API and live stream; always one warm replica |
 | **Azure Container Registry** | Images built in the cloud |
@@ -97,7 +101,7 @@ The main line goes on air the moment the Auditor approves it; the audience versi
 | **Azure Developer CLI and Bicep** | `azd up` provisions and deploys everything |
 
 ## Use it
-- **REST API:** `POST /v1/audit` (`deep: true` adds the reader), `POST /v1/broadcast` (the full agent workflow), `POST /v1/matches/{id}/kickoff`, `GET /v1/matches/{id}/live` (Server-Sent Events), `GET /v1/queue` and `POST /v1/queue/{chain_id}/decision` (the producer's queue), `GET /v1/log` (the hash-chained decision log, with a verification), `GET /v1/metrics`. OpenAPI at `/docs`.
+- **REST API:** `POST /v1/audit` (`deep: true` adds the reader), `POST /v1/broadcast` (the full agent workflow), `POST /v1/matches/{id}/recap` (the audited match recap), `POST /v1/matches/{id}/kickoff`, `GET /v1/matches/{id}/live` (Server-Sent Events), `GET /v1/queue` and `POST /v1/queue/{chain_id}/decision` (the producer's queue), `GET /v1/log` (the hash-chained decision log, with a verification), `GET /v1/metrics`. OpenAPI at `/docs`.
 - **MCP server:** `uv run python services/api/mcp_server.py` (stdio) or `--http`.
 - **GitHub Action:**
   ```yaml
@@ -115,7 +119,7 @@ uv run uvicorn services.api.app:app --port 8000          # API, website (after b
 cd apps/web && npm ci && npm run dev                       # the website alone, works with no server
 azd up                                                     # everything on Azure
 ```
-Tests: **149 Python** (unit, property-based, API, agent workflow, live feed and producer queue, and 83 red-team regressions) and **160 web**, including 154 cases where the browser engine must match the Python engine exactly. CI runs them on every push.
+Tests: **161 Python** (unit, property-based, API, agent workflow, match recap, live feed, producer queue and usage limits, and 83 red-team regressions) and **160 web**, including 154 cases where the browser engine must match the Python engine exactly. CI runs them on every push.
 
 ## Repository
 ```

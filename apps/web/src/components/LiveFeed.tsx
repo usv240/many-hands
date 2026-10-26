@@ -7,6 +7,7 @@ import { Info } from "./Info";
 import { ScoreBadge } from "./viz";
 
 type Verdict = "fair" | "watch" | "unfair";
+type Evidence = "confirmed" | "rejected" | "unclear";
 
 interface LiveGoal {
   chainId: string; minute: number;
@@ -16,6 +17,7 @@ interface LiveGoal {
   sentTo: string | null;
   status: "aired" | "pending" | "approved" | "rejected" | "held" | "writing";
   versions: number | null; heldReason: string | null;
+  check: { index: number; minute: number; question: string } | null;   // the Investigator's one question
 }
 
 /**
@@ -51,7 +53,7 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
     const i = gs.findIndex((g) => g.chainId === chainId);
     if (i === -1) {
       return [{ chainId, minute: minuteOf(chainId), line: null, audit: null, lineLatency: null, latency: null,
-                sentTo: null, status: "writing", versions: null, heldReason: null, ...patch }, ...gs];
+                sentTo: null, status: "writing", versions: null, heldReason: null, check: null, ...patch }, ...gs];
     }
     const next = [...gs];
     next[i] = { ...next[i], ...patch };
@@ -73,7 +75,7 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
         if (msg.decisive) setWaking(`${minute}'`);
       }
       if (msg.type === "line") {
-        upsert(msg.chain_id, { line: msg.line, audit: msg.audit, lineLatency: msg.line_latency_s, sentTo: msg.graphic_sent_to,
+        upsert(msg.chain_id, { line: msg.line, audit: msg.audit, lineLatency: msg.line_latency_s, sentTo: msg.graphic_sent_to, check: msg.check ?? null,
                                status: msg.queued ? "pending" : "aired" });
         setWaking(null);
         refreshLog();
@@ -153,11 +155,14 @@ function LiveGoalItem({ g }: { g: LiveGoal }) {
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [answer, setAnswer] = useState<Evidence | null>(g.check ? null : "confirmed");
   const fair = g.audit?.verdict === "fair";
+  const needsReason = !fair || answer === "unclear";
 
-  const send = async (decision: "approve" | "reject") => {
+  const send = async (decision: "approve" | "reject", evidence: Evidence | null = answer) => {
     setBusy(true); setError(null);
-    try { await decide(g.chainId, decision, reason.trim()); } catch (e) { setError((e as Error).message); } finally { setBusy(false); }
+    try { await decide(g.chainId, decision, reason.trim(), undefined, g.check ? evidence ?? undefined : undefined); }
+    catch (e) { setError((e as Error).message); } finally { setBusy(false); }
   };
 
   const timing = g.lineLatency !== null
@@ -180,20 +185,35 @@ function LiveGoalItem({ g }: { g: LiveGoal }) {
             {g.status === "aired" && g.sentTo && <span className="mh-small mh-muted">Aired automatically: sent to {g.sentTo}</span>}
             {g.status === "approved" && <span className="mh-small mh-muted">Approved by you{fair ? "" : " with a reason"}{g.sentTo ? `, sent to ${g.sentTo}` : ""}</span>}
             {g.status === "rejected" && <span className="mh-small mh-muted">Rejected by you. It did not air.</span>}
+            {g.status === "pending" && g.check && answer === null && <span className="mh-small mh-muted">Answer the Investigator's question to air it.</span>}
           </div>
         </>
       )}
       {g.status === "pending" && (
         <div className="mh-live-decide">
           <p className="mh-small">{fair ? "Waiting for you. Nothing airs until you decide." : "Not clearly fair, so it waits for you. Nothing airs until you decide."}</p>
-          {!fair && (
+          {g.check && (
+            <div className="mh-live-check" role="group" aria-label="Evidence check from the Investigator">
+              <p className="mh-small mh-term"><strong>The Investigator asks</strong><Info id="evidenceCheck" /></p>
+              <p className="mh-small">{g.check.question}</p>
+              <div className="mh-row mh-wrap">
+                <Button size="small" appearance={answer === "confirmed" ? "primary" : "secondary"} aria-pressed={answer === "confirmed"}
+                  disabled={busy} onClick={() => setAnswer("confirmed")}>Yes, it does</Button>
+                <Button size="small" disabled={busy} onClick={() => { setAnswer("rejected"); send("reject", "rejected"); }}>No, the data is wrong</Button>
+                <Button size="small" appearance={answer === "unclear" ? "primary" : "subtle"} aria-pressed={answer === "unclear"}
+                  disabled={busy} onClick={() => setAnswer("unclear")}>Can't tell</Button>
+              </div>
+            </div>
+          )}
+          {needsReason && answer !== null && (
             <Field label={<span className="mh-term">Reason, needed to air it<Info id="reasonRequired" /></span>}>
               <Input value={reason} onChange={(_, d) => setReason(d.value)} placeholder="For example: the replay shows he was left alone" />
             </Field>
           )}
           <div className="mh-row mh-wrap">
-            <Button size="small" appearance="primary" disabled={busy || (!fair && !reason.trim())} onClick={() => send("approve")}>
-              {fair ? "Air it" : "Air with this reason"}
+            <Button size="small" appearance="primary" disabled={busy || answer === null || (needsReason && !reason.trim())}
+              onClick={() => send("approve")}>
+              {needsReason ? "Air with this reason" : "Air it"}
             </Button>
             <Button size="small" disabled={busy} onClick={() => send("reject")}>Don't air</Button>
           </div>

@@ -132,3 +132,9 @@ def test_variant_reader_failure_holds_only_that_variant(monkeypatch):
     assert not variants["analyst"]["aired"]
     assert variants["analyst"]["si"] is None
     assert variants["casual"]["aired"]
+
+
+def test_investigator_picks_the_action_to_check():
+    r = go(Request(CHAIN))
+    assert r.check and r.check["player_id"] == max(r.audit["evidence"], key=r.audit["evidence"].get)
+    assert r.check["question"].startswith("Look at action")

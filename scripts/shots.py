@@ -123,13 +123,25 @@ def main() -> None:
             page.get_by_label("Air Fair lines automatically", exact=False).uncheck()
             page.get_by_role("button", name="Kick off the live feed").click()
             page.wait_for_selector(".mh-live-goal.is-pending", timeout=120000)
-            page.locator(".mh-live-goal.is-pending").first.get_by_role("button", name="Air it").click()
+            first = page.locator(".mh-live-goal.is-pending").first
+            first.get_by_role("button", name="Yes, it does").click()
+            if first.get_by_role("textbox").count():  # not Fair: airing it needs a reason
+                first.get_by_role("textbox").fill("Replay checked: he was pressed by two players")
+            first.get_by_role("button", name="Air", exact=False).first.click()
             page.wait_for_function(
                 "document.querySelectorAll('.mh-live-goal').length >= 2 && document.querySelector('.mh-live-goal.is-pending')",
                 timeout=120000)
             page.wait_for_timeout(1500)
             page.locator(".mh-desk-region").screenshot(path=str(out / "4-studio-live-feed.png"))
             page.get_by_role("button", name="Stop the feed").click()
+
+            # 9. Studio: the match recap, every sentence audited.
+            t0 = time.time()
+            page.get_by_role("button", name="Write the match recap").click()
+            page.wait_for_selector(".mh-recap-body", timeout=90000)
+            report["timings"]["recap_s"] = round(time.time() - t0, 1)
+            page.wait_for_timeout(500)
+            page.locator(".mh-recap").screenshot(path=str(out / "9-studio-match-recap.png"))
 
             # 5. Audience versions and 6. the pre-air queue asking for a reason.
             page.locator(".mh-audiences").screenshot(path=str(out / "5-studio-audience-versions.png"))

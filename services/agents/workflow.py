@@ -53,7 +53,7 @@ class Request:
     simulate_auditor_outage: bool = False
     # Called with (line, audit) the moment the Auditor approves the main line, before the audience
     # versions are written, so a live graphic does not wait for them.
-    on_line: Callable[[str, dict], Awaitable[None]] | None = None
+    on_line: Callable[[str, dict, dict | None], Awaitable[None]] | None = None
 
 
 @dataclass
@@ -64,6 +64,7 @@ class Evidence:
     trace: list[Step] = field(default_factory=list)
     started: float = field(default_factory=time.perf_counter)
     line_ready_s: float | None = None  # when the fair line was approved: what the lower third needs
+    check: dict | None = None          # the one action a producer should look at before this airs
 
 
 @dataclass
@@ -97,6 +98,7 @@ class Result:
     held_reason: str | None = None
     line_ready_s: float | None = None
     usage: dict | None = None
+    check: dict | None = None
 
 
 def _ms(t0: float) -> int:
@@ -146,6 +148,7 @@ class Investigator(Executor):
                       {"who": summary["unsung"]["name"], "what": summary["unsung"]["reason"]},
         }
         ev = Evidence(req, facts, shares)
+        ev.check = deciding_check(L, req.chain_id, shares, roster)
         ev.trace.append(Step("Investigator", "gathered evidence with the ledger tools", _ms(t0),
                              f"{summary['n_actions']} actions; {len(shares)} defending player(s) lost the ball"))
         if req.incoming:
@@ -197,7 +200,7 @@ class Narrator(Executor):
         return Draft(ev, _template(ev), "template", revisions, history)
 
 
-SCORELINE = re.compile(r"(?<![0-9])(\d{1,2})\s*-\s*(\d{1,2})(?![0-9])")
+SCORELINE = re.compile(r"(?<![0-9])(\d{1,2})(?:\s*-\s*|\s+a\s+)(\d{1,2})(?![0-9])")  # "2-3", and Spanish "2 a 3"
 
 
 def _score_after(ledger, chain_id: str, names: dict) -> dict:
@@ -277,7 +280,7 @@ async def _line_ready(ev: Evidence, line: str, res: dict) -> None:
     if ev.request.on_line is None:
         return
     try:
-        await ev.request.on_line(line, res)
+        await ev.request.on_line(line, res, ev.check)
     except Exception as exc:  # the audience versions still follow; the caller logs its own failure
         ev.trace.append(Step("Auditor", "could not hand the line on", 0, type(exc).__name__))
 
@@ -367,8 +370,30 @@ def _result(ev: Evidence, line, audit_res, draft: Draft | None, variants, held: 
         revisions=draft.revisions if draft else 0, history=draft.history if draft else [],
         variants=variants, trace=[asdict(s) for s in ev.trace], model=models.model_name(),
         model_used=any(s.model for s in ev.trace), held_reason=held,
-        line_ready_s=None if held else ev.line_ready_s,
+        line_ready_s=None if held else ev.line_ready_s, check=ev.check,
     )
+
+
+def deciding_check(ledger, chain_id: str, shares: dict[str, float], roster) -> dict | None:
+    """The one action the verdict leans on most: the biggest lost ball by the most responsible player.
+
+    The Investigator hands this to the producer as a single question, and the line waits for the answer.
+    """
+    if not shares:
+        return None
+    top = max(shares, key=shares.get)
+    c = ledger.chain(chain_id).reset_index(drop=True)
+    losses = c[(c.player_id == top) & (c.result_name != "success")].sort_values("vaep_value")
+    if losses.empty:
+        return None
+    a = losses.iloc[0]
+    index = int(c.index[c.action_id == a.action_id][0]) + 1
+    minute = int(a.time_seconds // 60) + (45 if int(a.period_id) == 2 else 0)
+    kind = "carry" if a.type_name == "dribble" else str(a.type_name).replace("_", " ")
+    who = _label(roster, top)
+    return {"action_id": int(a.action_id), "index": index, "minute": minute, "player_id": top,
+            "question": f"Look at action {index} of the build-up ({minute}'). Does the replay show {who} "
+                        f"losing the ball with that {kind}?"}
 
 
 # ---------------------------------------------------------------------------------- build and run

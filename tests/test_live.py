@@ -114,7 +114,40 @@ def test_stricter_policy_queues_even_fair_lines():
                 break
         await hub.stop()
         assert line["queued"] and line["graphic_sent_to"] is None and hub.graphics_sent == 0
-        out = await hub.decide(line["chain_id"], "approve")  # a Fair line needs no reason, only a producer
+        assert line["check"] and "Does the replay show" in line["check"]["question"]
+        try:
+            await hub.decide(line["chain_id"], "approve")
+            raise AssertionError("aired before the evidence question was answered")
+        except ValueError:
+            pass
+        out = await hub.decide(line["chain_id"], "approve", evidence="confirmed")  # Fair and confirmed: no reason
         assert out["graphic_sent_to"] and out["record"]["decision"] == "approved"
+        assert out["record"]["evidence"] == "confirmed"
+
+    asyncio.run(scenario())
+
+
+def test_evidence_answers_gate_airing():
+    async def scenario():
+        hub = live.Hub()
+        hub.namespace = ""
+        check = {"action_id": 7, "index": 3, "minute": 16, "player_id": "p8", "question": "Did number 8 lose it?"}
+        for cid, verdict in (("a", "fair"), ("b", "fair"), ("c", "watch")):
+            hub.queue[cid] = {"game_id": 20003, "chain_id": cid, "line": "A line.", "check": check, "clock": None,
+                              "audit": {"verdict": verdict, "si": 0.1}, "status": "pending", "queued_at": 0.0}
+        for bad in (dict(evidence="rejected"), dict(evidence="unclear")):  # data wrong; or unsure with no reason
+            try:
+                await hub.decide("a", "approve", **bad)
+                raise AssertionError(f"aired with {bad}")
+            except ValueError:
+                pass
+        assert (await hub.decide("a", "approve", "Replay is blocked by a player", evidence="unclear"))["graphic_sent_to"]
+        assert (await hub.decide("b", "reject", evidence="rejected"))["record"]["evidence"] == "rejected"
+        try:
+            await hub.decide("c", "approve", evidence="confirmed")  # Watch still needs a reason
+            raise AssertionError("aired a Watch line without a reason")
+        except ValueError:
+            pass
+        assert hub.graphics_sent == 1 and hub.verify_log()["ok"]
 
     asyncio.run(scenario())

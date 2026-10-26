@@ -112,9 +112,9 @@ def usage_cost(tally: dict) -> float:
     return (tally["input_tokens"] * PRICE_PER_M["input"] + tally["output_tokens"] * PRICE_PER_M["output"]) / 1e6
 
 
-async def ask(a: Agent, prompt: str, options: dict | None = None) -> str:
+async def ask(a: Agent, prompt: str, options: dict | None = None, timeout: float = TIMEOUT_S) -> str:
     """Run an agent with a timeout. Raises on failure so the caller can fall back."""
-    response = await asyncio.wait_for(a.run(prompt, options=options or FAST), timeout=TIMEOUT_S)
+    response = await asyncio.wait_for(a.run(prompt, options=options or FAST), timeout=timeout)
     tally = _usage.get()
     if tally is not None and response.usage_details:
         tally["calls"] += 1

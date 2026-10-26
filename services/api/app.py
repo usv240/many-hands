@@ -313,6 +313,8 @@ class DecisionIn(BaseModel):
     decision: str = Field(pattern="^(approve|reject)$")
     reason: str = Field("", max_length=500, description="Required to approve: the line did not pass the check")
     producer: str = Field("producer", min_length=1, max_length=60)
+    evidence: str | None = Field(None, pattern="^(confirmed|rejected|unclear)$",
+                                 description="The producer's answer to the Investigator's evidence question")
 
 
 @app.get("/v1/queue")
@@ -326,7 +328,7 @@ def queue() -> list[dict]:
 async def decide(chain_id: str, body: DecisionIn) -> dict:
     from services.api.live import hub
     try:
-        return native(await hub.decide(chain_id, body.decision, body.reason, body.producer))
+        return native(await hub.decide(chain_id, body.decision, body.reason, body.producer, body.evidence))
     except KeyError as exc:
         raise HTTPException(404, f"nothing queued for {chain_id}") from exc
     except ValueError as exc:

@@ -106,7 +106,7 @@ class Hub:
         await self._graphics_producer.send_batch(batch)
 
     async def publish_graphic(self, game_id: int, chain_id: str, line: str | None, audit: dict | None,
-                              *, producer: str | None = None) -> dict | None:
+                              *, producer: str | None = None, clock: dict | None = None) -> dict | None:
         """Send an approved line to the broadcaster's graphics system.
 
         Policy: a line the Auditor scored Fair airs at once. Anything else airs only when a named
@@ -120,7 +120,8 @@ class Hub:
             "kind": "lower-third", "game_id": game_id, "chain_id": chain_id, "line": line,
             "scapegoat_index": audit["si"], "verdict": audit["verdict"],
             "approved_by": producer or "policy: Fair lines air automatically",
-            "duration_s": 7, "sent_at": time.time(),
+            # Timing for a renderer: the goal's place on the match clock, and how long the lower third stays up.
+            "match_clock": clock, "duration_s": 7, "sent_at": time.time(),
         }
         await self._send_graphics(graphic)
         self.graphics_sent += 1
@@ -151,8 +152,14 @@ class Hub:
             log.warning("decision record not written to Event Hubs: %s", exc)
         return record
 
-    async def decide(self, chain_id: str, decision: str, reason: str = "", producer: str = "producer") -> dict:
-        """A producer's decision on a queued line. Airing a line the check did not pass needs a reason."""
+    async def decide(self, chain_id: str, decision: str, reason: str = "", producer: str = "producer",
+                     evidence: str | None = None) -> dict:
+        """A producer's decision on a queued line.
+
+        The Investigator attached one question about the action the verdict leans on; airing waits for the
+        answer. "No, the data is wrong" means the line cannot air. Airing a line the check did not pass as
+        Fair, or one whose evidence the producer could not confirm, needs a typed reason.
+        """
         item = self.queue.get(chain_id)
         if item is None:
             raise KeyError(chain_id)
@@ -160,16 +167,24 @@ class Hub:
             raise ValueError(f"already {item['status']}")
         if decision not in ("approve", "reject"):
             raise ValueError("decision must be approve or reject")
-        if decision == "approve" and item["audit"]["verdict"] != "fair" and not reason.strip():
-            raise ValueError("a typed reason is needed to air a line the check did not pass")
+        if evidence not in (None, "confirmed", "rejected", "unclear"):
+            raise ValueError("evidence must be confirmed, rejected or unclear")
+        if decision == "approve" and item.get("check") and evidence is None:
+            raise ValueError("answer the evidence question before airing this line")
+        if decision == "approve" and evidence == "rejected":
+            raise ValueError("you marked the data as wrong, so this line cannot air")
+        needs_reason = item["audit"]["verdict"] != "fair" or evidence == "unclear"
+        if decision == "approve" and needs_reason and not reason.strip():
+            raise ValueError("a typed reason is needed to air a line the check did not pass or you could not confirm")
         item["status"] = "approved" if decision == "approve" else "rejected"
         record = await self._log({"chain_id": chain_id, "line": item["line"], "verdict": item["audit"]["verdict"],
                                   "si": item["audit"]["si"], "decision": item["status"], "by": producer,
-                                  "reason": reason.strip()})
+                                  "reason": reason.strip(), "evidence": evidence})
         graphic = None
         if decision == "approve":
             graphic = await self.publish_graphic(item["game_id"], chain_id, item["line"], item["audit"],
-                                                 producer=f"{producer}: {reason.strip()}")
+                                                 producer=f"{producer}: {reason.strip()}" if reason.strip() else producer,
+                                                 clock=item.get("clock"))
         sent_to = f"{self.graphics_name} ({self.transport})" if graphic else None
         self._fan_out(item["game_id"], {"type": "decided", "item": item, "record": record, "graphic_sent_to": sent_to})
         return {"item": item, "record": record, "graphic_sent_to": sent_to}
@@ -209,14 +224,15 @@ class Hub:
         self._fan_out(game_id, {**p, "action_type": p.get("type"), "type": "event"})
         chain_id = f"{game_id}-{p['action_id']}"
         if p.get("decisive"):
-            asyncio.create_task(self._wake_agents(game_id, chain_id, p["published_at"]))
+            clock = {"period": p.get("period"), "clock_s": p.get("clock_s")}
+            asyncio.create_task(self._wake_agents(game_id, chain_id, p["published_at"], clock))
 
-    async def _wake_agents(self, game_id: int, chain_id: str, published_at: float) -> None:
+    async def _wake_agents(self, game_id: int, chain_id: str, published_at: float, clock: dict | None = None) -> None:
         from services.agents.workflow import Request, run
         self._fan_out(game_id, {"type": "agent-start", "chain_id": chain_id, "at": time.time()})
         line_at: dict[str, Any] = {"latency": None, "sent_to": None}
 
-        async def on_line(line: str, audit: dict) -> None:
+        async def on_line(line: str, audit: dict, check: dict | None) -> None:
             """The Auditor approved the main line: air it now if Fair, else queue it for a producer."""
             latency = time.time() - published_at
             line_at["latency"] = latency
@@ -224,7 +240,7 @@ class Hub:
             if audit["verdict"] == "fair" and self.auto_air.get(game_id, True):
                 sent = None
                 try:
-                    sent = await self.publish_graphic(game_id, chain_id, line, audit)
+                    sent = await self.publish_graphic(game_id, chain_id, line, audit, clock=clock)
                 except Exception as exc:  # the Studio still shows the line if the graphics hub is unreachable
                     log.warning("graphics publish failed: %s", exc)
                 line_at["sent_to"] = f"{self.graphics_name} ({self.transport})" if sent else None
@@ -232,10 +248,11 @@ class Hub:
                                  "decision": "aired", "by": "policy: Fair lines air automatically", "reason": ""})
             else:
                 self.queue[chain_id] = {"game_id": game_id, "chain_id": chain_id, "line": line, "audit": audit,
-                                        "status": "pending", "queued_at": time.time()}
+                                        "check": check, "clock": clock, "status": "pending", "queued_at": time.time()}
                 self._fan_out(game_id, {"type": "queued", "item": self.queue[chain_id]})
             self._fan_out(game_id, {"type": "line", "chain_id": chain_id, "line": line, "audit": audit,
                                     "line_latency_s": round(latency, 2), "graphic_sent_to": line_at["sent_to"],
+                                    "check": check,
                                     "queued": chain_id in self.queue})
 
         try:

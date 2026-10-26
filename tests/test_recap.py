@@ -33,10 +33,11 @@ def test_scapegoating_sentence_is_replaced_and_wrong_score_rejected(monkeypatch)
         {"chain_id": ids[0], "text": "Number 8's howler cost them the goal."},
         {"chain_id": ids[1], "text": "A goal that made it 9-9."},
         {"chain_id": None, "text": "What a night for football."},
+        {"chain_id": None, "text": "It finished 7-7 in the end."},
         {"chain_id": None, "text": "Number 5's howler summed up the night."},
     ]}
 
-    async def ask(_agent, _prompt, options=None):
+    async def ask(_agent, _prompt, options=None, timeout=None):
         return json.dumps(fake)
 
     monkeypatch.setattr(models, "available", lambda: True)
@@ -54,6 +55,6 @@ def test_scapegoating_sentence_is_replaced_and_wrong_score_rejected(monkeypatch)
     first = r.sentences[0]
     if first.replaced:  # the howler line blamed the wrong share of number 8 here
         assert first.replaced == fake["sentences"][0]["text"] and first.verdict == "fair"
-    assert all("9-9" not in t for t in texts)                        # a wrong score never reaches the recap
+    assert all("9-9" not in t and "7-7" not in t for t in texts)     # a wrong score never reaches the recap
     assert "What a night for football." in texts                     # no blame, no goal: kept
     assert "Number 5's howler summed up the night." not in texts     # blame with no goal to check it: dropped
