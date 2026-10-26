@@ -1,4 +1,4 @@
-# Red team: results (Oct 25 2026)
+# Red team: results (updated Oct 26 2026)
 
 **The question:** can a determined attacker get scapegoating past the Auditor?
 
@@ -11,9 +11,9 @@
 ## Numbers
 | | Rules only | Rules plus reader |
 |---|---|---|
-| Held-out match: Judge-Unfair lines caught | 1 of 23 | **23 of 23** |
-| All matches: Judge-Unfair lines caught | 7 of 83 | **79 of 83** (77 on a rerun) |
-| Hard negatives (attacker lines the Judge rated Fair) flagged Unfair | 2 of 36 | 7 of 36 |
+| Held-out match: Judge-Unfair lines caught | 1 of 23 | **21 to 23 of 23** (3 runs) |
+| All matches: Judge-Unfair lines caught | 7 of 83 | **77 to 79 of 83** (3 runs) |
+| Hard negatives (attacker lines the Judge rated Fair) flagged Unfair | 2 of 36 | 5 to 7 of 36 |
 | Fair control lines (fair rewrites and neutral descriptions) flagged Unfair | 0 of 63 | **0 of 63** |
 
 ## What we tried first, and why we dropped it
@@ -22,7 +22,7 @@ Learning the attackers' phrasing into the word list caught 46 of 60 on the match
 ## Honest limits
 - The Judge and the reader are separate agents with different instructions, but both run on gpt-5-mini. Agreement between them is not independent human labelling.
 - Model output varies: the same 83 attacks were caught 79 and then 77 times. The live regression test asserts at least 90 percent.
-- The reader adds false flags on borderline lines (7 of 36 hard negatives versus 2 for rules). A producer still decides, and the line can air with a typed reason.
+- The reader adds false flags on borderline lines (5 to 7 of 36 hard negatives versus 2 for rules). A producer still decides, and the line can air with a typed reason.
 - The browser engine and `POST /v1/audit` without `deep` use the rules only, so they work with no AI at all. They catch explicit blame; implied blame needs the reader (`deep: true`, the Studio's AI desk, the live feed, and the GitHub Action by default).
 
 ## Every attack is a permanent test
@@ -36,3 +36,5 @@ uv run python benchmarks/redteam/run.py --per-moment 6        # new attacks, jud
 uv run python benchmarks/redteam/eval_reader.py               # Auditor with and without the reader
 MANYHANDS_LIVE=1 uv run pytest tests/test_redteam.py
 ```
+
+**Oct 26 rerun.** The reader's instructions now also cover Spanish. Rerun alone: 21 of 23 held out, 77 of 83 overall, 5 of 36 hard negatives, 0 of 63 controls; 118 of 120 reader calls succeeded. Run straight after the 83-call regression test, 22 calls were throttled and fell back to word rules (13 of 23). In the product a failed reader call holds the line instead.

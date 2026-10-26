@@ -69,13 +69,13 @@ The main line goes on air the moment the Auditor approves it; the audience versi
 |---|---|---|
 | [External](benchmarks/external_statsbomb/RESULTS.md): StatsBomb Open Data, provider-labelled errors, Premier League excluded | 178 | The check calls 1 in 4 single-culprit lines Unfair because a teammate's lost ball counted as much or more; last-touch names the labelled player more often (90% vs 76%) |
 | [Synthetic](benchmarks/synthetic/RESULTS.md): 60 fictional matches with counterfactual ground truth (each mistake replayed 100 times with and without it) | 483 moments | **Held out (29 matches):** 77% of Unfair calls right; deserved blame wrongly Unfair 6% vs 7.5% for last-touch. Shared-blame moments: 0.37 vs 0.52 distance to truth. Calibration: 12 of 13 statistics within 15% of 906 real matches |
-| [Red team](benchmarks/redteam/RESULTS.md): 120 attacker lines, judged by a separate agent | 83 unfair | Held-out match 23 of 23 caught with the reader (1 of 23 with rules alone); 0 of 63 fair controls flagged; 7 of 36 borderline lines flagged |
+| [Red team](benchmarks/redteam/RESULTS.md): 120 attacker lines, judged by a separate agent | 83 unfair | Held-out match: 21 to 23 of 23 caught with the reader across runs (1 of 23 with rules alone); 0 of 63 fair controls flagged; 5 to 7 of 36 borderline lines flagged |
 
 **Measured limits:**
 - **Cautious, not complete.** On held-out matches the check calls 10 of 42 truly unfair one-culprit lines Unfair outright, and sends 25 of 42 to a person; half of what reaches a person is fair. It informs a producer; it does not replace one.
 - Last-touch names the main culprit more often than our ledger (90 vs 76 percent on real data). Our edge is how much, not who.
 - Off-ball positional blame did not help at any weight, so its weight is 0.
-- The reader and the red team's judge are separate agents but share a base model, and catch rates vary between runs (77 to 79 of 83). Spanish versions are read in Spanish by the same reader; that is not separately benchmarked.
+- The reader and the red team's judge are separate agents but share a base model, and catch rates vary between runs (77 to 79 of 83; 21 to 23 of 23 on the held-out match, and a call that fails falls back to word rules in the benchmark but holds the line in the product). Spanish versions are read in Spanish by the same reader; that is not separately benchmarked.
 - Real data cannot say who was truly to blame, so the real-data numbers describe what the check does; accuracy is measured on the known-cause league.
 - The demo has no sign-in, so anyone with the link can act as the producer. The decision log is kept in memory and copied to Event Hubs (one-day retention). Production would put Entra ID roles in front and keep the log in a database.
 - We have not measured an effect on online abuse, or a broadcaster's adoption.

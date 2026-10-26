@@ -184,7 +184,7 @@ export default function Results() {
           ]} />
           <ul className="mh-facts">
             <li>Held-out match: <strong>{data.redteam.held_out.caught_with_reader} of {data.redteam.held_out.judge_unfair}</strong> caught with the reader, {data.redteam.held_out.caught_rules} with word rules alone.</li>
-            <li>All matches: {data.redteam.all.caught_with_reader} of {data.redteam.all.judge_unfair} caught with the reader (77 on a rerun), {data.redteam.all.caught_rules} with rules alone.</li>
+            <li>All matches: {data.redteam.all.caught_with_reader} of {data.redteam.all.judge_unfair} caught with the reader in the latest run (77 to 79 across three runs; 21 to 23 of 23 on the held-out match), {data.redteam.all.caught_rules} with rules alone.</li>
             <li>Fair control lines flagged Unfair: <strong>{data.redteam.controls.unfair_with_reader} of {data.redteam.controls.lines}</strong>.</li>
             <li>The cost: borderline attacker lines the judge rated fair were flagged Unfair {data.redteam.all.hard_negatives_unfair_with_reader} of {data.redteam.all.hard_negatives} times with the reader, {data.redteam.all.hard_negatives_unfair_rules} with rules alone. A producer still decides.</li>
             <li>Learning the attackers' phrasing into the word list did not generalise (5 of 23 on the held-out match), so we did not use it.</li>
