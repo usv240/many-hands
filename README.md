@@ -1,6 +1,6 @@
 # Many Hands
 
-**Microsoft Foundry agents trace every goal back through every player who contributed to it, catch scapegoating lines before they air, and have a fair line ready about 3 seconds after the goal.**
+**Microsoft Foundry agents trace every goal back through every player who contributed to it, catch scapegoating lines before they air, and put a fair line on air about 3 seconds after the goal.**
 
 > **A pundit is about to say:** "Number 8's howler cost them the goal."  **Unfair**
 > **Many Hands puts on air:** "A loose clearance by number 8 and a misplaced pass from number 9 led to Rafe Quilian's goal."  **Fair**
@@ -11,7 +11,7 @@
 
 | On a match day | |
 |---|---|
-| **About 3 s** | from a goal reaching Azure Event Hubs to a fair, checked line ready for air (medians of 2.9 s and 3.2 s on two live runs of 14 goals each, two matches at once; the slowest took 7.2 s). All five audience versions follow by 7.7 s. |
+| **About 3 s** | from a goal reaching Azure Event Hubs to a fair line on air, sent to the broadcaster's graphics hub (median 3.2 s over 14 live goals, two matches at once; the slowest took 8.6 s). The five audience versions follow by 9.5 s and never delay it. |
 | **$4.91 a season** | model cost to check every goal of a 380-match season, about 1.3 cents a match, from the tokens each agent call actually used |
 | **77% right** | when the check calls a line Unfair, scored against the known true cause on 29 held-out matches (10 of 13). It wrongly calls deserved blame Unfair 6 percent of the time, less often than the last-touch rule (7.5 percent). |
 | **About 51 a season** | one-culprit stories the check would call Unfair in a 380-match season. An estimate from real tournament data outside the Premier League: 0.5 clear errors a match, and 27 percent of one-culprit lines about them called Unfair. |
@@ -24,7 +24,7 @@ In July 2021, three young England players missed penalties in the Euro 2020 fina
 
 **Why goals.** Blame gathers around goals and big chances, so that is where the agents wake. The same evidence also names the unsung players who built the move, which the Studio shows for every goal.
 
-**Safe by default.** A line the check scores Fair airs at once. Anything else waits for a producer, who needs a typed reason to air it. If the model fails, a fair line written from a template is used; if the fairness check itself cannot run, nothing airs. All of it can be tried in the Studio.
+**Safe by default.** A line the check scores Fair airs at once. Anything else waits for a producer, who needs a typed reason to air it, and a broadcaster can switch off automatic airing so every line waits. If the model fails, a fair line written from a template is used; if the fairness check itself cannot run, nothing airs. All of it can be tried in the Studio.
 
 ## Try it in three minutes
 1. **Home:** press "Fix it with the agents, live". A pundit's one-culprit line goes to the agents on Microsoft Foundry and comes back fair, with every agent step and its timing.

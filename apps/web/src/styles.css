@@ -460,13 +460,12 @@ main:focus { outline: none; }
 .mh-live-latency { font-size: 0.85rem; color: var(--colorBrandForeground1); font-weight: 650; }
 /* The audience versions the Personalizer wrote, each with its own audit. */
 .mh-versions { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem; }
-.mh-version { display: grid; grid-template-columns: 9.5rem 1fr auto; gap: 0.25rem 0.75rem; align-items: start;
+.mh-version { display: grid; grid-template-columns: 1fr auto; gap: 0.3rem 0.75rem; align-items: center;
   padding: 0.6rem 0.75rem; border-radius: 10px; background: var(--colorNeutralBackground2); }
 .mh-version-who { font-weight: 650; font-size: 0.9rem; }
-.mh-version p { margin: 0; }
-.mh-version-note { grid-column: 2 / -1; font-size: 0.85rem; color: var(--colorNeutralForeground2); }
+.mh-version p, .mh-version-note { grid-column: 1 / -1; margin: 0; }
+.mh-version-note { font-size: 0.85rem; color: var(--colorNeutralForeground2); }
 .mh-version.is-held { background: color-mix(in srgb, var(--mh-unfair-bg) 50%, var(--colorNeutralBackground2)); }
-@media (max-width: 640px) { .mh-version { grid-template-columns: 1fr auto; } .mh-version p, .mh-version-note { grid-column: 1 / -1; } }
 @media (prefers-reduced-motion: reduce) { .mh-trace-step, .mh-live-goal { animation: none; } }
 
 /* Phone: the hero headline and its card must never push the page sideways */

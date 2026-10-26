@@ -277,7 +277,7 @@ export default function Home() {
         <div className="mh-facts-row">
           <article className="mh-stat">
             <p className="mh-stat-num">{det ? `${pc(det.justified_blame_wrongly_flagged.value)} vs ${pc(det.justified_blame_wrongly_flagged_last_touch.value)}` : "..."}</p>
-            <p><Term id="negativeControl">Deserved blame wrongly called Unfair</Term>: Many Hands versus <Term id="lastTouch">last-touch blame</Term>, scored against the known true cause. Fair both ways.</p>
+            <p><Term id="negativeControl">Deserved blame wrongly called Unfair</Term>: Many Hands versus blaming whoever lost the ball last, scored against the known true cause. Fair both ways.</p>
             <p className="mh-small mh-muted"><Term id="synthetic">Synthetic league</Term>, matches held out from tuning.</p>
           </article>
           <article className="mh-stat">

@@ -19,6 +19,11 @@ def test_dashes_and_newlines_removed():
     assert clean(f"A goal {EM_DASH} a fine one\nreally") == "A goal, a fine one really"
 
 
+def test_a_scoreline_dash_stays_a_scoreline():
+    assert clean("Corran Vale lead 3–2 now") == "Corran Vale lead 3-2 now"
+    assert clean("Kilnworth 2 – 3 Corran") == "Kilnworth 2-3 Corran"
+
+
 def test_field_name_leaks_are_found():
     assert leaked_fields("Goal for Corran Vale. Score_after: Kilnworth 2 Corran 3") == ["score_after"]
     assert leaked_fields("Corran Vale lead 3-2 after a loose ball from number 8.") == []

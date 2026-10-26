@@ -143,7 +143,7 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
           Every record is also written to Event Hubs. <a href="/v1/log" target="_blank" rel="noreferrer">See the log</a>
         </p>
       )}
-      <p className="mh-small mh-muted">A fictional match, sped up: a minute of play every couple of seconds. Nobody presses anything when a goal goes in;
+      <p className="mh-small mh-muted">A fictional match, sped up: a minute of play every couple of seconds. Nobody presses anything when a goal goes in;{" "}
         {autoAir ? "a Fair line airs on its own, and anything else waits for you." : "every line waits for you."}</p>
     </div>
   );

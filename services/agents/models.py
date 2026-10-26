@@ -20,6 +20,7 @@ from agent_framework import Agent
 TIMEOUT_S = float(os.environ.get("MANYHANDS_MODEL_TIMEOUT", "12"))
 FAST = {"reasoning": {"effort": "minimal"}}  # measured: 1.3 s per line versus 5.6 s by default
 DASHES = re.compile(r"\s*[‒–—―]\s*")
+SCORE_DASH = re.compile(r"(\d)\s*[‒–—―]\s*(\d)")  # "2–3" is a scoreline, not a pause: keep it as "2-3"
 QUOTES = str.maketrans({"‘": "'", "’": "'", "“": '"', "”": '"'})
 
 
@@ -73,7 +74,7 @@ FIELD_LEAK = re.compile(r"\b[a-z]+_[a-z_]+\b\s*:?")  # e.g. "score_after:" copie
 
 def clean(text: str) -> str:
     """House style: straight quotes, no em or en dashes, no surrounding quotes, single line."""
-    text = DASHES.sub(", ", text.strip().translate(QUOTES)).replace("\n", " ")
+    text = DASHES.sub(", ", SCORE_DASH.sub(r"\1-\2", text.strip().translate(QUOTES))).replace("\n", " ")
     return text.strip().strip('"').strip()
 
 

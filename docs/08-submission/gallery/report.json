@@ -1,7 +1,9 @@
 {
   "base": "https://ca-manyhands-7kzrrno7qr6zo.orangedune-9d42108b.eastus2.azurecontainerapps.io",
   "axe": {
-    "light /": [],
+    "light /": [
+      "target-size (1): .mh-stat:nth-child(1) > p:nth-child(2) > .mh-term:nth-child(1) > .mh-info"
+    ],
     "light /how-it-works": [],
     "light /check": [],
     "light /studio": [],
@@ -11,7 +13,9 @@
     "light /developers": [],
     "light /trust": [],
     "light /byo": [],
-    "dark /": [],
+    "dark /": [
+      "target-size (1): .mh-stat:nth-child(1) > p:nth-child(2) > .mh-term:nth-child(1) > .mh-info"
+    ],
     "dark /how-it-works": [],
     "dark /check": [],
     "dark /studio": [],
@@ -65,7 +69,7 @@
     "768 /byo": 0
   },
   "timings": {
-    "home_fix_s": 9.4,
-    "desk_fix_s": 16.3
+    "home_fix_s": 11.0,
+    "desk_fix_s": 9.3
   }
 }
