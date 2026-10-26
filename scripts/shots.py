@@ -121,7 +121,7 @@ def main() -> None:
 
             # 4. Studio: the live feed through Azure Event Hubs wakes the agents.
             #    Stricter policy, so the producer queue is visible: approve the first line, leave the next waiting.
-            page.get_by_label("Air Fair lines automatically", exact=False).uncheck()
+            page.get_by_role("checkbox", name="Air Fair lines automatically").uncheck()
             page.get_by_role("button", name="Kick off the live feed").click()
             page.wait_for_selector(".mh-live-goal.is-pending", timeout=120000)
             first = page.locator(".mh-live-goal.is-pending").first

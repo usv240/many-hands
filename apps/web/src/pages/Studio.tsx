@@ -242,7 +242,9 @@ export default function Studio() {
           </Region>
 
           <Region n={5} on={explain} className="mh-log">
-            <h2 className="mh-pane-title"><Term id="auditLog">Audit log</Term></h2>
+            <h2 className="mh-pane-title"><Term id="auditLog">Your decisions in this browser</Term></h2>
+            <p className="mh-small mh-muted">A record of what you approve, fix or reject on this page, kept in your browser. The live feed above keeps its own
+              log on the server.</p>
             {!log.length ? <p className="mh-muted">No decisions yet. Approve, rewrite or reject a line in the queue.</p> : (
               <div className="mh-table-wrap">
                 <table className="mh-table">
@@ -363,7 +365,8 @@ function QueueCard({ c, chain, data, disabled, unconfirmed, onDecide, onSendToAg
                 }}>Use fair version</Button>
             )}
             <Button size="small" icon={<Edit20Regular />} onClick={() => { setDraft(current.text); setEditing(true); }}>Edit</Button>
-            <Button size="small" appearance="subtle" onClick={() => onSendToAgents(current.text)}>Send to the agents</Button>
+            <Button size="small" appearance="subtle" title="Load this line into the AI desk below, where the agents rewrite it fairly"
+              onClick={() => onSendToAgents(current.text)}>Fix with the AI desk</Button>
             <Button size="small" appearance="subtle" icon={<Dismiss20Regular />} disabled={disabled}
               onClick={() => { onDecide({ text: current.text, si: r.si, verdict: r.verdict }, "rejected"); setDone("Rejected. It will not air."); }}>Reject</Button>
           </>

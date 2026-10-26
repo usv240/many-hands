@@ -507,3 +507,4 @@ main:focus { outline: none; }
 @media (min-width: 1101px) { .mh-moments { position: sticky; top: 4.5rem; } }
 /* Disabled controls stay readable (they are exempt from contrast rules, but a judge still has to read them). */
 .fui-Button:disabled, .fui-Button[aria-disabled="true"] { color: var(--colorNeutralForeground3) !important; }
+.mh-footer-note { max-width: 75ch; }

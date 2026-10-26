@@ -144,12 +144,12 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
       </ol>
       {log && (
         <p className="mh-small mh-muted">
-          Decision log on the server: {log.entries} {log.entries === 1 ? "entry" : "entries"}, {log.ok ? "chain intact" : "chain broken"}.
+          Decision log for the live feed, kept on the server: {log.entries} {log.entries === 1 ? "entry" : "entries"}, {log.ok ? "chain intact" : "chain broken"}.
           Every record is also written to Event Hubs. <a href="/v1/log" target="_blank" rel="noreferrer">See the log</a>
         </p>
       )}
-      <p className="mh-small mh-muted">A fictional match, sped up: a minute of play every couple of seconds. Nobody presses anything when a goal goes in;{" "}
-        {autoAir ? "a Fair line airs on its own, and anything else waits for you." : "every line waits for you."}</p>
+      <p className="mh-small mh-muted">A fictional match, sped up: a minute of play every couple of seconds. Nobody has to press anything when a goal goes in.{" "}
+        {autoAir ? "A Fair line airs on its own, and anything else waits for you." : "With automatic airing off, every line waits for you."}</p>
     </div>
   );
 }

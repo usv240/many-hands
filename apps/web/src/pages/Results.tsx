@@ -104,8 +104,10 @@ export default function Results() {
 
       <section className="mh-section" aria-labelledby="syn">
         <h2 id="syn"><Term id="synthetic">Synthetic benchmark: known causes</Term></h2>
-        <p><L s={`We built ${s.bench_games} fictional matches where we know the true cause of every goal, because we replay each attack 100 times with and without each mistake.`}
+        <p><L s={`We built ${s.bench_games} fictional matches where we know the true cause of every goal, because we replay each attack 100 times with and without each mistake. We tune on half of them and report results on the other half, the held-out matches (${data.detection.split.test_matches} with a measurable cause).`}
               t={`${s.moments} decisive moments with measured causes, paired random numbers for both arms of every replay, VAEP trained on ${s.train_games} separate matches; the ledger never sees the truth.`} /> <Info id="groundTruth" /></p>
+        <p className="mh-small">Over all moments the two methods tie: most goals have one clear cause, and both find it. The difference shows when the
+          blame is genuinely shared, below.</p>
         <Compare title="All moments" lowerIsBetter rows={[
           { label: "Distance from the true blame", ours: s.metrics["tv_lam0.0"].mean, base: s.metrics.tv_last.mean, fmt: dist },
         ]} />
@@ -196,7 +198,8 @@ export default function Results() {
           <h2 id="redteam"><Term id="redTeam">Red team: can an attacker sneak scapegoating past the Auditor?</Term></h2>
           <p><L s={`An attacker agent wrote ${data.redteam.attacks} lines that sound like normal punditry but quietly pin a goal on one player. A separate judge agent said which were unfair. We then checked how many our Auditor caught.`}
                 t={`Hot Take and Judge are separate gpt-5-mini agents. Judge quotes are verified in code; the Scapegoat Index is computed in code. Match ${"20045"} was held out before anything was learned.`} /></p>
-          <Compare title="Subtle scapegoating caught, on a match held out in advance"
+          <p className="mh-small mh-term">The reader is <Term id="reader">an AI that spots hinted blame</Term>; word rules alone look only for blaming words.</p>
+          <Compare title="Subtle scapegoating caught, on a match held out in advance (latest run)"
             labels={["Rules plus gpt-5-mini reader", "Word rules alone"]} rows={[
             { label: "Share of the judge's unfair lines caught", ours: data.redteam.held_out.caught_with_reader / data.redteam.held_out.judge_unfair,
               base: data.redteam.held_out.caught_rules / data.redteam.held_out.judge_unfair, fmt: pct },

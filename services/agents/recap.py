@@ -37,6 +37,7 @@ RECAPPER_RULES = (
     "Blame must match the responsibility shares of each goal: name one player as the cause only if their share "
     "is 60 percent or more; otherwise share it among the players with 15 percent or more, or describe the move. "
     "Give credit to attackers, including the unsung player when one is listed. Use the scores exactly as given. "
+    "Never write \"own clearance\", \"own pass\" or anything that sounds like an own goal: say \"a clearance in his own half\". In Spanish say \"en su propio campo\", never \"propia puerta\" or \"autogol\". Spell every name exactly as in the facts. "
     "Write every score with a hyphen, like 2-1, and use no other dashes. Reply with JSON only: "
     '{"title": "...", "sentences": [{"chain_id": "<the goal this sentence is about, or null>", "text": "..."}]}'
 )
@@ -106,7 +107,7 @@ def _template(store, game_id: int, facts: dict, shares: dict, audience: str) -> 
 
 
 async def write(game_id: int, audience: str = "casual", policy: tuple[float, float] = (0.20, 0.40)) -> Recap:
-    from services.agents.workflow import SCORELINE, _fact_errors
+    from services.agents.workflow import OWN_GOAL, SCORELINE, _fact_errors, misspelled
     from services.api.app import store
     if game_id not in store.ledgers:
         raise KeyError(game_id)
@@ -158,6 +159,7 @@ async def write(game_id: int, audience: str = "casual", policy: tuple[float, flo
 
     reads = await asyncio.gather(*(read(s) for s in sentences), return_exceptions=True)
     real_scores = [sorted(score["goals"]) for _ev, _team, score in shares.values()]
+    known_names = [e.name for e in roster.entries] + [facts["home"], facts["away"]]
     final = []
     for s, reading in zip(sentences, reads, strict=True):
         if isinstance(reading, BaseException):  # the check could not run on this sentence: it does not air
@@ -170,7 +172,7 @@ async def write(game_id: int, audience: str = "casual", policy: tuple[float, flo
         if s.chain_id:
             ev, team, score = shares[s.chain_id]
             res = audit(s.text, ev, roster, team, Policy(*policy), extraction=extraction, goal=True)
-            errors = _fact_errors(s.text, {"score_after": score})
+            errors = _fact_errors(s.text, {"score_after": score, "names": known_names})
             if res.verdict == "unfair" or errors:
                 fixed = fair_rewrite(ev, roster, True)
                 final.append(Sentence(fixed, s.chain_id, 0.0, "fair", s.text, errors + res.reasons))
@@ -180,6 +182,8 @@ async def write(game_id: int, audience: str = "casual", policy: tuple[float, flo
             continue
         elif any(sorted(map(int, pair)) not in real_scores for pair in SCORELINE.findall(s.text)):
             continue                     # a score that never happened in this match: dropped
+        elif OWN_GOAL.search(s.text) or misspelled(s.text, known_names):
+            continue                     # an own goal that was not one, or a misspelt name: dropped
         else:
             final.append(Sentence(s.text, None, 0.0, "fair"))
     return Recap(game_id, audience, title or facts["final_score"], final, used, models.model_name(),

@@ -138,3 +138,12 @@ def test_investigator_picks_the_action_to_check():
     r = go(Request(CHAIN))
     assert r.check and r.check["player_id"] == max(r.audit["evidence"], key=r.audit["evidence"].get)
     assert r.check["question"].startswith("Look at action")
+
+
+def test_own_goal_wording_and_misspelt_names_are_fact_errors():
+    from services.agents.workflow import _fact_errors
+    names = ["Rafe Quilian", "Yan Belain", "Corran Vale"]
+    assert _fact_errors("An own clearance from number 8 let Quilian in.", {"names": names})
+    assert _fact_errors("Despeje en propia puerta del número 8.", {"names": names})
+    assert any("Quilan" in e for e in _fact_errors("Quilan scored again.", {"names": names}))
+    assert not _fact_errors("A clearance in his own half by number 8 let Quilian score for Corran Vale.", {"names": names})

@@ -142,6 +142,7 @@ class Investigator(Executor):
             "conceding_team": names[summary["conceding_team_id"]],
             "conceding_team_id": summary["conceding_team_id"],
             "game_id": int(L.game_id),
+            "names": [e.name for e in roster.entries] + list(names.values()),  # for the spelling check
             "shooter": L.name(summary["shooter_id"]),
             "score_after": score,
             "actions": summary["n_actions"],
@@ -168,6 +169,7 @@ NARRATOR_RULES = (
     "players with 15 percent or more, or describe the move without blame. If you mention the score, "
     "use the score given in the facts, written naturally (for example 'Corran Vale lead 3-2'); never "
     "state any other number and never copy field names from the facts. Calm, broadcast tone. "
+    "Never write \"own clearance\", \"own pass\" or anything that sounds like an own goal: say \"a clearance in his own half\". In Spanish say \"en su propio campo\", never \"propia puerta\" or \"autogol\". "
     "No dashes. Output only the line."
 )
 
@@ -225,7 +227,25 @@ def _fact_errors(text: str, facts: dict) -> list[str]:
     leaks = models.leaked_fields(text)
     if leaks:
         errors.append(f"The line copies internal field names ({', '.join(leaks)}) instead of plain words.")
+    if OWN_GOAL.search(text):  # our matches have no own goals; the model once turned "own-half clearance" into one
+        errors.append("The line reads like an own goal; this goal was not one. Say \"in his own half\".")
+    errors += [f"\"{w}\" looks like a misspelling of {right}." for w, right in misspelled(text, facts.get("names", []))]
     return errors
+
+
+OWN_GOAL = re.compile(r"\bown[ -]goal|\bown (?:clearance|pass|touch|header)\b|\bautogol|\bpropia (?:puerta|meta)\b", re.I)
+
+
+def misspelled(text: str, names: list[str]) -> list[tuple[str, str]]:
+    """Capitalised words that are close to a known player or club name but not it: "Quilan" for "Quilian"."""
+    import difflib
+    known = {w for n in names for w in n.split() if len(w) > 3}
+    out = []
+    for w in set(re.findall(r"\b[A-Z][a-z]{3,}\b", text)) - known:
+        close = difflib.get_close_matches(w, known, n=1, cutoff=0.8)
+        if close:
+            out.append((w, close[0]))
+    return sorted(out)
 
 
 def _template(ev: Evidence) -> str:
@@ -291,7 +311,8 @@ async def _line_ready(ev: Evidence, line: str, res: dict) -> None:
 PERSONALIZER_RULES = (
     "You are the Personalizer for a football broadcast. From the approved line and the facts, write "
     "versions for different viewers. Keep every fact; never add blame beyond the approved line; "
-    "refer to defending players by shirt number. At most 30 words each. No dashes. Reply with JSON "
+    "refer to defending players by shirt number. At most 30 words each. No dashes. "
+    "Never write \"own clearance\", \"own pass\" or anything that sounds like an own goal: say \"a clearance in his own half\". In Spanish say \"en su propio campo\", never \"propia puerta\" or \"autogol\". Reply with JSON "
     'only: {"analyst": "...", "casual": "...", "club": "...", "focus": "...", "es": "..."} where '
     "analyst is numbers-first, casual is plain words for a fan of the conceding team with no blame, "
     "club celebrates the move for the scoring team's fans and credits the unsung player, focus follows "

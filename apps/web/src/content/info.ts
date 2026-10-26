@@ -16,7 +16,7 @@ export const INFO = {
     title: "Scapegoat Index",
     what: "A score from 0 to 1 comparing who a sentence blames with who the evidence says contributed.",
     why: "It catches stories that pin a team's mistake on one player.",
-    deep: "Below 0.20 is Fair, 0.20 to 0.40 is Watch, above 0.40 is Unfair. Broadcasters can set their own limits.",
+    deep: "0.20 or below is Fair, up to 0.40 is Watch, above 0.40 is Unfair. Broadcasters can set their own limits.",
     tech: "Total variation distance between the sentence's blame distribution and the ledger's responsibility distribution. A sentence with no blame scores 0.",
     more: { label: "How the score works", to: "/how-it-works#score" },
   },

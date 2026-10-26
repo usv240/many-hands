@@ -157,10 +157,10 @@ class MatchLedger:
             "period": int(c.period_id.iloc[-1]), "n_actions": int(len(c)),
             "minute": int(c.time_seconds.iloc[-1] // 60) + (45 if int(c.period_id.iloc[-1]) == 2 else 0),
             "responsibility": [{"player_id": x.player_id, "name": self.name(x.player_id),
-                                "shirt": self.shirt(x.player_id), "share": round(x.share, 3),
+                                "shirt": self.shirt(x.player_id), "share": round(x.share, 6),
                                 "reason": x.reason} for x in r.contributors],
             "last_touch": r.last_touch[:1],
             "unsung": None if u is None else {"player_id": u.player_id, "name": self.name(u.player_id),
                                                "shirt": self.shirt(u.player_id),
-                                               "share": round(u.share, 3), "reason": u.reason},
+                                               "share": round(u.share, 6), "reason": u.reason},
         }

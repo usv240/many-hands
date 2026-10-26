@@ -1,8 +1,7 @@
 import { Accordion, AccordionHeader, AccordionItem, AccordionPanel, Button, Tab, TabList } from "@fluentui/react-components";
 import {
   ArrowRight16Regular, Bot20Regular, BuildingShop20Regular, Code20Regular, DocumentText20Regular,
-  Glasses20Regular, PeopleTeam20Regular, PersonSupport20Regular, PlugConnected20Regular,
-  ShieldCheckmark20Regular, Sparkle20Regular, Tv20Regular,
+  PersonSupport20Regular, ShieldCheckmark20Regular, Tv20Regular,
 } from "@fluentui/react-icons";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -18,23 +17,23 @@ import { loadMatch, loadResults, SHOWCASE, useAsync } from "../state/data";
 import { L } from "../state/prefs";
 
 const STEPS = [
-  { n: 1, name: "Ingest", icon: <PlugConnected20Regular />,
+  { n: 1, name: "Ingest",
     s: "It watches the match as a list of events: every pass, tackle and shot.",
     d: "Events arrive live from our match simulator, or from your own data files.",
     t: "Events in the open SPADL format; provider files are converted with kloppy. Azure Event Hubs carries the live stream." },
-  { n: 2, name: "Interpret", icon: <Sparkle20Regular />,
+  { n: 2, name: "Interpret",
     s: "It gives every action a value: did it make a goal more or less likely?",
     d: "A model trained on thousands of matches estimates how each action changes both teams' chances of scoring.",
     t: "VAEP: gradient-boosted models of P(score) and P(concede) within 10 actions; value is the change in their difference." },
-  { n: 3, name: "Explain", icon: <Glasses20Regular />,
+  { n: 3, name: "Explain",
     s: "For every goal or big chance, it works out who contributed, and how much.",
     d: "It answers why this player and not that one, and finds the unsung player who created the chance.",
     t: "Material losses of value by the conceding side, counting lost balls only, final turnover weighted double. Tuned on ground truth." },
-  { n: 4, name: "Render", icon: <Tv20Regular />,
+  { n: 4, name: "Render",
     s: "It turns that into graphics that can sit next to the match.",
     d: "Timed graphics: the chain of actions, responsibility bars and a card for the unsung contributor.",
     t: "Overlays as timed JSON a broadcaster's graphics system can render in its own style." },
-  { n: 5, name: "Personalize", icon: <PeopleTeam20Regular />,
+  { n: 5, name: "Personalize",
     s: "It tells the story differently for different fans, and checks every version is still fair.",
     d: "Versions for analysts and casual fans, for each club, for one featured player, and in other languages.",
     t: "Personalizer fan-out; the Auditor scores each variant; failing variants never air." },
@@ -213,7 +212,6 @@ export default function Home() {
         <ol className="mh-steps">
           {STEPS.map((s) => (
             <li key={s.n} className="mh-step">
-              <span className="mh-step-icon" aria-hidden>{s.icon}</span>
               <div>
                 <h3><span className="mh-step-n">{s.n}</span> {s.name}</h3>
                 <p><L s={s.s} d={s.d} t={s.t} /></p>
@@ -229,7 +227,7 @@ export default function Home() {
         <h2 id="score"><Term id="si">A fairness score for every sentence</Term></h2>
         <p className="mh-section-lead">
           <L s="We compare who a sentence blames with who the evidence says contributed. Close to 0 means fair. Close to 1 means one player is being blamed for something the evidence spreads across others."
-             d="The Scapegoat Index measures the gap between the blame in a sentence and the responsibility in the evidence. Below 0.20 is Fair, 0.20 to 0.40 is Watch, above 0.40 is Unfair. Broadcasters can set their own limits."
+             d="The Scapegoat Index measures the gap between the blame in a sentence and the responsibility in the evidence. 0.20 or below is Fair, up to 0.40 is Watch, above 0.40 is Unfair. Broadcasters can set their own limits."
              t="SI is the total variation distance between the sentence's blame distribution (extracted with verified spans) and the ledger's responsibility distribution. A sentence with no blame scores 0." />
         </p>
         <ScaleMeter />
@@ -309,7 +307,7 @@ export default function Home() {
             { icon: <Tv20Regular />, t: "Broadcasters and streamers", d: "Every line is checked before it airs. Clearly fair lines go out at once; anything else waits for a person.", to: "/studio", cta: "Open the Studio" },
             { icon: <DocumentText20Regular />, t: "Editors and pundits", d: "Paste any line about a goal and see how fair it is, and why.", to: "/check", cta: "Check a line" },
             { icon: <Code20Regular />, t: "AI developers", d: "Add the check to any recap engine through the REST API or the command line.", to: "/developers", cta: "Read the API" },
-            { icon: <Bot20Regular />, t: "AI assistants", d: "GitHub Copilot or any MCP client can use our 8 ledger tools.", to: "/developers#mcp", cta: "Connect over MCP" },
+            { icon: <Bot20Regular />, t: "AI assistants", d: "GitHub Copilot or any MCP client can use the 8 tools that read our Responsibility Ledger.", to: "/developers#mcp", cta: "Connect over MCP" },
             { icon: <ShieldCheckmark20Regular />, t: "Clubs and leagues", d: "See which players are being over-blamed, with a tamper-evident record.", to: "/trust", cta: "How it stays honest" },
             { icon: <BuildingShop20Regular />, t: "Anyone with match files", d: "Bring your own data, sentences and fairness limits. Files never leave your browser.", to: "/byo", cta: "Bring your own" },
           ].map((c) => (
