@@ -107,6 +107,7 @@ def main() -> None:
 
             # 2. Studio: the evidence check, with the replay on the deciding action.
             page.goto(b + "/studio", wait_until="networkidle")
+            page.add_style_tag(content=".mh-header { position: static !important; }")  # keep it off element shots
             page.wait_for_selector(".mh-evidence-check")
             page.locator(".mh-evidence").screenshot(path=str(out / "2-studio-evidence-check.png"))
 

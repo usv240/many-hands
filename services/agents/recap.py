@@ -37,7 +37,7 @@ RECAPPER_RULES = (
     "Blame must match the responsibility shares of each goal: name one player as the cause only if their share "
     "is 60 percent or more; otherwise share it among the players with 15 percent or more, or describe the move. "
     "Give credit to attackers, including the unsung player when one is listed. Use the scores exactly as given. "
-    "No dashes. Reply with JSON only: "
+    "Write every score with a hyphen, like 2-1, and use no other dashes. Reply with JSON only: "
     '{"title": "...", "sentences": [{"chain_id": "<the goal this sentence is about, or null>", "text": "..."}]}'
 )
 

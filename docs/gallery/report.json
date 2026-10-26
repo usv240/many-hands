@@ -65,7 +65,8 @@
     "768 /byo": 0
   },
   "timings": {
-    "home_fix_s": 15.7,
-    "desk_fix_s": 13.2
+    "home_fix_s": 16.0,
+    "desk_fix_s": 11.6,
+    "recap_s": 10.6
   }
 }
