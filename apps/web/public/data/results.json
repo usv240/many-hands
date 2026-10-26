@@ -368,17 +368,17 @@
   "caveat": "Judge and reader are separate agents but share the gpt-5-mini model; not human labels."
  },
  "foundry_eval": {
-  "run_at": "2026-10-25T18:18:22+00:00",
+  "run_at": "2026-10-26T06:07:19+00:00",
   "status": "completed",
-  "eval_id": "eval_1509fd3e8d0a4599ba3f5715153f0114",
-  "run_id": "evalrun_1e08a82551024af3b9550632a27f55ee",
-  "portal_url": "https://ai.azure.com/nextgen/r/K1AoRkV4RGevjVYIeXT2yQ,rg-manyhands,,ai-manyhands-7kzrrno7qr6zo,many-hands/build/evaluations/eval_1509fd3e8d0a4599ba3f5715153f0114/run/evalrun_1e08a82551024af3b9550632a27f55ee",
+  "eval_id": "eval_fa3a661a529740bb987906811fe91fda",
+  "run_id": "evalrun_056bd512eb4044cf9967a1f4f3d1cd5b",
+  "portal_url": "https://ai.azure.com/nextgen/r/K1AoRkV4RGevjVYIeXT2yQ,rg-manyhands,,ai-manyhands-7kzrrno7qr6zo,many-hands/build/evaluations/eval_fa3a661a529740bb987906811fe91fda/run/evalrun_056bd512eb4044cf9967a1f4f3d1cd5b",
   "items": 42,
   "groups": {
    "pundit line": {
     "lines": 21,
     "Scapegoat Index (code): passed": 19,
-    "Independent fairness judge (model): passed": 19
+    "Independent fairness judge (model): passed": 20
    },
    "agents' line": {
     "lines": 21,
@@ -388,7 +388,7 @@
   }
  },
  "operations": {
-  "run_at": "2026-10-25T18:07:10+00:00",
+  "run_at": "2026-10-26T05:59:15+00:00",
   "model": "gpt-5-mini",
   "price_per_million_tokens_usd": {
    "input": 0.25,
@@ -398,19 +398,19 @@
   "matches": 3,
   "all_ready": 22,
   "line_ready_s": {
-   "p50": 2.85,
-   "p95": 8.7
+   "p50": 3.14,
+   "p95": 8.78
   },
   "all_versions_s": {
-   "p50": 7.94,
-   "p95": 16.47
+   "p50": 9.58,
+   "p95": 16.81
   },
-  "model_calls_per_goal": 8,
-  "tokens_per_goal": 2980,
-  "cost_per_goal_usd": 0.00176,
-  "cost_per_match_usd": 0.0129,
+  "model_calls_per_goal": 8.1,
+  "tokens_per_goal": 3080,
+  "cost_per_goal_usd": 0.00172,
+  "cost_per_match_usd": 0.0126,
   "decisive_moments_per_match": 7.3,
-  "cost_per_season_usd": 4.91,
+  "cost_per_season_usd": 4.79,
   "note": "Agent time only, measured from this machine to Foundry in East US 2. The live feed adds Event Hubs transit, measured separately by /v1/metrics."
  }
 }

@@ -1,15 +1,15 @@
 {
-  "run_at": "2026-10-25T18:18:22+00:00",
+  "run_at": "2026-10-26T06:07:19+00:00",
   "status": "completed",
-  "eval_id": "eval_1509fd3e8d0a4599ba3f5715153f0114",
-  "run_id": "evalrun_1e08a82551024af3b9550632a27f55ee",
-  "portal_url": "https://ai.azure.com/nextgen/r/K1AoRkV4RGevjVYIeXT2yQ,rg-manyhands,,ai-manyhands-7kzrrno7qr6zo,many-hands/build/evaluations/eval_1509fd3e8d0a4599ba3f5715153f0114/run/evalrun_1e08a82551024af3b9550632a27f55ee",
+  "eval_id": "eval_fa3a661a529740bb987906811fe91fda",
+  "run_id": "evalrun_056bd512eb4044cf9967a1f4f3d1cd5b",
+  "portal_url": "https://ai.azure.com/nextgen/r/K1AoRkV4RGevjVYIeXT2yQ,rg-manyhands,,ai-manyhands-7kzrrno7qr6zo,many-hands/build/evaluations/eval_fa3a661a529740bb987906811fe91fda/run/evalrun_056bd512eb4044cf9967a1f4f3d1cd5b",
   "items": 42,
   "groups": {
     "pundit line": {
       "lines": 21,
       "Scapegoat Index (code): passed": 19,
-      "Independent fairness judge (model): passed": 19
+      "Independent fairness judge (model): passed": 20
     },
     "agents' line": {
       "lines": 21,

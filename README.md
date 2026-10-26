@@ -12,10 +12,10 @@
 | On a match day | |
 |---|---|
 | **About 3 s** | from a goal reaching Azure Event Hubs to a fair line on air, sent to the broadcaster's graphics hub (median 3.2 s over 14 live goals, two matches at once; the slowest took 8.6 s). The five audience versions follow by 9.5 s and never delay it. |
-| **$4.91 a season** | model cost to check every goal of a 380-match season, about 1.3 cents a match, from the tokens each agent call actually used |
+| **$4.79 a season** | model cost to check every goal of a 380-match season, about 1.3 cents a match, from the tokens each agent call actually used |
 | **77% right** | when the check calls a line Unfair, scored against the known true cause on 29 held-out matches (10 of 13). It wrongly calls deserved blame Unfair 6 percent of the time, less often than the last-touch rule (7.5 percent). |
 | **About 51 a season** | one-culprit stories the check would call Unfair in a 380-match season. An estimate from real tournament data outside the Premier League: 0.5 clear errors a match, and 27 percent of one-culprit lines about them called Unfair. |
-| **21 of 21** | agents' lines graded fair in a Microsoft Foundry evaluation, by our code grader and by a separate model judge with its own instructions (the pundit lines: 19 of 21) |
+| **21 of 21** | agents' lines graded fair in a Microsoft Foundry evaluation, by our code grader and by a separate model judge with its own instructions (the pundit lines: 19 of 21 by the code grader, 20 of 21 by the judge) |
 
 Built for the Inside the Game Developer Hackathon (Microsoft and the Premier League). All match data in the product is synthetic and fictional.
 

@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-25T18:07:10+00:00",
+  "run_at": "2026-10-26T05:59:15+00:00",
   "model": "gpt-5-mini",
   "price_per_million_tokens_usd": {
     "input": 0.25,
@@ -9,19 +9,19 @@
   "matches": 3,
   "all_ready": 22,
   "line_ready_s": {
-    "p50": 2.85,
-    "p95": 8.7
+    "p50": 3.14,
+    "p95": 8.78
   },
   "all_versions_s": {
-    "p50": 7.94,
-    "p95": 16.47
+    "p50": 9.58,
+    "p95": 16.81
   },
-  "model_calls_per_goal": 8,
-  "tokens_per_goal": 2980,
-  "cost_per_goal_usd": 0.00176,
-  "cost_per_match_usd": 0.0129,
+  "model_calls_per_goal": 8.1,
+  "tokens_per_goal": 3080,
+  "cost_per_goal_usd": 0.00172,
+  "cost_per_match_usd": 0.0126,
   "decisive_moments_per_match": 7.3,
-  "cost_per_season_usd": 4.91,
+  "cost_per_season_usd": 4.79,
   "note": "Agent time only, measured from this machine to Foundry in East US 2. The live feed adds Event Hubs transit, measured separately by /v1/metrics.",
   "rows": [
     {
@@ -29,180 +29,180 @@
       "chain_id": "20003-150",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 9.26,
-      "all_versions_s": 14.03,
+      "line_ready_s": 6.51,
+      "all_versions_s": 15.28,
       "calls": 8,
-      "input_tokens": 2388,
-      "output_tokens": 578,
-      "cost_usd": 0.001753
+      "input_tokens": 2459,
+      "output_tokens": 512,
+      "cost_usd": 0.001639
     },
     {
       "game_id": 20003,
       "chain_id": "20003-171",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 2.41,
-      "all_versions_s": 7.62,
+      "line_ready_s": 3.29,
+      "all_versions_s": 10.02,
       "calls": 8,
-      "input_tokens": 2417,
-      "output_tokens": 652,
-      "cost_usd": 0.001908
+      "input_tokens": 2441,
+      "output_tokens": 439,
+      "cost_usd": 0.001488
     },
     {
       "game_id": 20003,
       "chain_id": "20003-198",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 2.66,
-      "all_versions_s": 7.94,
+      "line_ready_s": 3.34,
+      "all_versions_s": 8.55,
       "calls": 8,
-      "input_tokens": 2379,
-      "output_tokens": 533,
-      "cost_usd": 0.001661
+      "input_tokens": 2471,
+      "output_tokens": 506,
+      "cost_usd": 0.00163
     },
     {
       "game_id": 20003,
       "chain_id": "20003-250",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 4.23,
-      "all_versions_s": 12.05,
-      "calls": 8,
-      "input_tokens": 2351,
-      "output_tokens": 521,
-      "cost_usd": 0.00163
+      "line_ready_s": 2.79,
+      "all_versions_s": 16.81,
+      "calls": 7,
+      "input_tokens": 2041,
+      "output_tokens": 238,
+      "cost_usd": 0.000986
     },
     {
       "game_id": 20003,
       "chain_id": "20003-300",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 2.88,
-      "all_versions_s": 8.2,
-      "calls": 8,
-      "input_tokens": 2534,
-      "output_tokens": 768,
-      "cost_usd": 0.002169
+      "line_ready_s": 9.83,
+      "all_versions_s": 15.33,
+      "calls": 12,
+      "input_tokens": 4167,
+      "output_tokens": 841,
+      "cost_usd": 0.002724
     },
     {
       "game_id": 20003,
       "chain_id": "20003-492",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 3.53,
-      "all_versions_s": 8.36,
+      "line_ready_s": 3.11,
+      "all_versions_s": 8.42,
       "calls": 8,
-      "input_tokens": 2387,
-      "output_tokens": 591,
-      "cost_usd": 0.001779
+      "input_tokens": 2453,
+      "output_tokens": 548,
+      "cost_usd": 0.001709
     },
     {
       "game_id": 20003,
       "chain_id": "20003-536",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 2.36,
-      "all_versions_s": 6.91,
+      "line_ready_s": 2.58,
+      "all_versions_s": 7.41,
       "calls": 8,
-      "input_tokens": 2370,
-      "output_tokens": 558,
-      "cost_usd": 0.001708
+      "input_tokens": 2433,
+      "output_tokens": 577,
+      "cost_usd": 0.001762
     },
     {
       "game_id": 20003,
       "chain_id": "20003-1243",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 2.88,
-      "all_versions_s": 7.56,
+      "line_ready_s": 3.14,
+      "all_versions_s": 8.76,
       "calls": 8,
-      "input_tokens": 2375,
-      "output_tokens": 578,
-      "cost_usd": 0.00175
+      "input_tokens": 2483,
+      "output_tokens": 518,
+      "cost_usd": 0.001657
     },
     {
       "game_id": 20003,
       "chain_id": "20003-1566",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 5.39,
-      "all_versions_s": 9.31,
+      "line_ready_s": 3.72,
+      "all_versions_s": 9.03,
       "calls": 8,
-      "input_tokens": 2325,
-      "output_tokens": 477,
-      "cost_usd": 0.001535
+      "input_tokens": 2572,
+      "output_tokens": 662,
+      "cost_usd": 0.001967
     },
     {
       "game_id": 20012,
       "chain_id": "20012-801",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 3.28,
-      "all_versions_s": 7.75,
+      "line_ready_s": 4.87,
+      "all_versions_s": 13.42,
       "calls": 8,
-      "input_tokens": 2407,
-      "output_tokens": 628,
-      "cost_usd": 0.001858
+      "input_tokens": 2509,
+      "output_tokens": 604,
+      "cost_usd": 0.001835
     },
     {
       "game_id": 20012,
       "chain_id": "20012-990",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 2.7,
-      "all_versions_s": 7.42,
+      "line_ready_s": 2.73,
+      "all_versions_s": 8.36,
       "calls": 8,
-      "input_tokens": 2360,
-      "output_tokens": 507,
-      "cost_usd": 0.001604
+      "input_tokens": 2471,
+      "output_tokens": 392,
+      "cost_usd": 0.001402
     },
     {
       "game_id": 20012,
       "chain_id": "20012-1303",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 2.37,
-      "all_versions_s": 6.42,
+      "line_ready_s": 2.91,
+      "all_versions_s": 8.33,
       "calls": 8,
-      "input_tokens": 2373,
-      "output_tokens": 454,
-      "cost_usd": 0.001501
+      "input_tokens": 2507,
+      "output_tokens": 544,
+      "cost_usd": 0.001715
     },
     {
       "game_id": 20012,
       "chain_id": "20012-1391",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 2.35,
-      "all_versions_s": 7.22,
-      "calls": 8,
-      "input_tokens": 2290,
-      "output_tokens": 411,
-      "cost_usd": 0.001394
+      "line_ready_s": 2.85,
+      "all_versions_s": 17.91,
+      "calls": 7,
+      "input_tokens": 2020,
+      "output_tokens": 231,
+      "cost_usd": 0.000967
     },
     {
       "game_id": 20012,
       "chain_id": "20012-1470",
       "status": "ready",
-      "verdict": "watch",
-      "line_ready_s": 2.85,
-      "all_versions_s": 11.83,
+      "verdict": "fair",
+      "line_ready_s": 2.69,
+      "all_versions_s": 14.0,
       "calls": 8,
-      "input_tokens": 2359,
-      "output_tokens": 617,
-      "cost_usd": 0.001824
+      "input_tokens": 2519,
+      "output_tokens": 601,
+      "cost_usd": 0.001832
     },
     {
       "game_id": 20012,
       "chain_id": "20012-1597",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 2.51,
-      "all_versions_s": 7.83,
+      "line_ready_s": 3.06,
+      "all_versions_s": 9.58,
       "calls": 8,
-      "input_tokens": 2403,
-      "output_tokens": 648,
-      "cost_usd": 0.001897
+      "input_tokens": 2509,
+      "output_tokens": 563,
+      "cost_usd": 0.001753
     },
     {
       "game_id": 20012,
@@ -210,83 +210,83 @@
       "status": "ready",
       "verdict": "watch",
       "line_ready_s": 3.26,
-      "all_versions_s": 11.88,
+      "all_versions_s": 8.91,
       "calls": 8,
-      "input_tokens": 2602,
-      "output_tokens": 918,
-      "cost_usd": 0.002486
+      "input_tokens": 2622,
+      "output_tokens": 708,
+      "cost_usd": 0.002071
     },
     {
       "game_id": 20012,
       "chain_id": "20012-1950",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 4.34,
-      "all_versions_s": 16.47,
+      "line_ready_s": 2.85,
+      "all_versions_s": 7.98,
       "calls": 8,
-      "input_tokens": 2354,
-      "output_tokens": 507,
-      "cost_usd": 0.001602
+      "input_tokens": 2461,
+      "output_tokens": 522,
+      "cost_usd": 0.001659
     },
     {
       "game_id": 20045,
       "chain_id": "20045-363",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 2.49,
-      "all_versions_s": 7.19,
+      "line_ready_s": 4.28,
+      "all_versions_s": 9.48,
       "calls": 8,
-      "input_tokens": 2419,
-      "output_tokens": 550,
-      "cost_usd": 0.001705
+      "input_tokens": 2534,
+      "output_tokens": 584,
+      "cost_usd": 0.001801
     },
     {
       "game_id": 20045,
       "chain_id": "20045-770",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 2.62,
-      "all_versions_s": 8.42,
+      "line_ready_s": 2.82,
+      "all_versions_s": 9.56,
       "calls": 8,
-      "input_tokens": 2393,
-      "output_tokens": 591,
-      "cost_usd": 0.00178
+      "input_tokens": 2537,
+      "output_tokens": 595,
+      "cost_usd": 0.001824
     },
     {
       "game_id": 20045,
       "chain_id": "20045-993",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 8.7,
-      "all_versions_s": 17.73,
+      "line_ready_s": 3.08,
+      "all_versions_s": 9.59,
       "calls": 8,
-      "input_tokens": 2417,
-      "output_tokens": 557,
-      "cost_usd": 0.001718
+      "input_tokens": 2566,
+      "output_tokens": 605,
+      "cost_usd": 0.001852
     },
     {
       "game_id": 20045,
       "chain_id": "20045-1646",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 2.33,
-      "all_versions_s": 6.59,
+      "line_ready_s": 6.75,
+      "all_versions_s": 14.06,
       "calls": 8,
-      "input_tokens": 2398,
-      "output_tokens": 562,
-      "cost_usd": 0.001723
+      "input_tokens": 2536,
+      "output_tokens": 543,
+      "cost_usd": 0.00172
     },
     {
       "game_id": 20045,
       "chain_id": "20045-1761",
       "status": "ready",
       "verdict": "fair",
-      "line_ready_s": 2.3,
-      "all_versions_s": 7.94,
+      "line_ready_s": 8.78,
+      "all_versions_s": 14.06,
       "calls": 8,
-      "input_tokens": 2462,
-      "output_tokens": 599,
-      "cost_usd": 0.001814
+      "input_tokens": 2531,
+      "output_tokens": 594,
+      "cost_usd": 0.001821
     }
   ]
 }
