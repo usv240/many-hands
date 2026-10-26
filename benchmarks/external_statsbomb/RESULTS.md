@@ -1,6 +1,8 @@
 # External benchmark: results (updated Oct 26 2026)
 
-Data provided by StatsBomb. Premier League excluded. On-ball responsibility only, because public event data has no player positions. Ledger defaults are the ones chosen on the synthetic ground truth (count only actions that lost the ball; final turnover weighted double).
+<img src="statsbomb-logo.png" alt="StatsBomb" width="220">
+
+Data provided by StatsBomb (StatsBomb Open Data, used under the StatsBomb Public Data User Agreement; the data is downloaded by script and never redistributed). Premier League excluded. On-ball responsibility only, because public event data has no player positions. Ledger defaults are the ones chosen on the synthetic ground truth (count only actions that lost the ball; final turnover weighted double).
 
 ## Setup
 - **Action value model (VAEP):** trained on 414 club matches (Serie A and Bundesliga 2015/16). On 492 held-out international matches it scores AUROC 0.81 for "scores soon" and 0.80 for "concedes soon".

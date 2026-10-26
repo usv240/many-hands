@@ -85,6 +85,7 @@ export default function Results() {
 
       <section className="mh-section" aria-labelledby="ext">
         <h2 id="ext"><Term id="external">External benchmark: real public data</Term></h2>
+        <p className="mh-credit"><img src="/statsbomb-logo.png" alt="StatsBomb" width={150} height={24} /> Data provided by StatsBomb (StatsBomb Open Data).</p>
         <p><L s={`StatsBomb marks an "Error" when a player's mistake leads to a shot. We checked our method on ${e.cases} of those, from ${e.matches} matches in international tournaments. Premier League data was excluded.`}
               d={`Action value model trained on 414 club matches (Serie A and Bundesliga 2015/16), tested on ${e.matches} international matches it never saw. ${e.cases} labelled errors evaluated, ${e.goals} of them goals.`}
               t={e.note} /></p>

@@ -37,7 +37,8 @@ export default function Trust() {
       <section className="mh-section"><h2>Data and privacy</h2>
         <ul>
           <li>The product uses only fictional matches, clubs and players from our simulator.</li>
-          <li>Real public data (StatsBomb Open Data, data provided by StatsBomb), excluding the Premier League, was used only to test the model. It is not stored in the product or the code repository.</li>
+          <li>Real public data (StatsBomb Open Data, data provided by StatsBomb), excluding the Premier League, was used only to test the model. It is not stored in the product or the code repository.
+            <span className="mh-credit"><img src="/statsbomb-logo.png" alt="StatsBomb" width={150} height={24} /></span></li>
           <li>Files you load on Bring your own stay in your browser tab and are deleted when you close it.</li>
           <li>The score is computed in code, not by an AI model, so text that tries to instruct the AI cannot change it.</li>
         </ul>

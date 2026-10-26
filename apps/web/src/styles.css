@@ -511,3 +511,7 @@ main:focus { outline: none; }
 /* The sticky header floats over the page, so it earns a soft shadow; the footer is a tone step, not a rule. */
 .mh-header { border-bottom: 0; box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08); }
 .mh-footer { border-top: 0; }
+/* Data credit: StatsBomb's licence asks for their logo wherever analysis of their data is published.
+   A light plate keeps their colours legible in dark mode. */
+.mh-credit { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; font-size: 0.9rem; color: var(--colorNeutralForeground2); }
+.mh-credit img { height: 24px; width: auto; background: #fff; padding: 6px 10px; border-radius: 8px; box-sizing: content-box; }
