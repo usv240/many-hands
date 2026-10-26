@@ -93,6 +93,7 @@ export default function Check() {
 
         <section className="mh-panel" aria-labelledby="step2">
           <h2 id="step2"><span className="mh-step-n">2</span> Write or pick a line</h2>
+          <p className="mh-small mh-muted">Type your own line below, or try a ready-made example:</p>
           <div className="mh-chips" role="group" aria-label="Example lines">
             {examples.map((e) => (
               <button key={e.kind} type="button" className={`mh-chip${text === e.text ? " is-on" : ""}`}

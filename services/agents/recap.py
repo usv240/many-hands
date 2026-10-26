@@ -17,7 +17,7 @@ import time
 from dataclasses import asdict, dataclass, field
 
 from narrative_core.audit import audit, fair_rewrite
-from narrative_core.scapegoat import Policy
+from narrative_core.scapegoat import Policy, percents
 
 from services.agents import models
 from services.agents.extractor import deep_extract
@@ -84,7 +84,7 @@ def _facts(store, game_id: int) -> tuple[dict, dict]:
             "chain_id": cid, "minute": s["minute"], "scorer": L.name(s["shooter_id"]),
             "scoring_team": names[s["attacking_team_id"]], "conceding_team": names[s["conceding_team_id"]],
             "score_after": shares[cid][2]["text"],
-            "contributors": [{"who": _label(roster, r["player_id"]), "share_pct": round(100 * r["share"]),
+            "contributors": [{"who": _label(roster, r["player_id"]), "share_pct": percents(shares[cid][0]).get(r["player_id"], 0),
                               "what": r["reason"]} for r in s["responsibility"]],
             "unsung": None if not s["unsung"] else {"who": s["unsung"]["name"], "what": s["unsung"]["reason"]},
         })

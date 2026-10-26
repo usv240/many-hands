@@ -490,3 +490,20 @@ main:focus { outline: none; }
 .mh-recap-note { grid-column: 1 / -1; font-size: 0.85rem; color: var(--colorNeutralForeground2); }
 .mh-live-check { display: grid; gap: 0.35rem; padding: 0.6rem 0.7rem; border-radius: 10px; background: var(--colorNeutralBackground1); }
 .mh-live-check p { margin: 0; font-weight: 400; }
+/* Plain-language guides for first-time visitors. */
+.mh-howto { margin: 0.75rem 0 0; padding-left: 1.25rem; display: grid; gap: 0.3rem; max-width: 70ch; }
+.mh-plain-summary { margin: 1rem 0 1.5rem; padding: 1rem 1.25rem; border-radius: 14px; background: var(--colorNeutralBackground2); }
+.mh-plain-summary h2 { margin: 0 0 0.5rem; font-size: 1.15rem; }
+.mh-plain-summary ul { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.4rem; max-width: 75ch; }
+
+/* Design pass (design-taste inspector): readable labels, measure, no resting shadow, plain icons. */
+.mh-footer-cols h2 { text-transform: none; letter-spacing: 0; font-size: 0.95rem; color: var(--colorNeutralForeground2); }
+.mh-hero-card { box-shadow: none; background: var(--colorNeutralBackground2); border-color: transparent; }
+.mh-step-icon, .mh-use-icon { width: auto; height: auto; background: none; border-radius: 0; color: var(--colorNeutralForeground2); padding-top: 0.15rem; }
+.mh-note, .mh-section p, .mh-page p { max-width: 75ch; }
+.mh-table p, .mh-trace p, .mh-live-goal p, .mh-version p, .mh-recap-lines p, .mh-ba-row p { max-width: none; }
+.mh-studio .mh-page-header h1 { font-size: clamp(1.6rem, 2.4vw, 2rem); }
+.mh-studio-grid { align-items: start; }
+@media (min-width: 1101px) { .mh-moments { position: sticky; top: 4.5rem; } }
+/* Disabled controls stay readable (they are exempt from contrast rules, but a judge still has to read them). */
+.fui-Button:disabled, .fui-Button[aria-disabled="true"] { color: var(--colorNeutralForeground3) !important; }

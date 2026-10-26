@@ -1,6 +1,6 @@
 // Browser port of packages/narrative_core/audit.py.
 import { blameOf, extract, type Mention, Roster } from "./extraction";
-import { blameInflation, normalize, scapegoatIndex, verdict } from "./scapegoat";
+import { blameInflation, normalize, percents, scapegoatIndex, verdict } from "./scapegoat";
 import { DEFAULT_POLICY, type Policy, type Shares, type Verdict } from "./types";
 
 export const JUSTIFIED_SHARE = 0.6;
@@ -21,7 +21,6 @@ export interface AuditResult {
 }
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
-const pct = (x: number) => `${Math.round(x * 100)}%`;
 
 export function label(roster: Roster | null, pid: string): string {
   const e = roster?.entries.find((x) => x.player_id === pid);
@@ -34,18 +33,19 @@ export function contrastive(evidence: Shares, blamed: string | null, roster: Ros
   const r = normalize(evidence);
   const order = sorted(r);
   if (!order.length) return "The evidence does not point to any defending mistake behind this moment.";
-  const [top, topS] = order[0];
+  const pc = percents(r);
+  const top = order[0][0];
   if (blamed && blamed in r && blamed !== top) {
-    return `${capitalize(label(roster, blamed))} carried ${pct(r[blamed])} of the danger; `
-      + `${label(roster, top)} carried ${pct(topS)}, the largest share.`;
+    return `${capitalize(label(roster, blamed))} carried ${pc[blamed]}% of the danger; `
+      + `${label(roster, top)} carried ${pc[top]}%, the largest share.`;
   }
   if (blamed && !(blamed in r)) {
     return `The evidence gives ${label(roster, blamed)} no share of this moment; `
-      + `${label(roster, top)} carried the largest share at ${pct(topS)}.`;
+      + `${label(roster, top)} carried the largest share at ${pc[top]}%.`;
   }
   if (order.length === 1) return `${capitalize(label(roster, top))} carried all of the measurable danger.`;
-  const [second, secondS] = order[1];
-  return `${capitalize(label(roster, top))} carried ${pct(topS)} of the danger, ${label(roster, second)} ${pct(secondS)}.`;
+  const second = order[1][0];
+  return `${capitalize(label(roster, top))} carried ${pc[top]}% of the danger, ${label(roster, second)} ${pc[second]}%.`;
 }
 
 export function fairRewrite(evidence: Shares, roster: Roster | null, goal = true): string {
@@ -85,7 +85,7 @@ export function audit(text: string, evidence: Shares, roster: Roster, concedingT
     const missing = Object.entries(r).filter(([p, s]) => s >= 0.15 && !(p in blame));
     if (missing.length) {
       reasons.push("Not mentioned despite a real share: "
-        + missing.map(([p, s]) => `${label(roster, p)} (${pct(s)})`).join(", ") + ".");
+        + missing.map(([p]) => `${label(roster, p)} (${percents(r)[p]}%)`).join(", ") + ".");
     }
   }
   if (x.unresolved.length) reasons.push(`Could not tell who is meant by: ${x.unresolved.join(", ")}.`);

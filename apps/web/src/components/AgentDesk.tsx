@@ -2,7 +2,7 @@ import { Button, Spinner } from "@fluentui/react-components";
 import { Bot20Regular, ShieldError20Regular } from "@fluentui/react-icons";
 import { useState } from "react";
 import { type AgentResult, broadcast, LIVE_URL } from "../state/api";
-import { Info } from "./Info";
+import { Info, Term } from "./Info";
 import { ScoreBadge } from "./viz";
 
 const AGENT_JOB: Record<string, string> = {
@@ -119,7 +119,12 @@ export function AgentDesk({ chainId, line, live, onResult }:
               </ol>
             </div>
           )}
+          <h4 className="mh-term">What each agent did, and how long it took<Info id="agents" /></h4>
           <AgentTrace result={result} />
+          <p className="mh-small mh-muted">
+            "Rules and gpt-5-mini reader" means word rules plus <Term id="reader">an AI reader</Term> found who the line blames; the score is then worked out in code.
+            "Fair line ready" is when the main line could go on air; "Workflow finished" adds the five audience versions.
+          </p>
           <p className="mh-small mh-muted">
             {result.line_ready_s !== null && `Fair line ready in ${result.line_ready_s.toFixed(1)} s. `}
             {result.model_used ? `Written by ${result.model} on Microsoft Foundry, orchestrated by Microsoft Agent Framework.` : "The model was unavailable, so the fair template was used."}

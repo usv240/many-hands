@@ -96,7 +96,7 @@ export default function Byo() {
           <table className="mh-table">
             <thead><tr><th>File</th><th>Where it works</th><th>What it needs</th></tr></thead>
             <tbody>
-              <tr><td>Rated SPADL CSV (one action per row)</td><td>Here, in your browser</td>
+              <tr><td><Term id="spadl">Rated match file</Term> (CSV, one action per row, in the SPADL format)</td><td>Here, in your browser</td>
                 <td>period_id, time_seconds, team_id, player_id, type_name, result_name, start_x, start_y, end_x, end_y, <Term id="vaep">vaep_value</Term>. Optional: player_name, shirt, role, team_name.</td></tr>
               <tr><td>Many Hands match JSON</td><td>Here, in your browser</td><td>The format our API and exporter produce.</td></tr>
               <tr><td>Raw provider files: StatsBomb, Wyscout, Opta, Stats Perform, Sportec, Metrica and others</td><td>API and command line</td>

@@ -40,6 +40,8 @@ export function EvidenceCheck({ chain, data, status, onAnswer }:
             ({minute}'). The verdict depends on it most.
           </p>
           <p className="mh-question">Does the replay show {who} losing the ball with that {kind}?</p>
+          <p className="mh-small mh-muted">Yes keeps the scores. No treats it as a data error: that action is removed and the blame is worked out again.
+            Can't tell means any line blaming this player needs a written reason to air.</p>
           <div className="mh-row mh-wrap">
             <Button appearance="primary" icon={<CheckmarkCircle20Regular />} onClick={() => onAnswer("confirmed", action)}>Yes, it does</Button>
             <Button onClick={() => onAnswer("rejected", action)}>No, the data is wrong</Button>

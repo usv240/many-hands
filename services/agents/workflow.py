@@ -22,11 +22,12 @@ import re
 import time
 from collections.abc import Awaitable, Callable
 from dataclasses import asdict, dataclass, field
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Any, Never
 
 from agent_framework import Executor, WorkflowBuilder, WorkflowContext, handler
 from narrative_core.audit import JUSTIFIED_SHARE, audit, fair_rewrite
-from narrative_core.scapegoat import Policy
+from narrative_core.scapegoat import Policy, percents
 
 from services.agents import models
 from services.agents.extractor import deep_extract
@@ -106,8 +107,9 @@ def _ms(t0: float) -> int:
 
 
 def _si(si: float) -> str:
-    """Two decimals, rounding halves up like the browser's toFixed, so the trace matches the badge."""
-    return f"{int(si * 100 + 0.5) / 100:.2f}"
+    """Two decimals exactly as the browser's toFixed(2) shows them (half up on the stored binary value),
+    so the trace and the badge always agree: 0.475 is 0.47 in both."""
+    return str(Decimal(si).quantize(Decimal("0.01"), ROUND_HALF_UP))
 
 
 # ---------------------------------------------------------------------------------- context
@@ -131,6 +133,7 @@ class Investigator(Executor):
         summary = L.moment_summary(req.chain_id)
         roster = store.roster(int(L.game_id))
         shares = L.responsibility(req.chain_id).shares
+        pcs = percents(shares)  # the same whole percentages the Studio shows
         names = store.roster_df.drop_duplicates("team_id").set_index("team_id")["team"].to_dict()
         score = _score_after(L, req.chain_id, names)
         facts = {
@@ -142,7 +145,7 @@ class Investigator(Executor):
             "shooter": L.name(summary["shooter_id"]),
             "score_after": score,
             "actions": summary["n_actions"],
-            "contributors": [{"who": _label(roster, r["player_id"]), "share_pct": round(100 * r["share"]),
+            "contributors": [{"who": _label(roster, r["player_id"]), "share_pct": pcs.get(r["player_id"], 0),
                               "what": r["reason"]} for r in summary["responsibility"]],
             "unsung": None if not summary["unsung"] else
                       {"who": summary["unsung"]["name"], "what": summary["unsung"]["reason"]},

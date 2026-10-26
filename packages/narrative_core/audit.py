@@ -16,6 +16,7 @@ from narrative_core.scapegoat import (
     Verdict,
     blame_inflation,
     normalize,
+    percents,
     scapegoat_index,
     verdict,
 )
@@ -54,19 +55,20 @@ def contrastive(evidence: dict[str, float], blamed: str | None, roster: Roster |
     r = normalize(evidence)
     if not r:
         return "The evidence does not point to any defending mistake behind this moment."
+    pc = percents(r)
     order = sorted(r.items(), key=lambda kv: -kv[1])
-    top, top_s = order[0]
+    top = order[0][0]
     if blamed and blamed in r and blamed != top:
-        return (f"{_label(roster, blamed).capitalize()} carried {r[blamed]:.0%} of the danger; "
-                f"{_label(roster, top)} carried {top_s:.0%}, the largest share.")
+        return (f"{_label(roster, blamed).capitalize()} carried {pc[blamed]}% of the danger; "
+                f"{_label(roster, top)} carried {pc[top]}%, the largest share.")
     if blamed and blamed not in r:
         return (f"The evidence gives {_label(roster, blamed)} no share of this moment; "
-                f"{_label(roster, top)} carried the largest share at {top_s:.0%}.")
+                f"{_label(roster, top)} carried the largest share at {pc[top]}%.")
     if len(order) == 1:
         return f"{_label(roster, top).capitalize()} carried all of the measurable danger."
-    second, second_s = order[1]
-    return (f"{_label(roster, top).capitalize()} carried {top_s:.0%} of the danger, "
-            f"{_label(roster, second)} {second_s:.0%}.")
+    second = order[1][0]
+    return (f"{_label(roster, top).capitalize()} carried {pc[top]}% of the danger, "
+            f"{_label(roster, second)} {pc[second]}%.")
 
 
 def fair_rewrite(evidence: dict[str, float], roster: Roster | None, goal: bool = True) -> str:
@@ -120,7 +122,7 @@ def audit(text: str, evidence: dict[str, float], roster: Roster | None = None,
         missing = [p for p, s in r.items() if s >= 0.15 and p not in blame]
         if missing:
             reasons.append("Not mentioned despite a real share: " +
-                           ", ".join(f"{_label(roster, p)} ({r[p]:.0%})" for p in missing) + ".")
+                           ", ".join(f"{_label(roster, p)} ({percents(r)[p]}%)" for p in missing) + ".")
     if extraction.unresolved:
         reasons.append("Could not tell who is meant by: " + ", ".join(extraction.unresolved) + ".")
     return AuditResult(

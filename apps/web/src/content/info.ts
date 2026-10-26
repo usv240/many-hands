@@ -22,12 +22,80 @@ export const INFO = {
   },
   verdict: {
     title: "Fair, Watch, Unfair",
-    what: "Three bands of the Scapegoat Index: below 0.20, 0.20 to 0.40, above 0.40.",
+    what: "Three bands of the Scapegoat Index: Fair is 0.20 or below, Watch is up to 0.40, Unfair is above 0.40. A Fair line can air straight away. A Watch or Unfair line waits for a person, and an Unfair one needs a written reason to air.",
     why: "It turns a number into a decision a producer can act on in seconds.",
+  },
+  ledger: {
+    title: "Responsibility Ledger",
+    what: "Many Hands' record of every action before a goal, and each defending player's share of the blame for it.",
+    why: "Every score, chart and rewrite on this site is worked out from it.",
+    tech: "Per chain: VAEP action values, on-ball losses by the conceding team, final turnover weighted double. Exposed as 8 tools over MCP and the REST API.",
+  },
+  heldOut: {
+    title: "Held-out matches",
+    what: "Matches kept aside and not used while choosing the method's settings. The results come only from these.",
+    why: "Testing on matches you tuned on flatters a method. Held-out matches give a fair test.",
+  },
+  distance: {
+    title: "Distance from the true blame",
+    what: "How far the blame shares are from the true shares, from 0 (exactly right) to 1 (completely wrong). Lower is better.",
+    why: "It shows how close each method gets to who really caused the goal, not just who it names first.",
+    tech: "Total variation distance between the method's shares and the counterfactual ground truth, averaged over moments.",
+  },
+  reader: {
+    title: "The AI reader",
+    what: "An AI model that reads a line to find who it blames, including blame that is only hinted at. Word rules alone miss most hints.",
+    why: "It catches subtle scapegoating. It can only add blame it can quote from the line; the score itself is always worked out in code.",
+    tech: "gpt-5-mini on Microsoft Foundry. Every quote must appear in the line or it is dropped; quotes about an opponent are dropped; rules are the floor.",
+  },
+  template: {
+    title: "Template line",
+    what: "A line built from a fixed pattern and the evidence, with no AI. It shares the blame exactly as the evidence does, so it is always fair.",
+    why: "If the AI is unavailable or keeps writing unfair lines, there is still a fair line to air.",
+  },
+  foundry: {
+    title: "Microsoft Foundry and gpt-5-mini",
+    what: "Microsoft Foundry is Microsoft's service for running AI models. gpt-5-mini is the AI model that writes and reads the lines here.",
+    why: "The writing is done by AI; the fairness score never is.",
+  },
+  lowerThird: {
+    title: "Lower third",
+    what: "The caption across the bottom of a TV picture, where a line like this appears on air.",
+    why: "It is what millions of viewers read in the seconds after a goal.",
+  },
+  tokens: {
+    title: "Tokens",
+    what: "AI services charge by the amount of text read and written, counted in tokens. A token is roughly three quarters of a word.",
+    why: "Counting them on every call is how the cost is measured, not guessed.",
+  },
+  queue: {
+    title: "Pre-air queue",
+    what: "Lines about this goal that someone wants to put on air: from a pundit's script, an AI recap and a TV graphic. Each waits here with its score until a producer approves, fixes or rejects it.",
+    why: "Nothing goes on air without passing the check or a person's decision.",
+  },
+  broadcast: {
+    title: "Broadcast preview",
+    what: "Shows how the approved line would look on screen, as a caption over the match.",
+    why: "A producer sees exactly what viewers will see.",
+  },
+  sharedTag: {
+    title: "Shared",
+    what: "This goal's blame is shared: no single player carried 60 percent or more.",
+    why: "These are the goals where a one-culprit story is most likely to be unfair.",
+  },
+  autoAir: {
+    title: "Air Fair lines automatically",
+    what: "On: a line the check scores Fair goes on air by itself, and anything else waits for you. Off: every line waits for you.",
+    why: "A broadcaster can choose speed or a person checking every line.",
+  },
+  spadl: {
+    title: "Rated match file",
+    what: "A spreadsheet (CSV) with one row per action: who, what, where, when, and how much it changed each team's chance of scoring.",
+    why: "It is the standard format football data is converted into. Download the sample to see one.",
   },
   responsibility: {
     title: "Responsibility",
-    what: "Each player's share of what led to this moment. The shares add up to 100 percent.",
+    what: "Each player's share of what led to this moment. The shares add up to 100 percent, rounded to whole numbers.",
     why: "It shows the whole team's part, not just the last touch.",
     tech: "Material losses of action value (VAEP) by the conceding team in the chain, counting only actions that lost the ball, with the final turnover weighted double. Settings chosen on the synthetic ground truth.",
     more: { label: "The method", to: "/how-it-works#explain" },
@@ -86,7 +154,7 @@ export const INFO = {
   policy: {
     title: "Policy",
     what: "The fairness limits this broadcaster has chosen: where Watch and Unfair begin.",
-    why: "Different organisations make different choices. This is Bring Your Own Policy.",
+    why: "Different organisations draw the line in different places, so each sets its own.",
   },
   approve: {
     title: "Approve",
@@ -183,8 +251,8 @@ export const INFO = {
   },
   pipeline: {
     title: "The five stages",
-    what: "Ingest, Interpret, Explain, Render, Personalize: the pipeline the hackathon asks for.",
-    why: "Each stage is a visible part of the product.",
+    what: "The five jobs Many Hands does, in order: take in the match (Ingest), value every action (Interpret), work out who contributed and why (Explain), put it on screen (Render), and tell it differently for each kind of viewer (Personalize).",
+    why: "Each stage is a part of the product you can see and try.",
   },
   recap: {
     title: "Match recap",
@@ -200,7 +268,7 @@ export const INFO = {
   },
   evidenceCheck: {
     title: "Evidence check",
-    what: "The agent picks the one action the verdict depends on most, plays it, and asks you a single question about it.",
+    what: "Before a line airs, the Investigator picks the one action the verdict depends on most, replays it, and asks you one question about it. Yes: the verdict stands. No: that action is treated as a data error and removed, and responsibility is worked out again. Can't tell: any line blaming that player needs a written reason.",
     why: "Data feeds make mistakes. A person who can see the replay settles it in seconds, and the agent knows exactly what to ask.",
     tech: "Deciding action = the largest lost ball by the most responsible player. No removes it and recomputes responsibility in the browser; Can't tell requires a reason to air any line blaming that player.",
   },

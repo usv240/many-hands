@@ -60,7 +60,8 @@ export function MatchRecap({ gameId, live }: { gameId: number; live: boolean }) 
           <p className="mh-small mh-muted" lang="en">
             {result.model_used ? `Written by ${result.model} on Microsoft Foundry. ` : "The model was unavailable, so the recap is built from the fair lines. "}
             Every sentence about a goal was scored against that goal's evidence, in code
-            {result.replaced ? `; ${result.replaced} replaced` : "; none needed replacing"}. {result.seconds.toFixed(1)} s.
+            {result.replaced ? `; ${result.replaced} unfair or wrong ${result.replaced === 1 ? "sentence was" : "sentences were"} replaced` : "; no sentence was unfair"}.
+            {result.sentences.some((s) => s.verdict === "watch") ? " Watch sentences are kept but marked for a producer to check before air." : ""} {result.seconds.toFixed(1)} s.
             <Info id="recap" />
           </p>
         </article>

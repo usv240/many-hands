@@ -6,6 +6,13 @@ import { loadResults, type Metric, useAsync } from "../state/data";
 import { L } from "../state/prefs";
 
 const pct = (x: number) => `${(x * 100).toFixed(1)}%`;
+// Plain names for the realism table's statistics.
+const STAT_NAMES: Record<string, string> = {
+  actions: "actions (everything players do)", passes: "passes", carries: "carries (running with the ball)",
+  crosses: "crosses", take_ons: "dribbles past a player", shots: "shots", tackles: "tackles",
+  interceptions: "interceptions", clearances: "clearances", keeper_saves: "goalkeeper saves", goals: "goals",
+  pass_completion: "share of passes that reach a teammate", pass_length_m: "average pass length (metres)",
+};
 const ci = (m: Metric, f = pct) => `${f(m.mean)} (${f(m.ci95_low)} to ${f(m.ci95_high)})`;
 const dist = (x: number) => x.toFixed(3);
 
@@ -56,6 +63,16 @@ export default function Results() {
     <div className="mh-page">
       <PageHeader title="Results" purpose="What we measured, how, against what, and where Many Hands is weaker. Every number can be rerun." />
 
+      <section className="mh-plain-summary" aria-labelledby="plain">
+        <h2 id="plain">In plain words</h2>
+        <ul>
+          <li><strong>When it says a line is Unfair, it is usually right:</strong> {pct(d.called_unfair.precision.value)} of the time, on matches where we know the true cause.</li>
+          <li><strong>It rarely accuses a fair line:</strong> only {pct(d.called_unfair.fair_lines_called_unfair.value)} of fair lines were called Unfair.</li>
+          <li><strong>It is careful, not complete:</strong> it calls about a quarter of truly unfair lines Unfair by itself, and sends about six in ten to a person. That is why a person always has the last word on anything not clearly fair.</li>
+          <li><strong>It does not excuse real mistakes:</strong> when one player really caused a goal, it wrongly objects less often than the simple rule of blaming whoever lost the ball last.</li>
+        </ul>
+      </section>
+
       <section className="mh-headline-card">
         <p>
           On held-out matches where the true cause of every goal is known, <strong>{pct(d.called_unfair.precision.value)}</strong> of the
@@ -72,7 +89,7 @@ export default function Results() {
               d={`Action value model trained on 414 club matches (Serie A and Bundesliga 2015/16), tested on ${e.matches} international matches it never saw. ${e.cases} labelled errors evaluated, ${e.goals} of them goals.`}
               t={e.note} /></p>
         <Compare title="Finding the player the data company labelled" rows={[
-          { label: "Labelled player ranked first", ours: e.metrics.ours_top1.mean, base: e.metrics.last_top1.mean, fmt: pct },
+          { label: "Labelled player has the largest share", ours: e.metrics.ours_top1.mean, base: e.metrics.last_top1.mean, fmt: pct },
           { label: "Labelled player in top three", ours: e.metrics.ours_top3.mean, base: e.metrics.last_top3.mean, fmt: pct },
         ]} />
         <ul className="mh-facts">
@@ -81,7 +98,7 @@ export default function Results() {
             the negative control against a known truth is in the synthetic benchmark below.</li>
           <li>Labelled player's share of responsibility: {ci(e.metrics.labelled_share)}, median {pct(e.labelled_share_median)}. <Info id="ci" /></li>
           <li>A line blaming only the labelled player would be: Fair {e.verdicts_if_blamed_alone.fair}, Watch {e.verdicts_if_blamed_alone.watch}, Unfair {e.verdicts_if_blamed_alone.unfair}.</li>
-          <li>Not evaluated: {Object.entries(e.excluded).map(([k, v]) => `${v} ${k.replaceAll("_", " ")}`).join("; ")}.</li>
+          <li>Not tested: {e.excluded.no_onball_blame ?? 0} errors with no lost ball to measure, and {e.excluded.no_linked_shot ?? 0} with no shot linked to them.</li>
         </ul>
       </section>
 
@@ -104,6 +121,8 @@ export default function Results() {
 
       <section className="mh-section" aria-labelledby="detect">
         <h2 id="detect">Does the check catch truly unfair lines?</h2>
+        <p className="mh-small"><strong>What this means:</strong> on {data.detection.split.test_matches} <Term id="heldOut">held-out matches</Term>, three in four of its Unfair
+          calls were right and almost no fair line was accused. It lets most borderline lines through to a person rather than guessing.</p>
         <p><L s="A pundit blames the last defender to lose the ball. We know whether that was fair, because we know the true cause. Does the check agree?"
               t={`Settings chosen on ${data.detection.split.tune_matches} benchmark matches; every number here is from the other ${data.detection.split.test_matches}, held out. A line is truly unfair when its Scapegoat Index against the true causes is above 0.40. 95 percent intervals by bootstrap over matches.`} /> <Info id="ci" /></p>
         <div className="mh-table-wrap">
@@ -136,7 +155,7 @@ export default function Results() {
               code grader, and a separate model judge, with its own instructions, that sees only the line and the evidence, never our score.</p>
             <div className="mh-table-wrap">
               <table className="mh-table">
-                <thead><tr><th>Lines</th><th>Fair by the Scapegoat Index (code)</th><th>Fair by the separate judge (model)</th></tr></thead>
+                <thead><tr><th>Lines</th><th>Fair by our score, worked out in code</th><th>Fair by a separate AI judge</th></tr></thead>
                 <tbody>
                   <tr><td>The agents' lines</td><td>{agents[code]} of {agents.lines}</td><td>{agents[judge]} of {agents.lines}</td></tr>
                   <tr><td>A pundit's one-culprit line</td><td>{pundit[code]} of {pundit.lines}</td><td>{pundit[judge]} of {pundit.lines}</td></tr>
@@ -157,7 +176,7 @@ export default function Results() {
             Microsoft Foundry ({data.operations.model}). {data.operations.all_ready} of {data.operations.moments} produced a fair line.</p>
           <div className="mh-table-wrap">
             <table className="mh-table">
-              <thead><tr><th>Measured</th><th>Median</th><th>95th percentile</th></tr></thead>
+              <thead><tr><th>Measured</th><th>Typical (median)</th><th>Slowest 1 in 20</th></tr></thead>
               <tbody>
                 <tr><td>Fair line ready for the lower third (agent time)</td><td>{data.operations.line_ready_s.p50.toFixed(1)} s</td><td>{data.operations.line_ready_s.p95.toFixed(1)} s</td></tr>
                 <tr><td>All five audience versions ready</td><td>{data.operations.all_versions_s.p50.toFixed(1)} s</td><td>{data.operations.all_versions_s.p95.toFixed(1)} s</td></tr>
@@ -165,9 +184,9 @@ export default function Results() {
             </table>
           </div>
           <ul className="mh-facts">
-            <li><strong>${data.operations.cost_per_goal_usd.toFixed(4)}</strong> per goal: {data.operations.model_calls_per_goal} model calls and about {data.operations.tokens_per_goal.toLocaleString()} tokens.</li>
+            <li><strong>${data.operations.cost_per_goal_usd.toFixed(4)}</strong> per goal: {data.operations.model_calls_per_goal} AI calls and about {data.operations.tokens_per_goal.toLocaleString()} <Term id="tokens">tokens</Term>.</li>
             <li><strong>${data.operations.cost_per_match_usd.toFixed(3)}</strong> per match ({data.operations.decisive_moments_per_match} decisive moments), so about <strong>${data.operations.cost_per_season_usd.toFixed(2)}</strong> for a 380-match season.</li>
-            <li>{data.operations.note} The live Studio shows the measured time on every goal.</li>
+            <li>Measured from this computer to the AI service in Microsoft's US data centre. The live Studio also shows the time for every goal it handles.</li>
           </ul>
         </section>
       )}
@@ -198,9 +217,9 @@ export default function Results() {
         <ul className="mh-facts">
           <li><strong>Last-touch names the main culprit more often</strong>: {pct(e.metrics.last_top1.mean)} versus {pct(e.metrics.ours_top1.mean)} on real data. Our edge is how much, not who.</li>
           <li><strong>Most truly unfair lines are not called Unfair outright</strong>: {r(d.called_unfair.recall)} on held-out matches; {r(d.sent_to_a_person.recall)} reach a person. The check informs a producer; it does not replace one.</li>
-          <li><strong>Half the lines sent to a person are fair</strong> ({r(d.sent_to_a_person.precision)} truly unfair). That is the cost of caution: a few seconds of a producer's attention.</li>
+          <li><strong>Half the lines sent to a person turn out to be fair</strong> ({d.sent_to_a_person.precision.hits} of the {d.sent_to_a_person.precision.n} are truly unfair). That is the cost of caution: a few seconds of a producer's attention.</li>
           <li><strong>Off-ball blame did not help.</strong> Weighting positional blame moved results further from the truth at every weight we tried, so its weight is 0.</li>
-          <li><strong>Blame extraction is rule-based offline.</strong> It misses sarcasm and unusual phrasing; unknown names are reported, never guessed.</li>
+          <li><strong>Without the AI reader, it reads lines with word rules only.</strong> Those miss sarcasm and unusual phrasing; a name it does not recognise is reported, never guessed.</li>
         </ul>
       </section>
 
@@ -211,7 +230,7 @@ export default function Results() {
           <table className="mh-table">
             <thead><tr><th>Statistic per match</th><th>Real</th><th>Our league</th><th>Difference</th></tr></thead>
             <tbody>{data.calibration.map((c) => (
-              <tr key={c.statistic}><td>{c.statistic.replaceAll("_", " ")}</td><td>{c.real}</td><td>{c.simulated}</td>
+              <tr key={c.statistic}><td>{STAT_NAMES[c.statistic] ?? c.statistic.replaceAll("_", " ")}</td><td>{c.real}</td><td>{c.simulated}</td>
                 <td className={Math.abs(c.difference_pct) <= 15 ? "mh-ok" : "mh-bad"}>{c.difference_pct > 0 ? "+" : ""}{c.difference_pct}%</td></tr>
             ))}</tbody>
           </table>

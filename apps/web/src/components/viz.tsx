@@ -1,4 +1,5 @@
 import { CheckmarkCircle16Filled, DismissCircle16Filled, Warning16Filled } from "@fluentui/react-icons";
+import { percents } from "../engine/scapegoat";
 import type { Verdict } from "../engine/types";
 import { Info } from "./Info";
 
@@ -26,6 +27,7 @@ export interface BarRow { id: string; label: string; share: number; note?: strin
 /** Sorted horizontal bars with the percentage written at the end of each bar. */
 export function ResponsibilityBars({ rows, team, caption }: { rows: BarRow[]; team: "a" | "b"; caption: string }) {
   if (!rows.length) return <p className="mh-muted">No defending action lost the ball in this move.</p>;
+  const pc = percents(Object.fromEntries(rows.map((r) => [r.id, r.share])));
   return (
     <figure className="mh-bars" aria-label={caption}>
       <figcaption className="mh-sr">{caption}</figcaption>
@@ -34,7 +36,7 @@ export function ResponsibilityBars({ rows, team, caption }: { rows: BarRow[]; te
           <div className="mh-bar-label">{r.label}</div>
           <div className="mh-bar-track">
             <div className={`mh-bar-fill mh-team-${team}`} style={{ width: `${Math.max(2, r.share * 100)}%` }} />
-            <span className="mh-bar-value">{Math.round(r.share * 100)}%</span>
+            <span className="mh-bar-value">{pc[r.id] ?? 0}%</span>
           </div>
           {r.note && <div className="mh-bar-note">{r.note}</div>}
         </div>
@@ -48,6 +50,8 @@ export interface DumbbellRow { id: string; label: string; story: number; evidenc
 /** Story versus evidence: hollow ring for the sentence's blame, filled dot for the evidence. */
 export function StoryVsEvidence({ rows }: { rows: DumbbellRow[] }) {
   if (!rows.length) return null;
+  const story = percents(Object.fromEntries(rows.map((r) => [r.id, r.story])));
+  const evidence = percents(Object.fromEntries(rows.map((r) => [r.id, r.evidence])));
   return (
     <figure className="mh-dumbbell">
       <figcaption>
@@ -58,17 +62,18 @@ export function StoryVsEvidence({ rows }: { rows: DumbbellRow[] }) {
         </span>
       </figcaption>
       {rows.map((r) => {
+        const s = story[r.id] ?? 0, e = evidence[r.id] ?? 0;
         const lo = Math.min(r.story, r.evidence) * 100;
         const hi = Math.max(r.story, r.evidence) * 100;
         return (
           <div className="mh-db-row" key={r.id}>
             <div className="mh-db-label">{r.label}</div>
-            <div className="mh-db-track" role="img" aria-label={`${r.label}: sentence ${Math.round(r.story * 100)}%, evidence ${Math.round(r.evidence * 100)}%`}>
+            <div className="mh-db-track" role="img" aria-label={`${r.label}: sentence ${s}%, evidence ${e}%`}>
               <div className="mh-db-line" style={{ left: `${lo}%`, width: `${hi - lo}%` }} />
               <div className="mh-db-ring" style={{ left: `${r.story * 100}%` }} />
               <div className="mh-db-dot" style={{ left: `${r.evidence * 100}%` }} />
             </div>
-            <div className="mh-db-values">{Math.round(r.story * 100)}% vs {Math.round(r.evidence * 100)}%</div>
+            <div className="mh-db-values">{s}% vs {e}%</div>
           </div>
         );
       })}

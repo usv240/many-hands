@@ -99,7 +99,12 @@ export default function Studio() {
 
   return (
     <div className="mh-page mh-studio">
-      <PageHeader title="Studio" purpose="The console a producer uses during a match: see who caused each goal, and approve only fair lines for air. This one replays a fictional match.">
+      <PageHeader title="Studio" purpose="The screen a TV producer uses during a match: see who caused each goal, and decide which lines go on air. This one replays a fictional match.">
+        <ol className="mh-howto" aria-label="How to use this screen">
+          <li><strong>Pick a goal</strong> on the left. The pitch shows the moves that led to it.</li>
+          <li><strong>Answer the evidence check</strong> under the pitch: one question about the action that matters most.</li>
+          <li><strong>Decide each line</strong> in the pre-air queue on the right: approve, use the fair version, or reject. Below, the AI desk and live feed show the agents doing the same job by themselves.</li>
+        </ol>
         <div className="mh-studio-bar">
           {matches.data && (
             <Dropdown aria-label="Match" className="mh-studio-match"
@@ -116,7 +121,7 @@ export default function Studio() {
           <span className="mh-status"><span className="mh-status-dot" aria-hidden />Replay mode<Info id="replay" /></span>
           <span className="mh-status">Policy: Watch above {DEFAULT_POLICY.watch_above.toFixed(2)}, Unfair above {DEFAULT_POLICY.unfair_above.toFixed(2)}<Info id="policy" /></span>
           <Switch label="Explain this screen" checked={explain} onChange={(_, d) => setExplain(d.checked)} />
-          <Switch label="Broadcast preview" checked={broadcast} onChange={(_, d) => setBroadcast(d.checked)} />
+          <span className="mh-term"><Switch label="Broadcast preview" checked={broadcast} onChange={(_, d) => setBroadcast(d.checked)} /><Info id="broadcast" /></span>
           <span className="mh-term"><Switch label="Simulate fairness check outage" checked={outage} onChange={(_, d) => setOutage(d.checked)} /><Info id="failClosed" /></span>
         </div>
         {explain && (
@@ -130,6 +135,7 @@ export default function Studio() {
         <div className="mh-studio-grid">
           <Region n={1} on={explain} className="mh-moments">
             <h2 className="mh-pane-title">Moments</h2>
+            <p className="mh-small mh-muted">Goals and big chances in this match. <span className="mh-term">Shared<Info id="sharedTag" /></span> means no one player carried most of the blame.</p>
             <ul className="mh-moment-list">
               {data.chains.map((c) => (
                 <li key={c.chain_id}>
@@ -137,7 +143,7 @@ export default function Studio() {
                           aria-pressed={c.chain_id === chain.chain_id} onClick={() => setChainId(c.chain_id)}>
                     <span className="mh-moment-min">{c.minute}'</span>
                     <span>{c.goal ? "Goal" : "Chance"}, {teamName(data, c.attacking_team_id)}</span>
-                    {c.responsibility.length > 1 && <Badge size="small" appearance="tint">shared</Badge>}
+                    {c.responsibility.length > 1 && <Badge size="small" appearance="tint" title="Blame is shared: no single player carried 60 percent or more">shared</Badge>}
                   </button>
                 </li>
               ))}
@@ -169,7 +175,8 @@ export default function Studio() {
           </Region>
 
           <Region n={3} on={explain} className="mh-queue">
-            <h2 className="mh-pane-title">Pre-air queue</h2>
+            <h2 className="mh-pane-title"><Term id="queue">Pre-air queue</Term></h2>
+            <p className="mh-small mh-muted">Three lines someone wants to air about this goal. Each has its fairness score. Decide each one.</p>
             {outage ? (
               <MessageBar intent="error" icon={<ShieldError20Regular />}>
                 <MessageBarBody>
@@ -186,7 +193,8 @@ export default function Studio() {
 
           <Region n={4} on={explain} className="mh-audiences">
             <h2 className="mh-pane-title"><Term id="audience">Audience versions</Term></h2>
-            <Field label="Featured player (player focus)">
+            <p className="mh-small mh-muted">The same goal told for five kinds of viewer, each checked for fairness. Pick whose story the player-focus version follows.</p>
+            <Field label="Player-focus version follows">
               <Dropdown value={featured ? labelFor(data, featured) : "Most responsible player"} selectedOptions={featured ? [featured] : []}
                 onOptionSelect={(_, d) => setFeatured(d.optionValue)}>
                 {data.roster.filter((r) => r.team_id === chain.conceding_team_id).map((r) => (
@@ -205,7 +213,7 @@ export default function Studio() {
               ))}
             </div>
             <p className="mh-small mh-muted">
-              {live ? "Instant drafts from the template writer, checked in your browser. For versions written by gpt-5-mini on Microsoft Foundry, use the AI desk."
+              {live ? "These quick drafts come from a template in your browser, so they appear instantly. The AI desk below shows the versions the AI writes for the same goal."
                     : "Drafts from the template writer, checked in your browser. On the hosted site the Personalizer agent writes these with Microsoft Foundry."}
             </p>
           </Region>

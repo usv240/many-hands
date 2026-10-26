@@ -79,7 +79,7 @@ export default function Home() {
         <div className="mh-hero-text">
           <h1>Nobody concedes alone.</h1>
           <p className="mh-lead mh-lead-strong">
-            Microsoft Foundry agents trace every goal back through every player who contributed to it, catch scapegoating
+            <Term id="foundry">Microsoft Foundry</Term> agents trace every goal back through every player who contributed to it, catch scapegoating
             lines before they air, and rewrite them fairly, seconds after the goal.
           </p>
           <p className="mh-lead">
@@ -93,7 +93,7 @@ export default function Home() {
           </div>
           <p className="mh-hint"><Info id="judges" /> Look for the <strong>i</strong> next to any term: hover to preview, click to keep it open. Judging? <Link to="/judges">Start here</Link>.</p>
         </div>
-        <div className="mh-hero-card" aria-label="Example: the same goal, two lines">
+        <div className="mh-hero-card" data-ui aria-label="Example: the same goal, two lines">
           {showcase ? (
             <>
               <p className="mh-card-title">A pundit is about to say this about a goal:</p>
@@ -198,7 +198,8 @@ export default function Home() {
               </p>
             </div>
             <div>
-              <p className="mh-small mh-muted"><Term id="chain">The {showcase.chain.n_actions} actions behind this goal</Term></p>
+              <p className="mh-small mh-muted"><Term id="chain">The {showcase.chain.n_actions} actions behind this goal</Term>. Press Play to
+                watch them in order; rings mark the lost balls that count as blame.</p>
               <PitchReplay actions={showcase.chain.actions} data={showcase.data}
                            highlight={showcase.chain.responsibility.map((c) => c.player_id)} compact />
             </div>
@@ -249,28 +250,29 @@ export default function Home() {
           <div>
             {timing.line ? (<>
               <dt>{timing.line.toFixed(1)} s</dt>
-              <dd>from a goal reaching Azure Event Hubs to a fair, checked line ready for the lower third
+              <dd>from a goal reaching Azure Event Hubs to a fair, checked line ready for the <Term id="lowerThird">lower third</Term>
                 {timing.all ? `; all five audience versions follow by ${timing.all.toFixed(1)} s` : ""}. Median of the {timing.n} live goals since the server last started.</dd>
             </>) : (<>
               <dt>{results.data ? `${results.data.operations.line_ready_s.p50.toFixed(1)} s` : "Seconds"}</dt>
-              <dd>from a goal to a fair, checked line ready for the lower third; all five audience versions
+              <dd>from a goal to a fair, checked line ready for the <Term id="lowerThird">lower third</Term>; all five audience versions
                 follow by {results.data ? `${results.data.operations.all_versions_s.p50.toFixed(1)} s` : "a few seconds more"}. Median
                 of {results.data?.operations.moments ?? 22} goals in our benchmark. Kick off the live feed in the Studio to measure it yourself.</dd>
             </>)}
           </div>
           <div>
             <dt>{results.data ? `$${results.data.operations.cost_per_season_usd.toFixed(0)}` : "About $5"}</dt>
-            <dd>to check every goal of a 380-match season with the agents on Microsoft Foundry: about {results.data ? `${(results.data.operations.cost_per_match_usd * 100).toFixed(1)} cents` : "1 cent"} a match. Measured from real token use on {results.data?.operations.moments ?? 22} goals.</dd>
+            <dd>to check every goal of a 380-match season with the agents on Microsoft Foundry: about {results.data ? `${(results.data.operations.cost_per_match_usd * 100).toFixed(1)} cents` : "1 cent"} a match. Measured from real <Term id="tokens">token</Term> use on {results.data?.operations.moments ?? 22} goals.</dd>
           </div>
           <div>
             <dt>{det ? pc(det.called_unfair.precision.value) : "3 in 4"}</dt>
-            <dd>of its Unfair calls were right, on held-out matches where the true cause of every goal is known.
+            <dd>of its Unfair calls were right{det ? ` (${det.called_unfair.precision.hits} of ${det.called_unfair.precision.n})` : ""}, on{" "}
+              <Term id="heldOut">held-out matches</Term> where the true cause of every goal is known.
               Fair lines were called Unfair {det ? pc(det.called_unfair.fair_lines_called_unfair.value) : "2%"} of the time.</dd>
           </div>
           <div>
             <dt>51</dt>
-            <dd>one-culprit stories a 380-match season that the check would call Unfair, by our estimate: 0.5 provider-labelled errors a match, and
-              27 percent of those lines called Unfair. An estimate from real tournament data.</dd>
+            <dd>one-culprit stories in a 380-match season that the check would call Unfair. Our estimate from real tournament data:
+              about one error a data company marks in every two matches, and 27 percent of the stories blaming one player for it are Unfair.</dd>
           </div>
         </dl>
         <h3 className="mh-subhead">The evidence behind those numbers</h3>
@@ -287,7 +289,7 @@ export default function Home() {
           </article>
           <article className="mh-stat">
             <p className="mh-stat-num">{syn ? `${syn.multi_cause.metrics["tv_lam0.0"].toFixed(2)} vs ${syn.multi_cause.metrics.tv_last.toFixed(2)}` : "..."}</p>
-            <p>distance from the <Term id="groundTruth">true blame</Term> when blame is shared: Many Hands versus <Term id="lastTouch">last-touch blame</Term>. Lower is better.</p>
+            <p><Term id="distance">distance from the true blame</Term> when blame is shared: Many Hands versus blaming whoever lost the ball last. Lower is better.</p>
             <p className="mh-small mh-muted"><Term id="synthetic">Synthetic league</Term> with known causes.</p>
           </article>
         </div>

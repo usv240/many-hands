@@ -41,6 +41,20 @@ def normalize[K: Hashable](weights: Mapping[K, float]) -> dict[K, float]:
     return {k: v / total for k, v in clipped.items() if v > 0}
 
 
+def percents[K: Hashable](weights: Mapping[K, float]) -> dict[K, int]:
+    """Whole percentages that always add up to 100 (largest remainder), so 52.5 and 47.5 show as 53 and 47.
+
+    Every place that prints a share uses this, in Python and in the browser, so the numbers agree.
+    """
+    r = normalize(weights)
+    raw = {k: 100 * v for k, v in r.items()}
+    out = {k: int(v) for k, v in raw.items()}
+    short = 100 - sum(out.values()) if out else 0
+    for k in sorted(raw, key=lambda k: (-(raw[k] - out[k]), -raw[k], str(k)))[:short]:
+        out[k] += 1
+    return out
+
+
 def scapegoat_index[K: Hashable](blame: Mapping[K, float], evidence: Mapping[K, float]) -> float:
     """Total variation distance between narrative blame and evidence responsibility."""
     b = normalize(blame)

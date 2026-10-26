@@ -15,6 +15,18 @@ export function normalize(weights: Shares): Shares {
   return out;
 }
 
+/** Whole percentages that always add up to 100 (largest remainder); the same rule as percents() in Python. */
+export function percents(weights: Shares): Record<string, number> {
+  const r = normalize(weights);
+  const raw = Object.entries(r).map(([k, v]) => [k, 100 * v] as const);
+  const out: Record<string, number> = Object.fromEntries(raw.map(([k, v]) => [k, Math.floor(v)]));
+  let short = raw.length ? 100 - Object.values(out).reduce((a, b) => a + b, 0) : 0;
+  const order = [...raw].sort(([ka, a], [kb, b]) =>
+    (b - Math.floor(b)) - (a - Math.floor(a)) || b - a || (ka < kb ? -1 : ka > kb ? 1 : 0));
+  for (const [k] of order) { if (short-- <= 0) break; out[k] += 1; }
+  return out;
+}
+
 /** Total variation distance between the blame in a sentence and the blame in the evidence. */
 export function scapegoatIndex(blame: Shares, evidence: Shares): number {
   const b = normalize(blame);

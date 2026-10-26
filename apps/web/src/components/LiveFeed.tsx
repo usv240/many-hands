@@ -125,10 +125,13 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
           : <Button appearance="primary" icon={<Live20Regular />} onClick={start}>Kick off the live feed</Button>}
         {transport && <span className="mh-status"><span className="mh-status-dot" aria-hidden />Through {transport}<Info id="liveFeed" /></span>}
       </div>
-      <label className="mh-check-inline">
-        <input type="checkbox" checked={autoAir} disabled={running} onChange={(e) => setAutoAir(e.target.checked)} />
-        Air Fair lines automatically. Turn off to approve every line yourself.
-      </label>
+      <span className="mh-term">
+        <label className="mh-check-inline">
+          <input type="checkbox" checked={autoAir} disabled={running} onChange={(e) => setAutoAir(e.target.checked)} />
+          Air Fair lines automatically. Turn off to approve every line yourself.
+        </label>
+        <Info id="autoAir" />
+      </span>
       {error && <p className="mh-bad" role="alert">{error}</p>}
       {running && (
         <p className="mh-live-ticker" aria-live="off">
@@ -191,7 +194,9 @@ function LiveGoalItem({ g }: { g: LiveGoal }) {
       )}
       {g.status === "pending" && (
         <div className="mh-live-decide">
-          <p className="mh-small">{fair ? "Waiting for you. Nothing airs until you decide." : "Not clearly fair, so it waits for you. Nothing airs until you decide."}</p>
+          <p className="mh-small">{fair
+            ? "Scored Fair, but waiting for you because automatic airing is off. Nothing airs until you decide."
+            : "Not clearly fair, so it waits for you. Nothing airs until you decide."}</p>
           {g.check && (
             <div className="mh-live-check" role="group" aria-label="Evidence check from the Investigator">
               <p className="mh-small mh-term"><strong>The Investigator asks</strong><Info id="evidenceCheck" /></p>

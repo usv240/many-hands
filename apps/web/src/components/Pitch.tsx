@@ -104,7 +104,7 @@ export function PitchReplay({ actions, data, highlight = [], compact, focusActio
       <div className="mh-legend">
         <span className="mh-legend-item"><span className="mh-swatch mh-team-a" aria-hidden />{data.match.home.name}</span>
         <span className="mh-legend-item"><span className="mh-swatch mh-team-b" aria-hidden />{data.match.away.name}</span>
-        <span className="mh-legend-item"><span className="mh-dash" aria-hidden />Dashed: carry</span>
+        <span className="mh-legend-item"><span className="mh-dash" aria-hidden />Dashed: carry (running with the ball)</span>
         <span className="mh-legend-item"><span className="mh-halo-key" aria-hidden />Ring: a lost ball that counts as blame</span>
       </div>
     </div>
