@@ -18,7 +18,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 import pandas as pd
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -29,6 +29,9 @@ from ledger_core.ledger import MatchLedger  # noqa: E402
 from narrative_core.audit import audit  # noqa: E402
 from narrative_core.extraction import Roster, RosterEntry  # noqa: E402
 from narrative_core.scapegoat import Policy  # noqa: E402
+from starlette.requests import Request as FastRequest  # noqa: E402  (the agents' Request is a different class)
+
+from services.api.guard import client_id, limit, limits  # noqa: E402
 
 DATA_DIR = Path(os.environ.get("MANYHANDS_DATA", ROOT / "demo_data"))
 VERSION = "0.1.0"
@@ -180,7 +183,7 @@ def counterfactual(chain_id: str, action_id: int) -> dict:
 
 
 @app.post("/v1/audit")
-async def audit_line(body: AuditIn) -> dict:
+async def audit_line(body: AuditIn, request: FastRequest) -> dict:
     L = store.ledger_for_chain(body.chain_id)
     m = L.moment(body.chain_id)
     r = L.responsibility(body.chain_id, body.method)
@@ -191,7 +194,10 @@ async def audit_line(body: AuditIn) -> dict:
     roster = store.roster(int(L.game_id))
     extraction, read_by_model = None, False
     if body.deep:
+        from services.agents import models
         from services.agents.extractor import deep_extract
+        limits.check("model", client_id(request))
+        models.templates_only(not limits.take_model_run())
         extraction, read_by_model = await deep_extract(body.text, roster, m.conceding_team_id)
     result = audit(body.text, r.shares, roster, m.conceding_team_id, policy, extraction=extraction, goal=m.goal)
     out = result.to_dict()
@@ -213,13 +219,15 @@ class BroadcastIn(BaseModel):
     simulate_auditor_outage: bool = Field(False, description="Demonstrates fail-closed: nothing airs")
 
 
-@app.post("/v1/broadcast")
+@app.post("/v1/broadcast", dependencies=[Depends(limit("model"))])
 async def broadcast(body: BroadcastIn) -> dict:
     """Run the agent workflow on a moment: write or rewrite the line, audit it, personalise it."""
     from dataclasses import asdict
 
     from services.agents.workflow import Request, run
     store.ledger_for_chain(body.chain_id)  # 404 for unknown chains before any model call
+    from services.agents import models
+    models.templates_only(not limits.take_model_run())  # over today's budget: the templates, never an error
     result = await run(Request(body.chain_id, body.text, (body.policy.watch_above, body.policy.unfair_above),
                                body.featured, body.simulate_auditor_outage))
     return native(asdict(result))
@@ -232,14 +240,18 @@ SSE_END = chr(10) * 2  # a Server-Sent Events message ends with a blank line
 def sse(payload: dict) -> str:
     return "data: " + json.dumps(payload) + SSE_END
 
-@app.post("/v1/matches/{game_id}/kickoff")
+@app.post("/v1/matches/{game_id}/kickoff", dependencies=[Depends(limit("kickoff"))])
 async def kickoff(game_id: int, start_action: int | None = None, auto_air: bool = True) -> dict:
     """Publish a match to Azure Event Hubs, starting shortly before its next goal. Goals wake the agents."""
     from services.api.live import hub
     L = store.ledgers.get(game_id)
     if L is None:
         raise HTTPException(404, f"unknown match {game_id}")
-    return await hub.kickoff(L, start_action, auto_air)
+    from services.api.live import LiveFullError
+    try:
+        return await hub.kickoff(L, start_action, auto_air)
+    except LiveFullError as exc:
+        raise HTTPException(429, str(exc), headers={"Retry-After": "60"}) from exc
 
 
 @app.post("/v1/matches/{game_id}/stop")
@@ -278,7 +290,23 @@ async def live_stream(game_id: int):
 def metrics() -> dict:
     """Measured time from a goal reaching Event Hubs to a fair, audited line being ready."""
     from services.api.live import hub
-    return hub.metrics()
+    return {**hub.metrics(), "limits": limits.status()}
+
+
+class RecapIn(BaseModel):
+    audience: str = Field("casual", pattern="^(casual|analyst|es)$", description="casual, analyst, or es (Spanish)")
+    policy: PolicyIn = PolicyIn()
+
+
+@app.post("/v1/matches/{game_id}/recap", dependencies=[Depends(limit("model"))])
+async def match_recap(game_id: int, body: RecapIn) -> dict:
+    """The whole match as a short recap for one audience. Every sentence is checked against its goal's evidence."""
+    from services.agents import models, recap
+    if game_id not in store.ledgers:
+        raise HTTPException(404, f"unknown match {game_id}")
+    models.templates_only(not limits.take_model_run())
+    return native(recap.to_dict(await recap.write(game_id, body.audience,
+                                                  (body.policy.watch_above, body.policy.unfair_above))))
 
 
 class DecisionIn(BaseModel):

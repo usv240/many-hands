@@ -51,7 +51,7 @@ export const REFERENCES: { cite: string; why: string; href: string }[] = [
 
 export const FAQ: { q: string; a: string }[] = [
   { q: "Is this just excusing bad mistakes?", a: "No. When the evidence puts most of the blame on one player, Many Hands says so plainly. We measured it against matches where the true cause is known: when one player really was to blame, it called that blame Unfair 6 percent of the time, less often than the simple last-touch rule (7.5 percent)." },
-  { q: "Does it censor anyone?", a: "No. It scores a line, explains why, and suggests a fairer version. A human always decides what airs." },
+  { q: "Does it censor anyone?", a: "No. It scores a line, explains why, and suggests a fairer version. A person decides anything the check does not pass as Fair, and a broadcaster can require a person for every line." },
   { q: "Is the match data real?", a: "The product uses fictional matches from our simulator, as the hackathon requires. To test our model we also used public data from other competitions, never the Premier League." },
   { q: "How can a computer know who is to blame?", a: "It values every action by how it changed each team's chance of scoring, using a published method. It is not perfect, and the Results page shows exactly where it is weaker." },
   { q: "Does it stop online abuse?", a: "It cannot prove that on its own. It removes one known trigger, the one-culprit story, and we measure what we can: how fair the story is." },

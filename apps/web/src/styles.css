@@ -477,3 +477,14 @@ main:focus { outline: none; }
   .mh-trace-step { grid-template-columns: 1fr auto; }
   .mh-trace-action { grid-column: 1 / -1; }
 }
+/* The match recap: one sentence per row, the Auditor's replacements shown in place. */
+.mh-recap-title { margin-top: 1.5rem; }
+.mh-recap { display: grid; gap: 0.6rem; }
+.mh-recap-body { display: grid; gap: 0.5rem; }
+.mh-recap-body h4 { margin: 0.25rem 0 0; font-size: 1.05rem; }
+.mh-recap-lines { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.35rem; }
+.mh-recap-lines li { display: grid; grid-template-columns: 1fr auto; gap: 0.25rem 0.75rem; align-items: start;
+  padding: 0.55rem 0.75rem; border-radius: 10px; background: var(--colorNeutralBackground2); }
+.mh-recap-lines li > p { margin: 0; }
+.mh-recap-lines li.is-replaced { background: var(--mh-fair-bg); }
+.mh-recap-note { grid-column: 1 / -1; font-size: 0.85rem; color: var(--colorNeutralForeground2); }

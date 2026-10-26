@@ -41,7 +41,15 @@ const ENDPOINTS = [
   ["GET", "/v1/chains/{chain_id}", "Every action in the build-up, with values"],
   ["GET", "/v1/chains/{chain_id}/responsibility?method=", "Shares by method: combined, vaep, lasttouch"],
   ["GET", "/v1/chains/{chain_id}/counterfactual?action_id=", "Danger removed if one loss had not happened"],
-  ["POST", "/v1/audit", "Score a sentence; reasons, contrastive line and fair rewrite"],
+  ["POST", "/v1/audit", "Score a sentence; reasons, contrastive line and fair rewrite (deep: true adds the gpt-5-mini reader)"],
+  ["POST", "/v1/broadcast", "The full agent workflow on one moment: write or fix the line, audit it, five audience versions"],
+  ["POST", "/v1/matches/{id}/recap", "The whole match as a recap for casual, analyst or es; every sentence audited"],
+  ["POST", "/v1/matches/{id}/kickoff?auto_air=", "Play a match into Azure Event Hubs; goals wake the agents"],
+  ["GET", "/v1/matches/{id}/live", "Server-Sent Events: every action, every line, every decision"],
+  ["GET", "/v1/queue", "Live lines waiting for a producer"],
+  ["POST", "/v1/queue/{chain_id}/decision", "Approve or reject a queued line; a reason is required for one that is not Fair"],
+  ["GET", "/v1/log", "The hash-chained decision log, with a verification"],
+  ["GET", "/v1/metrics", "Live timings, graphics sent, usage limits"],
 ];
 
 const TOOLS = ["list_matches", "get_chains", "get_chain", "responsibility", "counterfactual", "extract_blame", "audit_line", "fair_rewrite_constraints"];
@@ -67,7 +75,7 @@ export default function Developers() {
             <tbody>{ENDPOINTS.map(([m, p, d]) => <tr key={p}><td><code>{m}</code></td><td><code>{p}</code></td><td>{d}</td></tr>)}</tbody>
           </table>
         </div>
-        <p className="mh-small mh-muted">OpenAPI document at <code>/openapi.json</code>; interactive docs at <code>/docs</code>. <Term id="apiKey">API keys</Term> through Azure API Management in the hosted version.</p>
+        <p className="mh-small mh-muted">OpenAPI document at <code>/openapi.json</code>; interactive docs at <code>/docs</code>. The demo API is open, with no key: each caller gets 12 model-backed requests a minute, and past the daily model budget the agents answer with their templates instead of failing.</p>
       </section>
       <section className="mh-section" id="mcp" aria-labelledby="mcph">
         <h2 id="mcph"><Term id="mcp">MCP server</Term></h2>

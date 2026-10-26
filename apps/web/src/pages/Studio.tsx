@@ -11,6 +11,7 @@ import { AgentDesk } from "../components/AgentDesk";
 import { decidingAction, EvidenceCheck, type EvidenceStatus } from "../components/EvidenceCheck";
 import { Info, Term } from "../components/Info";
 import { LiveFeed } from "../components/LiveFeed";
+import { MatchRecap } from "../components/MatchRecap";
 import { PageHeader } from "../components/Layout";
 import { PitchReplay } from "../components/Pitch";
 import { ResponsibilityBars, ScoreBadge } from "../components/viz";
@@ -226,6 +227,8 @@ export default function Studio() {
               <div>
                 <h3 className="mh-term">Live feed<Info id="liveFeed" /></h3>
                 <LiveFeed data={data} live={live} />
+                <h3 className="mh-term mh-recap-title">Match recap<Info id="recap" /></h3>
+                <MatchRecap key={data.match.game_id} gameId={data.match.game_id} live={live} />
               </div>
             </div>
           </Region>

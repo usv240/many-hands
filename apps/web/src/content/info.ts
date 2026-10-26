@@ -91,7 +91,7 @@ export const INFO = {
   approve: {
     title: "Approve",
     what: "Sends this line to air.",
-    why: "A human always has the final say.",
+    why: "A person has the final say on anything the check does not pass as Fair.",
   },
   reasonRequired: {
     title: "Reason required",
@@ -166,11 +166,6 @@ export const INFO = {
     what: "A recorded fictional match is playing, and checks run in your browser.",
     why: "The demo works even if the server or the AI is unavailable.",
   },
-  apiKey: {
-    title: "API key",
-    what: "A secret code that lets your software use Many Hands.",
-    why: "It keeps usage fair and lets access be revoked.",
-  },
   mcp: {
     title: "MCP server",
     what: "A standard way for AI assistants to use outside tools. Ours offers 8 tools.",
@@ -191,11 +186,17 @@ export const INFO = {
     what: "Ingest, Interpret, Explain, Render, Personalize: the pipeline the hackathon asks for.",
     why: "Each stage is a visible part of the product.",
   },
+  recap: {
+    title: "Match recap",
+    what: "The whole match in a few sentences, for a casual fan, an analyst or a Spanish speaker. The Recapper agent writes it; the Auditor checks every sentence about a goal against that goal's evidence.",
+    why: "A recap is where one player usually gets the blame for a whole match. Here an unfair sentence is swapped for a fair one before anyone reads it.",
+    tech: "POST /v1/matches/{id}/recap. gpt-5-mini writes JSON sentences tagged with the goal each is about; each is read by the rules and the gpt-5-mini reader, scored in code, and scoreline-checked. Unfair or wrong sentences are replaced by the fair template line; blame not tied to a goal is dropped.",
+  },
   liveFeed: {
     title: "Live feed",
-    what: "The match arrives as a stream of events through Azure Event Hubs. When a goal arrives, it wakes the AI agents by itself.",
-    why: "In a real studio nobody has time to press a button when a goal goes in.",
-    tech: "Event Hubs (Entra ID only) carries each action; a consumer in the Container App runs the Agent Framework workflow on every decisive moment and streams the result over Server-Sent Events. Time from goal to fair line is measured on every goal.",
+    what: "The match arrives as a stream of events through Azure Event Hubs. When a goal arrives, it wakes the AI agents by itself. A Fair line goes on air at once; anything else waits for you.",
+    why: "In a real studio nobody has time to press a button when a goal goes in, but a person should decide anything that is not clearly fair.",
+    tech: "Event Hubs (Entra ID only) carries each action; a consumer in the Container App runs the Agent Framework workflow on every decisive moment. The Auditor hands the approved line on before the audience versions are written: Fair lines go to the broadcast-graphics hub, others to the producer queue (GET /v1/queue). Every decision is in a hash-chained log (GET /v1/log). Time from goal to the line on air is measured on every goal.",
   },
   evidenceCheck: {
     title: "Evidence check",

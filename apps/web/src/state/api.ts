@@ -57,18 +57,42 @@ export async function broadcast(body: { chain_id: string; text?: string; feature
     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
     signal: AbortSignal.timeout(45000),
   });
-  if (!r.ok) throw new Error(`The agents could not run (${r.status}).`);
+  if (!r.ok) throw await failure(r, "The agents could not run");
   return r.json();
 }
 
 export async function kickoff(gameId: number, autoAir = true): Promise<{ status: string; transport: string; decisive_moments: number[] }> {
   const r = await fetch(`/v1/matches/${gameId}/kickoff?auto_air=${autoAir}`, { method: "POST" });
-  if (!r.ok) throw new Error(`Kick-off failed (${r.status}).`);
+  if (!r.ok) throw await failure(r, "Kick-off failed");
   return r.json();
 }
 
 export async function getMetrics(): Promise<Metrics | null> {
   return fetch("/v1/metrics").then((r) => (r.ok ? r.json() : null)).catch(() => null);
+}
+
+/** The server's message for a refused request (rate limit, busy), or a plain fallback. */
+async function failure(r: Response, fallback: string): Promise<Error> {
+  const detail = (await r.json().catch(() => null))?.detail;
+  return new Error(typeof detail === "string" ? detail : `${fallback} (${r.status}).`);
+}
+
+export interface RecapSentence {
+  text: string; chain_id: string | null; si: number | null;
+  verdict: "fair" | "watch" | "unfair"; replaced: string | null; reasons: string[];
+}
+export interface Recap {
+  game_id: number; audience: string; title: string; sentences: RecapSentence[];
+  model_used: boolean; model: string; replaced: number; seconds: number;
+}
+
+export async function recap(gameId: number, audience: string): Promise<Recap> {
+  const r = await fetch(`/v1/matches/${gameId}/recap`, {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ audience }),
+    signal: AbortSignal.timeout(60000),
+  });
+  if (!r.ok) throw await failure(r, "The recap could not be written");
+  return r.json();
 }
 
 /** A live line the check did not pass as Fair, waiting on the server for a producer. */

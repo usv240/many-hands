@@ -193,7 +193,7 @@ class Narrator(Executor):
             except Exception as exc:  # fall back, never block the broadcast
                 ev.trace.append(Step("Narrator", "model unavailable, used the template", _ms(t0), type(exc).__name__))
         else:
-            ev.trace.append(Step("Narrator", "offline mode, used the template", _ms(t0)))
+            ev.trace.append(Step("Narrator", f"{models.offline_reason()}, used the template", _ms(t0)))
         return Draft(ev, _template(ev), "template", revisions, history)
 
 
@@ -312,7 +312,7 @@ class Personalizer(Executor):
         if not texts:
             texts = _variant_templates(ev, a.draft.text)
             if not models.available():
-                ev.trace.append(Step("Personalizer", "offline mode, used templates", _ms(t0)))
+                ev.trace.append(Step("Personalizer", f"{models.offline_reason()}, used templates", _ms(t0)))
         store = _store()
         roster = store.roster(ev.facts["game_id"])
         audiences = (("analyst", "Analyst"), ("casual", f"Casual fan of {ev.facts['conceding_team']}"),

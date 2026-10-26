@@ -35,8 +35,21 @@ def _env() -> dict[str, str]:
     return env
 
 
+_budget_spent: contextvars.ContextVar[bool] = contextvars.ContextVar("budget_spent", default=False)
+
+
 def available() -> bool:
-    return bool(_env().get("AZURE_AI_PROJECT_ENDPOINT")) and os.environ.get("MANYHANDS_OFFLINE") != "1"
+    return (bool(_env().get("AZURE_AI_PROJECT_ENDPOINT")) and os.environ.get("MANYHANDS_OFFLINE") != "1"
+            and not _budget_spent.get())
+
+
+def templates_only(spent: bool) -> None:
+    """Mark this request as over the daily model budget: every agent uses its template instead."""
+    _budget_spent.set(spent)
+
+
+def offline_reason() -> str:
+    return "today's model budget is used up" if _budget_spent.get() else "offline mode"
 
 
 def model_name() -> str:

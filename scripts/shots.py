@@ -4,7 +4,7 @@ Drives installed Chrome with Playwright against the live site (or --base). Inter
 the agents run on Microsoft Foundry and the live feed goes through Azure Event Hubs.
 
 Usage:
-    uv run --no-project --with playwright python scripts/shots.py --out docs/08-submission/gallery
+    uv run --no-project --with playwright python scripts/shots.py --out docs/gallery
 """
 
 from __future__ import annotations
@@ -40,7 +40,7 @@ def overflow(page: Page) -> int:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--base", default=LIVE)
-    ap.add_argument("--out", type=Path, default=Path("docs/08-submission/gallery"))
+    ap.add_argument("--out", type=Path, default=Path("docs/gallery"))
     ap.add_argument("--skip-live", action="store_true", help="skip the steps that call the agents")
     ap.add_argument("--only-scan", action="store_true", help="only accessibility and overflow")
     args = ap.parse_args()

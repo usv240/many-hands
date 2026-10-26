@@ -11,11 +11,14 @@ while keeping the guarantees that matter:
 
 from __future__ import annotations
 
+import asyncio
 import json
 
 from narrative_core.extraction import Extraction, Mention, Roster, RuleExtractor
 
 from services.agents import models
+
+RETRY_AFTER_S = 1.5
 
 READER = (
     "Read the commentary in its original language, including Spanish. Quote spans in that language, "
@@ -69,7 +72,11 @@ async def deep_extract(text: str, roster: Roster, team_id: str, *, required: boo
     try:
         extra = await model_mentions(text, roster, team_id)
     except Exception as exc:
-        if required:
+        if not required:
+            return rules, False
+        await asyncio.sleep(RETRY_AFTER_S)  # one retry: a passing throttle should not hold a line
+        try:
+            extra = await model_mentions(text, roster, team_id)
+        except Exception:
             raise RuntimeError("model fairness reader unavailable; publication held") from exc
-        return rules, False
     return merge(rules, extra), True

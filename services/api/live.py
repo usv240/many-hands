@@ -33,6 +33,10 @@ def _digest(body: dict) -> str:
     return hashlib.sha256(json.dumps(body, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
+class LiveFullError(Exception):
+    """Too many matches playing at once on this replica."""
+
+
 class Hub:
     def __init__(self) -> None:
         env = models._env()
@@ -235,6 +239,8 @@ class Hub:
                                     "queued": chain_id in self.queue})
 
         try:
+            from services.api.guard import limits
+            models.templates_only(not limits.take_model_run())  # over today's budget: templates, never silence
             result = await run(Request(chain_id, on_line=on_line))
             latency = time.time() - published_at
             self.latencies.append(latency)
@@ -258,6 +264,9 @@ class Hub:
         game_id = int(ledger.game_id)
         if game_id in self.running and not self.running[game_id].done():
             return {"status": "already running", "transport": self.transport}
+        from services.api.guard import MAX_LIVE_MATCHES
+        if sum(not task.done() for task in self.running.values()) >= MAX_LIVE_MATCHES:
+            raise LiveFullError(f"{MAX_LIVE_MATCHES} matches are already playing. Try again in a minute, or watch one of them.")
         actions = ledger.actions.sort_values(["period_id", "action_id"])
         decisive = {m.shot_action_id for m in ledger.moments}
         if start_action is None:

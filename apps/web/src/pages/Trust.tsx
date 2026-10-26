@@ -28,7 +28,7 @@ export default function Trust() {
       </section>
       <section className="mh-section"><h2>People stay in control</h2>
         <ul>
-          <li><Term id="approve">A producer approves every line.</Term> An Unfair line can only air with a typed reason.</li>
+          <li><Term id="approve">A person decides anything not clearly fair.</Term> A Fair line airs at once; anything else waits for a producer, and an Unfair line can only air with a typed reason. A stricter setting makes every line wait.</li>
           <li><Term id="failClosed">Fails closed.</Term> If the check is unavailable, nothing airs.</li>
           <li><Term id="auditLog">Tamper-evident log.</Term> Every decision is fingerprinted and chained; anyone can verify it.</li>
           <li><Term id="policy">Configurable limits.</Term> Each organisation sets where Watch and Unfair begin.</li>
