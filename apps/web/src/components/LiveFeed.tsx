@@ -32,6 +32,7 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
   const [goals, setGoals] = useState<LiveGoal[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [log, setLog] = useState<{ ok: boolean; entries: number } | null>(null);
+  const [autoAir, setAutoAir] = useState(true);
   const source = useRef<EventSource | null>(null);
   const gameId = data.match.game_id;
 
@@ -73,7 +74,7 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
       }
       if (msg.type === "line") {
         upsert(msg.chain_id, { line: msg.line, audit: msg.audit, lineLatency: msg.line_latency_s, sentTo: msg.graphic_sent_to,
-                               status: msg.audit.verdict === "fair" ? "aired" : "pending" });
+                               status: msg.queued ? "pending" : "aired" });
         setWaking(null);
         refreshLog();
       }
@@ -93,7 +94,7 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
     };
     es.onerror = () => { if (es.readyState === EventSource.CLOSED) setRunning(false); };
     try {
-      const k = await kickoff(gameId);
+      const k = await kickoff(gameId, autoAir);
       setTransport(k.transport); setRunning(true);
     } catch (e) {
       setError((e as Error).message); es.close();
@@ -122,6 +123,10 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
           : <Button appearance="primary" icon={<Live20Regular />} onClick={start}>Kick off the live feed</Button>}
         {transport && <span className="mh-status"><span className="mh-status-dot" aria-hidden />Through {transport}<Info id="liveFeed" /></span>}
       </div>
+      <label className="mh-check-inline">
+        <input type="checkbox" checked={autoAir} disabled={running} onChange={(e) => setAutoAir(e.target.checked)} />
+        Air Fair lines automatically. Turn off to approve every line yourself.
+      </label>
       {error && <p className="mh-bad" role="alert">{error}</p>}
       {running && (
         <p className="mh-live-ticker" aria-live="off">
@@ -139,7 +144,7 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
         </p>
       )}
       <p className="mh-small mh-muted">A fictional match, sped up: a minute of play every couple of seconds. Nobody presses anything when a goal goes in;
-        a Fair line airs on its own, and anything else waits for you.</p>
+        {autoAir ? "a Fair line airs on its own, and anything else waits for you." : "every line waits for you."}</p>
     </div>
   );
 }
@@ -148,6 +153,7 @@ function LiveGoalItem({ g }: { g: LiveGoal }) {
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const fair = g.audit?.verdict === "fair";
 
   const send = async (decision: "approve" | "reject") => {
     setBusy(true); setError(null);
@@ -172,19 +178,23 @@ function LiveGoalItem({ g }: { g: LiveGoal }) {
           <div className="mh-row mh-wrap">
             {g.audit && <ScoreBadge si={g.audit.si} verdict={g.audit.verdict} size="small" />}
             {g.status === "aired" && g.sentTo && <span className="mh-small mh-muted">Aired automatically: sent to {g.sentTo}</span>}
-            {g.status === "approved" && <span className="mh-small mh-muted">Approved by you with a reason{g.sentTo ? `, sent to ${g.sentTo}` : ""}</span>}
+            {g.status === "approved" && <span className="mh-small mh-muted">Approved by you{fair ? "" : " with a reason"}{g.sentTo ? `, sent to ${g.sentTo}` : ""}</span>}
             {g.status === "rejected" && <span className="mh-small mh-muted">Rejected by you. It did not air.</span>}
           </div>
         </>
       )}
       {g.status === "pending" && (
         <div className="mh-live-decide">
-          <p className="mh-small">Not clearly fair, so it waits for you. Nothing airs until you decide.</p>
-          <Field label={<span className="mh-term">Reason, needed to air it<Info id="reasonRequired" /></span>}>
-            <Input value={reason} onChange={(_, d) => setReason(d.value)} placeholder="For example: the replay shows he was left alone" />
-          </Field>
+          <p className="mh-small">{fair ? "Waiting for you. Nothing airs until you decide." : "Not clearly fair, so it waits for you. Nothing airs until you decide."}</p>
+          {!fair && (
+            <Field label={<span className="mh-term">Reason, needed to air it<Info id="reasonRequired" /></span>}>
+              <Input value={reason} onChange={(_, d) => setReason(d.value)} placeholder="For example: the replay shows he was left alone" />
+            </Field>
+          )}
           <div className="mh-row mh-wrap">
-            <Button size="small" appearance="primary" disabled={busy || !reason.trim()} onClick={() => send("approve")}>Air with this reason</Button>
+            <Button size="small" appearance="primary" disabled={busy || (!fair && !reason.trim())} onClick={() => send("approve")}>
+              {fair ? "Air it" : "Air with this reason"}
+            </Button>
             <Button size="small" disabled={busy} onClick={() => send("reject")}>Don't air</Button>
           </div>
           {error && <p className="mh-bad mh-small" role="alert">{error}</p>}

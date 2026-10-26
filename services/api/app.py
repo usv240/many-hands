@@ -233,13 +233,13 @@ def sse(payload: dict) -> str:
     return "data: " + json.dumps(payload) + SSE_END
 
 @app.post("/v1/matches/{game_id}/kickoff")
-async def kickoff(game_id: int, start_action: int | None = None) -> dict:
+async def kickoff(game_id: int, start_action: int | None = None, auto_air: bool = True) -> dict:
     """Publish a match to Azure Event Hubs, starting shortly before its next goal. Goals wake the agents."""
     from services.api.live import hub
     L = store.ledgers.get(game_id)
     if L is None:
         raise HTTPException(404, f"unknown match {game_id}")
-    return await hub.kickoff(L, start_action)
+    return await hub.kickoff(L, start_action, auto_air)
 
 
 @app.post("/v1/matches/{game_id}/stop")

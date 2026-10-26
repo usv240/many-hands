@@ -47,6 +47,7 @@ class Hub:
         self.latencies: deque[float] = deque(maxlen=200)       # goal to all five versions ready
         self.line_latencies: deque[float] = deque(maxlen=200)  # goal to the approved line on air or queued
         self.queue: dict[str, dict] = {}                       # lines waiting for a producer, by chain id
+        self.auto_air: dict[int, bool] = {}                    # per match: does a Fair line air without a producer?
         self.log: list[dict] = []                              # hash-chained record of every decision
         self.running: dict[int, asyncio.Task] = {}
         self._consumer: asyncio.Task | None = None
@@ -155,7 +156,7 @@ class Hub:
             raise ValueError(f"already {item['status']}")
         if decision not in ("approve", "reject"):
             raise ValueError("decision must be approve or reject")
-        if decision == "approve" and not reason.strip():
+        if decision == "approve" and item["audit"]["verdict"] != "fair" and not reason.strip():
             raise ValueError("a typed reason is needed to air a line the check did not pass")
         item["status"] = "approved" if decision == "approve" else "rejected"
         record = await self._log({"chain_id": chain_id, "line": item["line"], "verdict": item["audit"]["verdict"],
@@ -216,7 +217,7 @@ class Hub:
             latency = time.time() - published_at
             line_at["latency"] = latency
             self.line_latencies.append(latency)
-            if audit["verdict"] == "fair":
+            if audit["verdict"] == "fair" and self.auto_air.get(game_id, True):
                 sent = None
                 try:
                     sent = await self.publish_graphic(game_id, chain_id, line, audit)
@@ -230,7 +231,8 @@ class Hub:
                                         "status": "pending", "queued_at": time.time()}
                 self._fan_out(game_id, {"type": "queued", "item": self.queue[chain_id]})
             self._fan_out(game_id, {"type": "line", "chain_id": chain_id, "line": line, "audit": audit,
-                                    "line_latency_s": round(latency, 2), "graphic_sent_to": line_at["sent_to"]})
+                                    "line_latency_s": round(latency, 2), "graphic_sent_to": line_at["sent_to"],
+                                    "queued": chain_id in self.queue})
 
         try:
             result = await run(Request(chain_id, on_line=on_line))
@@ -251,7 +253,8 @@ class Hub:
         except Exception as exc:
             self._fan_out(game_id, {"type": "agent-error", "chain_id": chain_id, "error": str(exc)[:200]})
 
-    async def kickoff(self, ledger, start_action: int | None) -> dict:
+    async def kickoff(self, ledger, start_action: int | None, auto_air: bool = True) -> dict:
+        """Play a match into Event Hubs. `auto_air=False` is the stricter policy: every line waits for a producer."""
         game_id = int(ledger.game_id)
         if game_id in self.running and not self.running[game_id].done():
             return {"status": "already running", "transport": self.transport}
@@ -277,6 +280,7 @@ class Hub:
                 await asyncio.sleep(INTERVAL_S)
             await self._publish({"kind": "control", "type": "full-time", "game_id": game_id})
 
+        self.auto_air[game_id] = auto_air
         self.running[game_id] = asyncio.create_task(play())
         return {"status": "kicked off", "transport": self.transport, "from_action": int(start_action),
                 "actions": int(len(actions)), "decisive_moments": sorted(int(d) for d in decisive if d >= start_action)}

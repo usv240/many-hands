@@ -94,3 +94,27 @@ def test_decision_log_detects_tampering():
     assert hub.verify_log()["ok"]
     hub.log[1]["reason"] = "edited later"
     assert hub.verify_log() == {"ok": False, "entries": 3, "broken_at": 1}
+
+
+def test_stricter_policy_queues_even_fair_lines():
+    async def scenario():
+        live.INTERVAL_S = 0.0
+        hub = live.Hub()
+        hub.namespace = ""
+        await hub.start()
+        L = store.ledgers[20003]
+        first_goal = min(m.shot_action_id for m in L.moments)
+        q = hub.subscribe(20003)
+        await hub.kickoff(L, first_goal - 5, auto_air=False)
+        line = None
+        for _ in range(400):
+            msg = await asyncio.wait_for(q.get(), timeout=10)
+            if msg["type"] == "line":
+                line = msg
+                break
+        await hub.stop()
+        assert line["queued"] and line["graphic_sent_to"] is None and hub.graphics_sent == 0
+        out = await hub.decide(line["chain_id"], "approve")  # a Fair line needs no reason, only a producer
+        assert out["graphic_sent_to"] and out["record"]["decision"] == "approved"
+
+    asyncio.run(scenario())

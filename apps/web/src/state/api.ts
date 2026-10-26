@@ -61,8 +61,8 @@ export async function broadcast(body: { chain_id: string; text?: string; feature
   return r.json();
 }
 
-export async function kickoff(gameId: number): Promise<{ status: string; transport: string; decisive_moments: number[] }> {
-  const r = await fetch(`/v1/matches/${gameId}/kickoff`, { method: "POST" });
+export async function kickoff(gameId: number, autoAir = true): Promise<{ status: string; transport: string; decisive_moments: number[] }> {
+  const r = await fetch(`/v1/matches/${gameId}/kickoff?auto_air=${autoAir}`, { method: "POST" });
   if (!r.ok) throw new Error(`Kick-off failed (${r.status}).`);
   return r.json();
 }

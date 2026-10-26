@@ -119,9 +119,15 @@ def main() -> None:
             page.locator(".mh-desk-region").screenshot(path=str(out / "3-studio-ai-desk.png"))
 
             # 4. Studio: the live feed through Azure Event Hubs wakes the agents.
+            #    Stricter policy, so the producer queue is visible: approve the first line, leave the next waiting.
+            page.get_by_label("Air Fair lines automatically", exact=False).uncheck()
             page.get_by_role("button", name="Kick off the live feed").click()
-            page.wait_for_function("document.querySelectorAll('.mh-live-goal').length >= 2", timeout=120000)
-            page.wait_for_timeout(800)
+            page.wait_for_selector(".mh-live-goal.is-pending", timeout=120000)
+            page.locator(".mh-live-goal.is-pending").first.get_by_role("button", name="Air it").click()
+            page.wait_for_function(
+                "document.querySelectorAll('.mh-live-goal').length >= 2 && document.querySelector('.mh-live-goal.is-pending')",
+                timeout=120000)
+            page.wait_for_timeout(1500)
             page.locator(".mh-desk-region").screenshot(path=str(out / "4-studio-live-feed.png"))
             page.get_by_role("button", name="Stop the feed").click()
 
