@@ -7,28 +7,30 @@ import { loadResults, useAsync } from "../state/data";
 type Status = "live" | "in progress";
 
 const PATH = [
-  { t: "0:00 to 0:30", what: "Read the top of the home page and press the switch in \"One goal. Two ways to tell it.\"", see: "The whole idea in one click.", to: "/" },
+  { t: "0:00 to 0:30", what: "On the home page, press Fix it with the agents, live.", see: "Agents on Microsoft Foundry catch a one-culprit line and rewrite it fairly, with every step timed.", to: "/" },
   { t: "0:30 to 1:15", what: "Open Check a sentence. The first example is already filled in.", see: "An Unfair score, the reasons, story versus evidence, and a fair rewrite.", to: "/check" },
-  { t: "1:15 to 2:15", what: "Open the Studio. Try Approve on the red line, then Use fair version. Turn on Simulate fairness check outage.", see: "A human-controlled pre-air queue, five audience versions, a tamper-evident log, and fail-closed behaviour.", to: "/studio" },
-  { t: "2:15 to 3:00", what: "Open Results.", see: "Two benchmarks, a named baseline, a negative control, measured limits and the rerun commands.", to: "/results" },
+  { t: "1:15 to 2:15", what: "Open the Studio. Answer the evidence check. Press Fix it with the agents. In the live feed, untick Air Fair lines automatically, kick off, and air a line yourself.", see: "The five versions the model wrote, each audited; goals arriving on Azure Event Hubs; a producer queue on the server and its hash-chained log.", to: "/studio" },
+  { t: "2:15 to 3:00", what: "Open Results.", see: "Held-out detection against known causes, real public data, a red team, measured limits and the rerun commands.", to: "/results" },
 ];
 
 const CRITERIA: { name: string; asks: string; evidence: { text: string; to?: string; status: Status }[] }[] = [
   { name: "Technological Implementation", asks: "Optimised synthetic data; quality engineering; hero technologies; maintainable code.",
     evidence: [
       { text: "Calibrated fictional league: most statistics within 15 percent of 906 real matches; counterfactual ground truth", to: "/results#cal", status: "live" },
-      { text: "Same engine in Python and in the browser, checked case for case by 154 parity tests; 206 tests in total", status: "live" },
-      { text: "Microsoft Foundry models, Agent Framework workflow, Azure deployment with azd", status: "in progress" },
+      { text: "Same engine in Python and in the browser, checked case for case by 154 parity tests; 311 tests in total", status: "live" },
+      { text: "Microsoft Foundry (gpt-5-mini), Agent Framework workflow, Azure Event Hubs in and out, Container Apps, managed identity, deployed with azd", to: "/studio", status: "live" },
     ] },
   { name: "Agentic Design and Innovation", asks: "Creative agent patterns; orchestration, MCP, multi-agent; novelty.",
     evidence: [
       { text: "A new metric, the Scapegoat Index, with ground truth no real data set can provide", to: "/how-it-works#score", status: "live" },
       { text: "MCP server with 8 typed tools that our own agents use", to: "/developers#mcp", status: "live" },
-      { text: "Write, audit, revise loop with a fail-closed Auditor; red-team agent whose wins become regression tests", status: "in progress" },
+      { text: "Write, audit, revise loop with a fail-closed Auditor; red-team agent whose wins become regression tests", to: "/results#redteam", status: "live" },
+      { text: "A goal on Event Hubs wakes the workflow; the approved line goes back out before the audience versions are written", to: "/studio", status: "live" },
     ] },
   { name: "Real-World Impact and Applicability", asks: "Significance; production readiness; impact on users.",
     evidence: [
       { text: "The problem, with sources: abuse peaks after key moments; outcome bias in ratings", to: "/#problem", status: "live" },
+      { text: "Held out against known causes: 77 percent of Unfair calls right; deserved blame wrongly flagged 6.1 percent, versus 7.5 for last-touch", to: "/results#detect", status: "live" },
       { text: "Tested on real provider-labelled errors, not only our own data", to: "/results#ext", status: "live" },
       { text: "Ways in: API, MCP server, command line, Bring Your Own data, text and policy", to: "/developers", status: "live" },
     ] },
@@ -40,8 +42,8 @@ const CRITERIA: { name: string; asks: string; evidence: { text: string; to?: str
     ] },
   { name: "Adherence to category (Best Enterprise Solution)", asks: "Reliability, transparency and controls for production in global organisations.",
     evidence: [
-      { text: "Human approval; a typed reason required to air an Unfair line; per-broadcaster limits", to: "/studio", status: "live" },
-      { text: "Tamper-evident audit log you can verify and try to break", to: "/studio", status: "live" },
+      { text: "A producer queue on the server: Fair airs, anything else needs a named producer and a typed reason; a stricter policy makes every line wait", to: "/studio", status: "live" },
+      { text: "Hash-chained decision log on the server, verifiable at /v1/log and copied to Event Hubs; a browser log you can try to break", to: "/studio", status: "live" },
       { text: "Fails closed when the check is down; transparency note with measured limits", to: "/trust", status: "live" },
     ] },
 ];
