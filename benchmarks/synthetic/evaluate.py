@@ -72,9 +72,10 @@ def evaluate(rated: pd.DataFrame, positions: pd.DataFrame, moments: list[dict]) 
             base[f"top1_lam{lam}"] = bool(r) and r[0] == truth_rank[0]
             base[f"top3_lam{lam}"] = truth_rank[0] in r[:3]
             # Negative control: when one player truly dominates, blaming them alone must be allowed.
-            si = scapegoat_index({truth_rank[0]: 1.0}, ours) if ours else 1.0
-            base[f"justified_unfair_lam{lam}"] = (
-                truth[truth_rank[0]] >= JUSTIFIED_SHARE and verdict(si) is Verdict.UNFAIR)
+            # As in the product, no counted mistake means Watch (a person decides), never Unfair.
+            base[f"justified_unfair_lam{lam}"] = bool(
+                truth[truth_rank[0]] >= JUSTIFIED_SHARE and ours and
+                verdict(scapegoat_index({truth_rank[0]: 1.0}, ours)) is Verdict.UNFAIR)
         last_dist = {last[0]: 1.0} if last else {}
         base["tv_last"] = tv(last_dist, truth)
         base["top1_last"] = bool(last) and last[0] == truth_rank[0]

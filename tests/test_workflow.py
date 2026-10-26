@@ -55,3 +55,80 @@ def test_wrong_scoreline_never_airs():
     r = go(Request(CHAIN, incoming="Corran Vale go 1-0 up after loose balls from number 8 and number 9."))
     assert r.history[0]["verdict"] == "unfair" and r.history[0]["fact_errors"]
     assert "1-0" not in (r.line or "")
+
+
+def test_real_reader_outage_holds_publication(monkeypatch):
+    from services.agents import extractor, models
+
+    async def unavailable(*args, **kwargs):
+        raise TimeoutError("reader timed out")
+
+    monkeypatch.setattr(models, "available", lambda: True)
+    monkeypatch.setattr(extractor, "model_mentions", unavailable)
+    r = go(Request(CHAIN, incoming="Number 8's howler cost them the goal."))
+    assert r.status == "held"
+    assert r.line is None
+    assert not r.variants
+    assert "reader unavailable" in r.held_reason
+
+
+def test_reader_best_effort_is_explicit(monkeypatch):
+    from services.agents import extractor, models
+    from services.api.app import store
+
+    async def unavailable(*args, **kwargs):
+        raise TimeoutError("reader timed out")
+
+    monkeypatch.setattr(models, "available", lambda: True)
+    monkeypatch.setattr(extractor, "model_mentions", unavailable)
+    ledger = store.ledger_for_chain(CHAIN)
+    moment = ledger.moment(CHAIN)
+    _, used = asyncio.run(extractor.deep_extract(
+        "Number 8 lost the ball.", store.roster(int(ledger.game_id)), moment.conceding_team_id))
+    assert not used
+
+
+def test_variants_check_actual_translation_and_wrong_scores(monkeypatch):
+    from services.agents import workflow
+
+    texts = {"analyst": "Corran Vale lead 99-98.", "casual": "A goal.",
+             "club": "A goal.", "focus": "A goal.",
+             "es": "El número 8 tuvo toda la culpa del gol."}
+    checked = []
+    original = workflow.deep_extract
+
+    async def reader(text, roster, team_id, **kwargs):
+        checked.append(text)
+        return await original(text, roster, team_id, **kwargs)
+
+    monkeypatch.setattr(workflow, "deep_extract", reader)
+    monkeypatch.setattr(workflow, "_variant_templates", lambda *args: texts)
+    r = go(Request(CHAIN))
+    variants = {v["id"]: v for v in r.variants}
+    assert texts["es"] in checked
+    assert not variants["es"]["aired"]  # no multilingual reader in offline mode
+    assert "requires the model reader" in variants["es"]["note"]
+    assert not variants["analyst"]["aired"]
+    assert "99-98" in variants["analyst"]["note"]
+
+
+def test_variant_reader_failure_holds_only_that_variant(monkeypatch):
+    from services.agents import workflow
+
+    original = workflow.deep_extract
+
+    async def reader(text, roster, team_id, **kwargs):
+        if text == "An unavailable variant.":
+            raise RuntimeError("reader unavailable")
+        return await original(text, roster, team_id, **kwargs)
+
+    monkeypatch.setattr(workflow, "deep_extract", reader)
+    monkeypatch.setattr(workflow, "_variant_templates", lambda *args: {
+        "analyst": "An unavailable variant.", "casual": "A goal.",
+        "club": "A goal.", "focus": "A goal.", "es": "Un gol."})
+    r = go(Request(CHAIN))
+    variants = {v["id"]: v for v in r.variants}
+    assert r.line
+    assert not variants["analyst"]["aired"]
+    assert variants["analyst"]["si"] is None
+    assert variants["casual"]["aired"]

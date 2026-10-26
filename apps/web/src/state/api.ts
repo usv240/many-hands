@@ -10,7 +10,7 @@ export interface Health {
 
 export interface TraceStep { agent: string; action: string; ms: number; detail: string; model: boolean }
 
-export interface Variant { id: string; audience: string; text: string; si: number; verdict: "fair" | "watch" | "unfair"; aired: boolean; note?: string | null }
+export interface Variant { id: string; audience: string; text: string; si: number | null; verdict: "fair" | "watch" | "unfair" | "held"; aired: boolean; note?: string | null }
 
 export interface AgentResult {
   status: "ready" | "held";
@@ -69,4 +69,26 @@ export async function kickoff(gameId: number): Promise<{ status: string; transpo
 
 export async function getMetrics(): Promise<Metrics | null> {
   return fetch("/v1/metrics").then((r) => (r.ok ? r.json() : null)).catch(() => null);
+}
+
+/** A live line the check did not pass as Fair, waiting on the server for a producer. */
+export interface QueueItem {
+  game_id: number; chain_id: string; line: string; status: "pending" | "approved" | "rejected";
+  audit: { si: number; verdict: "fair" | "watch" | "unfair"; reasons?: string[] };
+}
+
+export interface LogRecord { chain_id: string; decision: string; by: string; reason: string; at: number; hash: string }
+
+export async function decide(chainId: string, decision: "approve" | "reject", reason: string, producer = "Producer in the Studio"):
+  Promise<{ item: QueueItem; record: LogRecord; graphic_sent_to: string | null }> {
+  const r = await fetch(`/v1/queue/${encodeURIComponent(chainId)}/decision`, {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ decision, reason, producer }),
+  });
+  if (!r.ok) throw new Error((await r.json().catch(() => null))?.detail ?? `The decision was not recorded (${r.status}).`);
+  return r.json();
+}
+
+export async function getLog(): Promise<{ verify: { ok: boolean; entries: number; broken_at: number | null }; entries: LogRecord[] } | null> {
+  return fetch("/v1/log").then((r) => (r.ok ? r.json() : null)).catch(() => null);
 }

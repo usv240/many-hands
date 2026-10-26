@@ -49,6 +49,8 @@ export default function Results() {
   const e = data.external;
   const s = data.synthetic;
   const m = s.multi_cause.metrics;
+  const d = data.detection.test_half;
+  const r = (x: { hits: number; n: number }) => `${x.hits} of ${x.n}`;
   const within = data.calibration.filter((c) => Math.abs(c.difference_pct) <= 15).length;
   return (
     <div className="mh-page">
@@ -56,10 +58,11 @@ export default function Results() {
 
       <section className="mh-headline-card">
         <p>
-          On <strong>{e.cases}</strong> real, provider-labelled errors, Many Hands never flagged deserved blame as unfair
-          (<strong>{e.justified_false_unfair} of {e.justified_cases}</strong>), and caught the <strong>{e.verdicts_if_blamed_alone.unfair}</strong> cases
-          (about 1 in 4) where a single-culprit story would have been unfair. On a synthetic league where the true cause of every goal is known,
-          it is much closer to the truth when blame is shared (<strong>{m["tv_lam0.0"].toFixed(2)}</strong> versus <strong>{m.tv_last.toFixed(2)}</strong>).
+          On held-out matches where the true cause of every goal is known, <strong>{pct(d.called_unfair.precision.value)}</strong> of the
+          check's Unfair calls were right, and it wrongly called deserved blame Unfair less often than the last-touch rule
+          (<strong>{pct(d.justified_blame_wrongly_flagged.value)}</strong> versus {pct(d.justified_blame_wrongly_flagged_last_touch.value)}).
+          It is cautious: it calls only {r(d.called_unfair.recall)} truly unfair lines Unfair outright, and sends {r(d.sent_to_a_person.recall)} to a person.
+          When blame is shared it is much closer to the truth (<strong>{m["tv_lam0.0"].toFixed(2)}</strong> versus <strong>{m.tv_last.toFixed(2)}</strong>).
         </p>
       </section>
 
@@ -73,7 +76,9 @@ export default function Results() {
           { label: "Labelled player in top three", ours: e.metrics.ours_top3.mean, base: e.metrics.last_top3.mean, fmt: pct },
         ]} />
         <ul className="mh-facts">
-          <li><Term id="negativeControl">Negative control</Term>: <strong>{e.justified_false_unfair} false Unfair flags in {e.justified_cases}</strong> cases where the labelled player really carried 60 percent or more.</li>
+          <li>Consistency check: in the {e.justified_cases} cases where our ledger gives the labelled player 60 percent or more, a line blaming them
+            alone is never called Unfair ({e.justified_false_unfair} flags). That follows from how the score works, so it is not evidence on its own;
+            the negative control against a known truth is in the synthetic benchmark below.</li>
           <li>Labelled player's share of responsibility: {ci(e.metrics.labelled_share)}, median {pct(e.labelled_share_median)}. <Info id="ci" /></li>
           <li>A line blaming only the labelled player would be: Fair {e.verdicts_if_blamed_alone.fair}, Watch {e.verdicts_if_blamed_alone.watch}, Unfair {e.verdicts_if_blamed_alone.unfair}.</li>
           <li>Not evaluated: {Object.entries(e.excluded).map(([k, v]) => `${v} ${k.replaceAll("_", " ")}`).join("; ")}.</li>
@@ -92,9 +97,32 @@ export default function Results() {
         ]} />
         <ul className="mh-facts">
           <li>Main culprit ranked first: Many Hands {ci(s.metrics["top1_lam0.0"])}, last-touch {ci(s.metrics.top1_last)}.</li>
-          <li>On shared-blame moments, a last-touch story scores {m.last_touch_story_si.toFixed(2)} on the Scapegoat Index: Unfair. Many Hands raised 0 false flags there.</li>
+          <li>On shared-blame moments, a last-touch story scores {m.last_touch_story_si.toFixed(2)} on the Scapegoat Index against the truth: Unfair.</li>
           <li>{s.justified_cases} of {s.moments} moments ({pct(s.justified_cases / s.moments)}) had one player holding 60 percent or more of the true responsibility.</li>
         </ul>
+      </section>
+
+      <section className="mh-section" aria-labelledby="detect">
+        <h2 id="detect">Does the check catch truly unfair lines?</h2>
+        <p><L s="A pundit blames the last defender to lose the ball. We know whether that was fair, because we know the true cause. Does the check agree?"
+              t={`Settings chosen on ${data.detection.split.tune_matches} benchmark matches; every number here is from the other ${data.detection.split.test_matches}, held out. A line is truly unfair when its Scapegoat Index against the true causes is above 0.40. 95 percent intervals by bootstrap over matches.`} /> <Info id="ci" /></p>
+        <div className="mh-table-wrap">
+          <table className="mh-table">
+            <thead><tr><th>On {d.pundit_lines} held-out one-culprit lines ({d.truly_unfair_lines} truly unfair)</th><th>Result</th><th>95% interval</th></tr></thead>
+            <tbody>
+              <tr><td>Unfair calls that were right</td><td><strong>{pct(d.called_unfair.precision.value)}</strong> ({r(d.called_unfair.precision)})</td><td>{pct(d.called_unfair.precision.ci95[0])} to {pct(d.called_unfair.precision.ci95[1])}</td></tr>
+              <tr><td>Fair lines called Unfair</td><td><strong>{pct(d.called_unfair.fair_lines_called_unfair.value)}</strong> ({r(d.called_unfair.fair_lines_called_unfair)})</td><td>{pct(d.called_unfair.fair_lines_called_unfair.ci95[0])} to {pct(d.called_unfair.fair_lines_called_unfair.ci95[1])}</td></tr>
+              <tr><td>Deserved blame called Unfair (last-touch rule: {pct(d.justified_blame_wrongly_flagged_last_touch.value)})</td><td><strong>{pct(d.justified_blame_wrongly_flagged.value)}</strong> ({r(d.justified_blame_wrongly_flagged)})</td><td>{pct(d.justified_blame_wrongly_flagged.ci95[0])} to {pct(d.justified_blame_wrongly_flagged.ci95[1])}</td></tr>
+              <tr><td>Truly unfair lines called Unfair outright</td><td>{pct(d.called_unfair.recall.value)} ({r(d.called_unfair.recall)})</td><td>{pct(d.called_unfair.recall.ci95[0])} to {pct(d.called_unfair.recall.ci95[1])}</td></tr>
+              <tr><td>Truly unfair lines sent to a person (Watch or Unfair)</td><td>{pct(d.sent_to_a_person.recall.value)} ({r(d.sent_to_a_person.recall)})</td><td>{pct(d.sent_to_a_person.recall.ci95[0])} to {pct(d.sent_to_a_person.recall.ci95[1])}</td></tr>
+              <tr><td>Fair lines sent to a person</td><td>{pct(d.sent_to_a_person.fair_lines_sent.value)} ({r(d.sent_to_a_person.fair_lines_sent)})</td><td>{pct(d.sent_to_a_person.fair_lines_sent.ci95[0])} to {pct(d.sent_to_a_person.fair_lines_sent.ci95[1])}</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="mh-note">The last-touch rule gives the blamed player 100 percent, so it never flags a one-culprit line and catches none of them.
+          The check is precise but cautious: most unfair lines it misses look fair to the evidence too. That is why it explains, routes and asks,
+          and a person decides. One rule matters: where the ledger counts no lost ball at all, it now says the evidence cannot tell, instead of calling the
+          line Unfair. Checked on the tuning half first, that cut wrong Unfair calls on deserved blame from 21 to 6 percent.</p>
       </section>
 
       {data.foundry_eval && (() => {
@@ -108,7 +136,7 @@ export default function Results() {
               code grader, and a separate model judge, with its own instructions, that sees only the line and the evidence, never our score.</p>
             <div className="mh-table-wrap">
               <table className="mh-table">
-                <thead><tr><th>Lines</th><th>Fair by the Scapegoat Index (code)</th><th>Fair by the independent judge (model)</th></tr></thead>
+                <thead><tr><th>Lines</th><th>Fair by the Scapegoat Index (code)</th><th>Fair by the separate judge (model)</th></tr></thead>
                 <tbody>
                   <tr><td>The agents' lines</td><td>{agents[code]} of {agents.lines}</td><td>{agents[judge]} of {agents.lines}</td></tr>
                   <tr><td>A pundit's one-culprit line</td><td>{pundit[code]} of {pundit.lines}</td><td>{pundit[judge]} of {pundit.lines}</td></tr>
@@ -116,7 +144,7 @@ export default function Results() {
               </table>
             </div>
             <p className="mh-note">The two graders agree. The pundit's line was fair whenever one player really did cause the goal,
-              and unfair only where blame was shared: fair both ways, confirmed by a judge we did not write.{" "}
+              and unfair only where blame was shared. The judge is a separate gpt-5-mini agent with its own instructions, not a person.{" "}
               <a href={data.foundry_eval.portal_url} target="_blank" rel="noreferrer">Open the run in Microsoft Foundry</a> (needs project access).</p>
           </section>
         );
@@ -169,7 +197,8 @@ export default function Results() {
         <h2 id="limits">Measured limits</h2>
         <ul className="mh-facts">
           <li><strong>Last-touch names the main culprit more often</strong>: {pct(e.metrics.last_top1.mean)} versus {pct(e.metrics.ours_top1.mean)} on real data. Our edge is how much, not who.</li>
-          <li><strong>On synthetic moments with one dominant cause, we raise more false Watch or Unfair flags</strong> than last-touch: {pct(s.metrics["justified_unfair_lam0.0"].mean)} versus {pct(s.metrics.justified_unfair_last.mean)}.</li>
+          <li><strong>Most truly unfair lines are not called Unfair outright</strong>: {r(d.called_unfair.recall)} on held-out matches; {r(d.sent_to_a_person.recall)} reach a person. The check informs a producer; it does not replace one.</li>
+          <li><strong>Half the lines sent to a person are fair</strong> ({r(d.sent_to_a_person.precision)} truly unfair). That is the cost of caution: a few seconds of a producer's attention.</li>
           <li><strong>Off-ball blame did not help.</strong> Weighting positional blame moved results further from the truth at every weight we tried, so its weight is 0.</li>
           <li><strong>Blame extraction is rule-based offline.</strong> It misses sarcasm and unusual phrasing; unknown names are reported, never guessed.</li>
         </ul>

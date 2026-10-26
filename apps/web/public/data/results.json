@@ -82,9 +82,9 @@
     "ci95_high": 0.8678097729320995
    },
    "justified_unfair_lam0.0": {
-    "mean": 0.18633540372670807,
-    "ci95_low": 0.15204068044874994,
-    "ci95_high": 0.2244125182117308
+    "mean": 0.055900621118012424,
+    "ci95_low": 0.03570834653151726,
+    "ci95_high": 0.07677491217175686
    },
    "tv_last": {
     "mean": 0.14770305090395533,
@@ -143,6 +143,123 @@
    }
   },
   "last_touch_story_unfair_share": 0.14906832298136646
+ },
+ "detection": {
+  "split": {
+   "tune_matches": 30,
+   "test_matches": 29,
+   "tune_moments": 230,
+   "test_moments": 253
+  },
+  "chosen_on_tune_half": {
+   "min_fraction": 0.0,
+   "only_failures": true,
+   "last_turnover_boost": 2.0
+  },
+  "product_defaults": {
+   "min_fraction": 0.2,
+   "only_failures": true,
+   "last_turnover_boost": 2.0
+  },
+  "tune_half_distance": {
+   "chosen": 0.1437,
+   "product_defaults": 0.1447
+  },
+  "reported_on_test_half": "product defaults",
+  "test_half": {
+   "pundit_lines": 239,
+   "truly_unfair_lines": 42,
+   "called_unfair": {
+    "recall": {
+     "value": 0.238,
+     "n": 42,
+     "hits": 10,
+     "ci95": [
+      0.106,
+      0.406
+     ]
+    },
+    "precision": {
+     "value": 0.769,
+     "n": 13,
+     "hits": 10,
+     "ci95": [
+      0.533,
+      1.0
+     ]
+    },
+    "fair_lines_called_unfair": {
+     "value": 0.015,
+     "n": 197,
+     "hits": 3,
+     "ci95": [
+      0.0,
+      0.031
+     ]
+    },
+    "accuracy": {
+     "value": 0.854,
+     "n": 239,
+     "hits": 204,
+     "ci95": [
+      0.815,
+      0.894
+     ]
+    }
+   },
+   "sent_to_a_person": {
+    "recall": {
+     "value": 0.595,
+     "n": 42,
+     "hits": 25,
+     "ci95": [
+      0.454,
+      0.75
+     ]
+    },
+    "precision": {
+     "value": 0.5,
+     "n": 50,
+     "hits": 25,
+     "ci95": [
+      0.364,
+      0.643
+     ]
+    },
+    "fair_lines_sent": {
+     "value": 0.127,
+     "n": 197,
+     "hits": 25,
+     "ci95": [
+      0.082,
+      0.172
+     ]
+    }
+   },
+   "baseline_last_touch_flags_nothing": {
+    "recall": 0.0,
+    "accuracy": 0.824
+   },
+   "justified_blame_wrongly_flagged": {
+    "value": 0.061,
+    "n": 228,
+    "hits": 14,
+    "ci95": [
+     0.03,
+     0.093
+    ]
+   },
+   "justified_blame_wrongly_flagged_last_touch": {
+    "value": 0.075,
+    "n": 228,
+    "hits": 17,
+    "ci95": [
+     0.043,
+     0.104
+    ]
+   },
+   "distance_to_truth": 0.151
+  }
  },
  "calibration": [
   {

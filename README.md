@@ -13,8 +13,8 @@
 |---|---|
 | **About 3 s** | from a goal reaching Azure Event Hubs to a fair, checked line ready for air (medians of 2.9 s and 3.2 s on two live runs of 14 goals each, two matches at once; the slowest took 7.2 s). All five audience versions follow by 7.7 s. |
 | **$4.91 a season** | model cost to check every goal of a 380-match season, about 1.3 cents a match, from the tokens each agent call actually used |
-| **About 51 a season** | moments where a one-culprit story would be unfair. An estimate: real tournament data outside the Premier League shows 0.5 clear errors a match, and 27 percent of those share the blame. |
-| **0 false alarms in 130** | real cases where one player truly was to blame. It does not cry wolf: deserved blame is allowed. |
+| **77% right** | when the check calls a line Unfair, scored against the known true cause on 29 held-out matches (10 of 13). It wrongly calls deserved blame Unfair 6 percent of the time, less often than the last-touch rule (7.5 percent). |
+| **About 51 a season** | one-culprit stories the check would call Unfair in a 380-match season. An estimate from real tournament data outside the Premier League: 0.5 clear errors a match, and 27 percent of one-culprit lines about them called Unfair. |
 | **21 of 21** | agents' lines graded fair in a Microsoft Foundry evaluation, by our code grader and by a separate model judge with its own instructions (the pundit lines: 19 of 21) |
 
 Built for the Inside the Game Developer Hackathon (Microsoft and the Premier League). All match data in the product is synthetic and fictional.
@@ -24,16 +24,16 @@ In July 2021, three young England players missed penalties in the Euro 2020 fina
 
 **Why goals.** Blame gathers around goals and big chances, so that is where the agents wake. The same evidence also names the unsung players who built the move, which the Studio shows for every goal.
 
-**Safe by default.** If the model fails, a fair line written from a template airs instead. If the fairness check itself cannot run, nothing airs. Both paths can be tried in the Studio.
+**Safe by default.** A line the check scores Fair airs at once. Anything else waits for a producer, who needs a typed reason to air it. If the model fails, a fair line written from a template is used; if the fairness check itself cannot run, nothing airs. All of it can be tried in the Studio.
 
 ## Try it in three minutes
 1. **Home:** press "Fix it with the agents, live". A pundit's one-culprit line goes to the agents on Microsoft Foundry and comes back fair, with every agent step and its timing.
 2. **Studio:**
    - **Evidence check:** the agent replays the one action the verdict depends on and asks you a single question.
    - **AI desk:** send any line to the agents.
-   - **Live feed:** kick off a match through Azure Event Hubs and watch goals wake the agents by themselves.
+   - **Live feed:** kick off a match through Azure Event Hubs. Goals wake the agents by themselves; a Fair line goes on air, anything else waits for your decision, and every decision lands in a hash-chained log.
    - **Pre-air queue:** an Unfair line needs a typed reason to air, and the hash-chained log shows Verify and Tamper.
-3. **Results:** two benchmarks, a named baseline, a negative control, a red team, and the limits, as numbers.
+3. **Results:** held-out detection against known causes, real public data, a named baseline, a negative control, a red team, and the limits, as numbers.
 
 ## What it does: the five stages the brief requires
 | Stage | Many Hands |
@@ -44,34 +44,41 @@ In July 2021, three young England players missed penalties in the Euro 2020 fina
 | Render | Timed graphics: chain replay, responsibility bars, a lower third that only shows approved lines |
 | Personalize | Analyst, casual fan of each club, featured player and Spanish versions, each checked separately |
 
-**The check** is the Scapegoat Index: the gap between who a line blames and who the evidence says contributed, from 0 (fair) to 1 (fully misplaced). Fair below 0.20, Watch to 0.40, Unfair above. **The score is always computed in code, never by a model**, so text that tries to instruct the AI cannot change it.
+**The check** is the Scapegoat Index: the gap between who a line blames and the ledger's estimated contribution, from 0 (aligned) to 1 (fully misplaced). Fair up to 0.20, Watch to 0.40, Unfair above. **The score is computed in code, never by a model.** A model only helps read who a line blames, every quote it reports must appear in the line, and it can add blame the word rules missed but never remove any.
 
 ## The agents (Microsoft Agent Framework on Microsoft Foundry, gpt-5-mini)
 ```
-goal on Azure Event Hubs ──> Investigator ──> Narrator <──> Auditor ──> Personalizer ──> Producer (a person)
-                              ledger tools     writes        rules + gpt-5-mini reader,   5 versions,    approves; Unfair
-                              (also over MCP)  and rewrites  score in code, max 2         each audited   needs a reason
-                                                             revisions, fails closed
+goal on Azure Event Hubs -> Investigator -> Narrator <-> Auditor -+-> Fair: on air at once, sent to the broadcast-graphics hub
+                            ledger tools    writes and    rules +   |
+                            (also over MCP) rewrites      reader,   +-> anything else: waits for a producer; airing it needs a typed reason
+                                                          score in  |
+                                                          code      +-> Personalizer: 5 audience versions, each audited, follow on the same hub
+
+Every decision (aired by policy, approved, rejected, held) goes into a hash-chained log: GET /v1/log.
 ```
+The main line goes on air the moment the Auditor approves it; the audience versions follow and never delay it.
 - **Investigator** gathers evidence with the same ledger tools the MCP server exposes.
 - **Narrator** writes or rewrites from the facts only; the Auditor also checks every scoreline against the real score.
 - **Auditor** reads with rules plus a gpt-5-mini reader whose quotes are verified in code. It sends unfair lines back with reasons, at most twice, then uses a template that is fair by construction. If it cannot run, nothing airs.
 - **Personalizer** writes five audience versions, and every one is audited again.
-- **The agent directs the producer:** before airing, it chooses the deciding action, replays it, and asks one question. "No" removes a data error and recomputes; "Can't tell" makes any line blaming that player need a typed reason.
+- **Evidence check (Studio):** before a line about a goal airs, the Studio picks the one action the verdict leans on most (the biggest lost ball by the most responsible player), replays it and asks the producer one question. "No" removes it as a data error and recomputes; "Can't tell" makes any line blaming that player need a typed reason.
 - **Hot Take and Judge** form a red team: an attacker tries to sneak scapegoating past the Auditor, and a separate judge decides. Every attack is now a permanent test.
 
 ## Evidence
 | Benchmark | Cases | Result |
 |---|---|---|
-| [External](benchmarks/external_statsbomb/RESULTS.md): StatsBomb Open Data, provider-labelled errors, Premier League excluded | 178 | 0 of 130 false Unfair flags on justified blame; 1 in 4 single-culprit lines would be unfair; last-touch names the culprit more often (90% vs 76%) |
-| [Synthetic](benchmarks/synthetic/RESULTS.md): 60 fictional matches with counterfactual ground truth (each mistake replayed 100 times with and without it) | 483 moments | Shared-blame moments: 0.37 vs 0.52 distance to truth against last-touch, 0 false flags; calibration 12 of 13 statistics within 15% of 906 real matches |
+| [External](benchmarks/external_statsbomb/RESULTS.md): StatsBomb Open Data, provider-labelled errors, Premier League excluded | 178 | The check calls 1 in 4 single-culprit lines Unfair because a teammate's lost ball counted as much or more; last-touch names the labelled player more often (90% vs 76%) |
+| [Synthetic](benchmarks/synthetic/RESULTS.md): 60 fictional matches with counterfactual ground truth (each mistake replayed 100 times with and without it) | 483 moments | **Held out (29 matches):** 77% of Unfair calls right; deserved blame wrongly Unfair 6% vs 7.5% for last-touch. Shared-blame moments: 0.37 vs 0.52 distance to truth. Calibration: 12 of 13 statistics within 15% of 906 real matches |
 | [Red team](benchmarks/redteam/RESULTS.md): 120 attacker lines, judged by a separate agent | 83 unfair | Held-out match 23 of 23 caught with the reader (1 of 23 with rules alone); 0 of 63 fair controls flagged; 7 of 36 borderline lines flagged |
 
 **Measured limits:**
-- Last-touch names the main culprit more often than our ledger. Our edge is how much, not who.
+- **Cautious, not complete.** On held-out matches the check calls 10 of 42 truly unfair one-culprit lines Unfair outright, and sends 25 of 42 to a person; half of what reaches a person is fair. It informs a producer; it does not replace one.
+- Last-touch names the main culprit more often than our ledger (90 vs 76 percent on real data). Our edge is how much, not who.
 - Off-ball positional blame did not help at any weight, so its weight is 0.
-- The reader and the judge share a base model, and catch rates vary between runs (77 to 79 of 83).
-- Rules alone miss most implied blame.
+- The reader and the red team's judge are separate agents but share a base model, and catch rates vary between runs (77 to 79 of 83). Spanish versions are read in Spanish by the same reader; that is not separately benchmarked.
+- Real data cannot say who was truly to blame, so the real-data numbers describe what the check does; accuracy is measured on the known-cause league.
+- The demo has no sign-in, so anyone with the link can act as the producer. The decision log is kept in memory and copied to Event Hubs (one-day retention). Production would put Entra ID roles in front and keep the log in a database.
+- We have not measured an effect on online abuse, or a broadcaster's adoption.
 
 **Rerun every number:** `uv run python packages/sdk/manyhands/cli.py verify --suite synthetic` (and `--suite external`), plus the commands in each RESULTS file.
 
@@ -90,7 +97,7 @@ goal on Azure Event Hubs ──> Investigator ──> Narrator <──> Auditor 
 | **Azure Developer CLI and Bicep** | `azd up` provisions and deploys everything |
 
 ## Use it
-- **REST API:** `POST /v1/audit` (`deep: true` adds the reader), `POST /v1/broadcast` (the full agent workflow), `POST /v1/matches/{id}/kickoff`, `GET /v1/matches/{id}/live` (Server-Sent Events), `GET /v1/metrics`. OpenAPI at `/docs`.
+- **REST API:** `POST /v1/audit` (`deep: true` adds the reader), `POST /v1/broadcast` (the full agent workflow), `POST /v1/matches/{id}/kickoff`, `GET /v1/matches/{id}/live` (Server-Sent Events), `GET /v1/queue` and `POST /v1/queue/{chain_id}/decision` (the producer's queue), `GET /v1/log` (the hash-chained decision log, with a verification), `GET /v1/metrics`. OpenAPI at `/docs`.
 - **MCP server:** `uv run python services/api/mcp_server.py` (stdio) or `--http`.
 - **GitHub Action:**
   ```yaml
@@ -108,7 +115,7 @@ uv run uvicorn services.api.app:app --port 8000          # API, website (after b
 cd apps/web && npm ci && npm run dev                       # the website alone, works with no server
 azd up                                                     # everything on Azure
 ```
-Tests: **141 Python** (unit, property-based, API, agent workflow, live feed, and 83 red-team regressions) and **159 web**, including 154 cases where the browser engine must match the Python engine exactly. CI runs them on every push.
+Tests: **149 Python** (unit, property-based, API, agent workflow, live feed and producer queue, and 83 red-team regressions) and **160 web**, including 154 cases where the browser engine must match the Python engine exactly. CI runs them on every push.
 
 ## Repository
 ```

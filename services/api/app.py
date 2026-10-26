@@ -281,6 +281,37 @@ def metrics() -> dict:
     return hub.metrics()
 
 
+class DecisionIn(BaseModel):
+    decision: str = Field(pattern="^(approve|reject)$")
+    reason: str = Field("", max_length=500, description="Required to approve: the line did not pass the check")
+    producer: str = Field("producer", min_length=1, max_length=60)
+
+
+@app.get("/v1/queue")
+def queue() -> list[dict]:
+    """Live lines the check did not pass as Fair. They wait here for a producer; nothing airs until one decides."""
+    from services.api.live import hub
+    return native(sorted(hub.queue.values(), key=lambda i: -i["queued_at"]))
+
+
+@app.post("/v1/queue/{chain_id}/decision")
+async def decide(chain_id: str, body: DecisionIn) -> dict:
+    from services.api.live import hub
+    try:
+        return native(await hub.decide(chain_id, body.decision, body.reason, body.producer))
+    except KeyError as exc:
+        raise HTTPException(404, f"nothing queued for {chain_id}") from exc
+    except ValueError as exc:
+        raise HTTPException(409, str(exc)) from exc
+
+
+@app.get("/v1/log")
+def decision_log() -> dict:
+    """Every live decision (aired by policy, approved, rejected, held), hash-chained, with a verification."""
+    from services.api.live import hub
+    return native({"verify": hub.verify_log(), "entries": hub.log[-200:]})
+
+
 # ---------------------------------------------------------------------- website
 # In the container the built site sits next to the API, so one address serves both.
 WEB_DIST = ROOT / "apps" / "web" / "dist"

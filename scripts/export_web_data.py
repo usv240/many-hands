@@ -49,6 +49,7 @@ def results() -> dict:
             "multi_cause": syn["subsets"]["multi_cause_moments"],
             "last_touch_story_unfair_share": syn["last_touch_story_unfair_share"],
         },
+        "detection": json.loads((ROOT / "benchmarks/synthetic/results/detection.json").read_text()),
         "calibration": cal.to_dict(orient="records"),
         "redteam": json.loads((ROOT / "benchmarks/redteam/reader_results.json").read_text()),
         "foundry_eval": json.loads((ROOT / "benchmarks/foundry_eval/results.json").read_text()),

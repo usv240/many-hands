@@ -44,6 +44,7 @@ export interface Results {
     multi_cause: { n: number; metrics: Record<string, number> };
     last_touch_story_unfair_share: number;
   };
+  detection: Detection;
   calibration: { statistic: string; real: number; simulated: number; difference_pct: number }[];
   redteam: {
     attacks: number;
@@ -61,6 +62,20 @@ export interface Results {
     line_ready_s: { p50: number; p95: number }; all_versions_s: { p50: number; p95: number };
     model_calls_per_goal: number; tokens_per_goal: number; cost_per_goal_usd: number;
     cost_per_match_usd: number; cost_per_season_usd: number; decisive_moments_per_match: number; note: string;
+  };
+}
+
+/** A ratio with its count and a 95 percent bootstrap interval over matches. */
+export interface Rate { value: number; n: number; hits: number; ci95: [number, number] }
+
+/** Held-out detection on known-cause matches: benchmarks/synthetic/detection.py. */
+export interface Detection {
+  split: { tune_matches: number; test_matches: number };
+  test_half: {
+    pundit_lines: number; truly_unfair_lines: number;
+    called_unfair: { recall: Rate; precision: Rate; fair_lines_called_unfair: Rate; accuracy: Rate };
+    sent_to_a_person: { recall: Rate; precision: Rate; fair_lines_sent: Rate };
+    justified_blame_wrongly_flagged: Rate; justified_blame_wrongly_flagged_last_touch: Rate;
   };
 }
 

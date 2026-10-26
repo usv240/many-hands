@@ -54,9 +54,11 @@ export default function Judges() {
 
       {data && (
         <section className="mh-headline-card">
-          <p><strong>The result in one sentence.</strong> On {data.external.cases} real, provider-labelled errors, Many Hands never flagged deserved blame as unfair
-            ({data.external.justified_false_unfair} of {data.external.justified_cases}) and caught the {data.external.verdicts_if_blamed_alone.unfair} where
-            a single-culprit story would have been. Where the simple rule wins, we say so.</p>
+          <p><strong>The result in one sentence.</strong> On held-out matches where the true cause of every goal is known,{" "}
+            {Math.round(data.detection.test_half.called_unfair.precision.value * 100)} percent of the check's Unfair calls were right, and it wrongly called
+            deserved blame Unfair less often than the last-touch rule ({Math.round(data.detection.test_half.justified_blame_wrongly_flagged.value * 100)} versus{" "}
+            {Math.round(data.detection.test_half.justified_blame_wrongly_flagged_last_touch.value * 100)} percent). It is cautious, so a person decides.
+            Where it falls short, the Results page says by how much.</p>
         </section>
       )}
 

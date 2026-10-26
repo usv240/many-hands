@@ -24,6 +24,14 @@ describe("Scapegoat Index", () => {
     expect(verdict(0.21)).toBe("watch");
     expect(verdict(0.41)).toBe("unfair");
   });
+  it("sends blame with no counted mistake to a person instead of calling it unfair", () => {
+    const data = load(20003);
+    const team = data.chains[0].conceding_team_id;
+    const shirt = data.roster.find((p) => p.team_id === team)!.shirt;
+    const r = audit(`Number ${shirt}'s howler cost them the goal.`, {}, new Roster(data.roster), team);
+    expect(r.verdict).toBe("watch");
+    expect(r.reasons[0]).toContain("neither support nor rule out");
+  });
 });
 
 describe("parity with the Python engine", () => {

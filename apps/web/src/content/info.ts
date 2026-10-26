@@ -129,7 +129,7 @@ export const INFO = {
   negativeControl: {
     title: "Negative control",
     what: "A test where the right answer is to do nothing: here, cases where one player really was to blame.",
-    why: "It proves the system does not cry wolf.",
+    why: "It measures how often the system cries wolf. Ours is scored against a known true cause, not against our own ledger.",
   },
   external: {
     title: "External benchmark",

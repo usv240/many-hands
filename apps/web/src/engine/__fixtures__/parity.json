@@ -952,7 +952,7 @@
   "game_id": 20012,
   "text": "Number 2's howler cost them the game.",
   "si": 1.0,
-  "verdict": "unfair",
+  "verdict": "watch",
   "blame": {
    "bra-2": 1.0
   },
@@ -963,7 +963,7 @@
   "game_id": 20012,
   "text": "Number 5 was at fault for that goal.",
   "si": 1.0,
-  "verdict": "unfair",
+  "verdict": "watch",
   "blame": {
    "bra-5": 1.0
   },
@@ -974,7 +974,7 @@
   "game_id": 20012,
   "text": "Lunek switched off and Rostesh could not save it.",
   "si": 1.0,
-  "verdict": "unfair",
+  "verdict": "watch",
   "blame": {
    "bra-5": 0.5,
    "bra-1": 0.5
@@ -986,7 +986,7 @@
   "game_id": 20012,
   "text": "The defence switched off completely.",
   "si": 1.0,
-  "verdict": "unfair",
+  "verdict": "watch",
   "blame": {
    "bra-2": 0.25,
    "bra-5": 0.25,
@@ -1009,7 +1009,7 @@
   "game_id": 20012,
   "text": "The keeper should have done better.",
   "si": 1.0,
-  "verdict": "unfair",
+  "verdict": "watch",
   "blame": {
    "bra-1": 1.0
   },

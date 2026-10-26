@@ -454,7 +454,19 @@ main:focus { outline: none; }
 .mh-live-goal { padding: 0.75rem 0.85rem; border-radius: 10px; background: var(--colorNeutralBackground2); display: grid; gap: 0.35rem;
   animation: mh-step-in 260ms cubic-bezier(0.23, 1, 0.32, 1) both; }
 .mh-live-goal p { margin: 0; font-weight: 600; }
+.mh-live-goal.is-pending { background: color-mix(in srgb, var(--mh-watch-bg) 60%, var(--colorNeutralBackground2)); }
+.mh-live-decide { display: grid; gap: 0.5rem; padding-top: 0.25rem; }
+.mh-live-decide p { font-weight: 400; }
 .mh-live-latency { font-size: 0.85rem; color: var(--colorBrandForeground1); font-weight: 650; }
+/* The audience versions the Personalizer wrote, each with its own audit. */
+.mh-versions { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem; }
+.mh-version { display: grid; grid-template-columns: 9.5rem 1fr auto; gap: 0.25rem 0.75rem; align-items: start;
+  padding: 0.6rem 0.75rem; border-radius: 10px; background: var(--colorNeutralBackground2); }
+.mh-version-who { font-weight: 650; font-size: 0.9rem; }
+.mh-version p { margin: 0; }
+.mh-version-note { grid-column: 2 / -1; font-size: 0.85rem; color: var(--colorNeutralForeground2); }
+.mh-version.is-held { background: color-mix(in srgb, var(--mh-unfair-bg) 50%, var(--colorNeutralBackground2)); }
+@media (max-width: 640px) { .mh-version { grid-template-columns: 1fr auto; } .mh-version p, .mh-version-note { grid-column: 1 / -1; } }
 @media (prefers-reduced-motion: reduce) { .mh-trace-step, .mh-live-goal { animation: none; } }
 
 /* Phone: the hero headline and its card must never push the page sideways */

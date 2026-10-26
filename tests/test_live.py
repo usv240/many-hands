@@ -23,21 +23,74 @@ def test_goal_on_the_stream_wakes_the_agents():
         first_goal = min(m.shot_action_id for m in L.moments)
         q = hub.subscribe(20003)
         started = await hub.kickoff(L, first_goal - 5)
-        seen_agent = None
+        seen_agent = seen_line = None
         events = 0
         for _ in range(400):
             msg = await asyncio.wait_for(q.get(), timeout=10)
             events += msg["type"] == "event"
+            if msg["type"] == "line" and seen_line is None:
+                seen_line = msg
             if msg["type"] == "agent":
                 seen_agent = msg
                 break
         await hub.stop()
-        return started, events, seen_agent
+        return started, events, seen_agent, seen_line, hub
 
-    started, events, agent = asyncio.run(scenario())
+    started, events, agent, line, hub = asyncio.run(scenario())
     assert started["transport"] == "in-process queue"
     assert events >= 5
     assert agent is not None and agent["result"]["status"] == "ready"
     assert agent["latency_s"] >= 0 and agent["result"]["audit"]["verdict"] != "unfair"
     assert agent["line_latency_s"] is not None and agent["line_latency_s"] <= agent["latency_s"]
     assert agent["graphic_sent_to"].startswith("broadcast-graphics")
+    # The fair line goes on air before the audience versions are written, and the decision is logged.
+    assert line is not None and line["chain_id"] == agent["chain_id"] and line["line"] == agent["result"]["line"]
+    assert hub.log[0]["decision"] == "aired" and hub.verify_log()["ok"]
+
+
+def test_only_fair_lines_air_without_a_producer():
+    async def scenario():
+        hub = live.Hub()
+        hub.namespace = ""
+        for verdict in ("watch", "unfair"):
+            assert await hub.publish_graphic(20003, "20003-300", "A line.", {"verdict": verdict, "si": 0.3}) is None
+        assert await hub.publish_graphic(20003, "20003-300", None, None) is None  # a held result
+        graphic = await hub.publish_graphic(20003, "20003-300", "A fair line.", {"verdict": "fair", "si": 0.0})
+        assert graphic["approved_by"].startswith("policy") and hub.graphics_sent == 1
+
+    asyncio.run(scenario())
+
+
+def test_queued_line_needs_a_producer_and_a_reason():
+    async def scenario():
+        hub = live.Hub()
+        hub.namespace = ""
+        hub.queue["20003-300"] = {"game_id": 20003, "chain_id": "20003-300", "line": "Number 8 again.",
+                                  "audit": {"verdict": "watch", "si": 0.31}, "status": "pending", "queued_at": 0.0}
+        try:
+            await hub.decide("20003-300", "approve", "")
+            raise AssertionError("approved without a reason")
+        except ValueError:
+            pass
+        assert hub.graphics_sent == 0 and not hub.log
+        out = await hub.decide("20003-300", "approve", "Replay shows he was unmarked", "Sam (producer)")
+        assert out["graphic_sent_to"] and hub.graphics_sent == 1
+        assert out["record"]["decision"] == "approved" and out["record"]["by"] == "Sam (producer)"
+        try:
+            await hub.decide("20003-300", "reject")
+            raise AssertionError("decided twice")
+        except ValueError:
+            pass
+        return hub
+
+    hub = asyncio.run(scenario())
+    assert hub.verify_log() == {"ok": True, "entries": 1, "broken_at": None}
+
+
+def test_decision_log_detects_tampering():
+    hub = live.Hub()
+    for i in range(3):
+        hub._record({"chain_id": f"c{i}", "decision": "aired", "by": "policy", "reason": ""})
+    assert hub.verify_log()["ok"]
+    hub.log[1]["reason"] = "edited later"
+    assert hub.verify_log() == {"ok": False, "entries": 3, "broken_at": 1}

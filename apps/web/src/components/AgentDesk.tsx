@@ -100,6 +100,23 @@ export function AgentDesk({ chainId, line, live, onResult }:
               )}
             </>
           )}
+          {result.status !== "held" && result.variants.length > 0 && (
+            <div>
+              <h4 className="mh-term">The versions the Personalizer wrote<Info id="agents" /></h4>
+              <ol className="mh-versions" aria-label="Audience versions, each audited">
+                {result.variants.map((v) => (
+                  <li key={v.id} className={`mh-version${v.aired ? "" : " is-held"}`}>
+                    <span className="mh-version-who">{v.audience}</span>
+                    <p lang={v.id === "es" ? "es" : undefined}>"{v.text}"</p>
+                    {v.si !== null && v.verdict !== "held"
+                      ? <ScoreBadge si={v.si} verdict={v.verdict} size="small" />
+                      : <span className="mh-small">Held</span>}
+                    {(v.note || !v.aired) && <span className="mh-version-note">{v.note ?? "Held: it did not pass the check, so it will not air."}</span>}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
           <AgentTrace result={result} />
           <p className="mh-small mh-muted">
             {result.line_ready_s !== null && `Fair line ready in ${result.line_ready_s.toFixed(1)} s. `}

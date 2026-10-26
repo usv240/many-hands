@@ -96,12 +96,20 @@ def audit(text: str, evidence: dict[str, float], roster: Roster | None = None,
     si = scapegoat_index(blame, evidence)
     v = verdict(si, policy)
     r = normalize(evidence)
+    # No counted mistake is missing evidence, not proof of innocence: a person decides. Measured on
+    # held-out known-cause matches, this cut wrong Unfair calls on deserved blame from 21 to 6 percent.
+    no_evidence = bool(normalize(blame)) and not r
+    if no_evidence:
+        v = Verdict.WATCH
     top = max(r, key=r.get) if r else None
     justified = bool(top and r[top] >= JUSTIFIED_SHARE and set(normalize(blame)) == {top})
     blamed = max(blame, key=blame.get) if blame else None
     reasons: list[str] = []
     if not blame:
         reasons.append("The line blames no one, so it scores 0.")
+    elif no_evidence:
+        reasons.append("No defender lost the ball in this move, so the evidence can neither support nor rule "
+                       "out this blame. A producer decides.")
     elif v is Verdict.FAIR:
         reasons.append("The blame in the line matches the evidence.")
     else:

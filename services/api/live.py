@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import hashlib
 import json
 import logging
 import time
@@ -25,6 +26,11 @@ from services.agents import models
 log = logging.getLogger("manyhands.live")
 INTERVAL_S = 0.06          # time between published actions: a minute of play in about 2 seconds
 LEAD_ACTIONS = 40          # a replay starts this many actions before the next goal
+GENESIS = "0" * 64
+
+
+def _digest(body: dict) -> str:
+    return hashlib.sha256(json.dumps(body, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
 class Hub:
@@ -39,7 +45,9 @@ class Hub:
         self.subscribers: dict[int, set[asyncio.Queue]] = defaultdict(set)
         self.backlog: dict[int, deque] = defaultdict(lambda: deque(maxlen=400))
         self.latencies: deque[float] = deque(maxlen=200)       # goal to all five versions ready
-        self.line_latencies: deque[float] = deque(maxlen=200)  # goal to the fair line ready for air
+        self.line_latencies: deque[float] = deque(maxlen=200)  # goal to the approved line on air or queued
+        self.queue: dict[str, dict] = {}                       # lines waiting for a producer, by chain id
+        self.log: list[dict] = []                              # hash-chained record of every decision
         self.running: dict[int, asyncio.Task] = {}
         self._consumer: asyncio.Task | None = None
         self._producer = None
@@ -78,32 +86,88 @@ class Hub:
         batch.add(EventData(json.dumps(payload)))
         await self._producer.send_batch(batch)
 
-    async def publish_graphic(self, game_id: int, chain_id: str, result) -> dict | None:
-        """Send an approved, audited graphic back into Event Hubs for the broadcaster's graphics system.
+    async def _send_graphics(self, payload: dict) -> None:
+        """Write to the `broadcast-graphics` hub: graphics, audience versions and decision records."""
+        if not self.namespace:
+            return
+        from azure.eventhub import EventData
+        from azure.eventhub.aio import EventHubProducerClient
+        if self._graphics_producer is None:
+            self._graphics_producer = EventHubProducerClient(
+                fully_qualified_namespace=self._fqdn(), eventhub_name=self.graphics_name,
+                credential=models.async_credential())
+        batch = await self._graphics_producer.create_batch()
+        batch.add(EventData(json.dumps(payload)))
+        await self._graphics_producer.send_batch(batch)
 
-        Only lines that passed the Auditor are ever sent; a held result sends nothing.
+    async def publish_graphic(self, game_id: int, chain_id: str, line: str | None, audit: dict | None,
+                              *, producer: str | None = None) -> dict | None:
+        """Send an approved line to the broadcaster's graphics system.
+
+        Policy: a line the Auditor scored Fair airs at once. Anything else airs only when a named
+        producer approves it (`decide`). A held result has no line and sends nothing.
         """
-        if result.status != "ready" or not result.line or not result.audit:
+        if not line or not audit:
+            return None
+        if audit.get("verdict") != "fair" and producer is None:
             return None
         graphic = {
-            "kind": "lower-third", "game_id": game_id, "chain_id": chain_id, "line": result.line,
-            "scapegoat_index": result.audit["si"], "verdict": result.audit["verdict"],
-            "versions": {v["id"]: v["text"] for v in result.variants if v["aired"]},
-            "approved_by": "Auditor (policy auto-approve for Fair)", "model": result.model,
+            "kind": "lower-third", "game_id": game_id, "chain_id": chain_id, "line": line,
+            "scapegoat_index": audit["si"], "verdict": audit["verdict"],
+            "approved_by": producer or "policy: Fair lines air automatically",
             "duration_s": 7, "sent_at": time.time(),
         }
-        if self.namespace:
-            from azure.eventhub import EventData
-            from azure.eventhub.aio import EventHubProducerClient
-            if self._graphics_producer is None:
-                self._graphics_producer = EventHubProducerClient(
-                    fully_qualified_namespace=self._fqdn(), eventhub_name=self.graphics_name,
-                    credential=models.async_credential())
-            batch = await self._graphics_producer.create_batch()
-            batch.add(EventData(json.dumps(graphic)))
-            await self._graphics_producer.send_batch(batch)
+        await self._send_graphics(graphic)
         self.graphics_sent += 1
         return graphic
+
+    # ------------------------------------------------------------------ editorial control
+    def _record(self, entry: dict) -> dict:
+        """Append to the hash-chained decision log: each record commits to the one before it."""
+        body = {**entry, "at": round(time.time(), 3), "prev": self.log[-1]["hash"] if self.log else GENESIS}
+        body["hash"] = _digest(body)
+        self.log.append(body)
+        return body
+
+    def verify_log(self) -> dict:
+        prev = GENESIS
+        for i, e in enumerate(self.log):
+            body = {k: v for k, v in e.items() if k != "hash"}
+            if e["prev"] != prev or _digest(body) != e["hash"]:
+                return {"ok": False, "entries": len(self.log), "broken_at": i}
+            prev = e["hash"]
+        return {"ok": True, "entries": len(self.log), "broken_at": None}
+
+    async def _log(self, entry: dict) -> dict:
+        record = self._record(entry)
+        try:  # a durable copy outside this process
+            await self._send_graphics({"kind": "decision", **record})
+        except Exception as exc:
+            log.warning("decision record not written to Event Hubs: %s", exc)
+        return record
+
+    async def decide(self, chain_id: str, decision: str, reason: str = "", producer: str = "producer") -> dict:
+        """A producer's decision on a queued line. Airing a line the check did not pass needs a reason."""
+        item = self.queue.get(chain_id)
+        if item is None:
+            raise KeyError(chain_id)
+        if item["status"] != "pending":
+            raise ValueError(f"already {item['status']}")
+        if decision not in ("approve", "reject"):
+            raise ValueError("decision must be approve or reject")
+        if decision == "approve" and not reason.strip():
+            raise ValueError("a typed reason is needed to air a line the check did not pass")
+        item["status"] = "approved" if decision == "approve" else "rejected"
+        record = await self._log({"chain_id": chain_id, "line": item["line"], "verdict": item["audit"]["verdict"],
+                                  "si": item["audit"]["si"], "decision": item["status"], "by": producer,
+                                  "reason": reason.strip()})
+        graphic = None
+        if decision == "approve":
+            graphic = await self.publish_graphic(item["game_id"], chain_id, item["line"], item["audit"],
+                                                 producer=f"{producer}: {reason.strip()}")
+        sent_to = f"{self.graphics_name} ({self.transport})" if graphic else None
+        self._fan_out(item["game_id"], {"type": "decided", "item": item, "record": record, "graphic_sent_to": sent_to})
+        return {"item": item, "record": record, "graphic_sent_to": sent_to}
 
     async def _consume(self) -> None:
         if not self.namespace:
@@ -145,22 +209,44 @@ class Hub:
     async def _wake_agents(self, game_id: int, chain_id: str, published_at: float) -> None:
         from services.agents.workflow import Request, run
         self._fan_out(game_id, {"type": "agent-start", "chain_id": chain_id, "at": time.time()})
-        woke = time.time()
+        line_at: dict[str, Any] = {"latency": None, "sent_to": None}
+
+        async def on_line(line: str, audit: dict) -> None:
+            """The Auditor approved the main line: air it now if Fair, else queue it for a producer."""
+            latency = time.time() - published_at
+            line_at["latency"] = latency
+            self.line_latencies.append(latency)
+            if audit["verdict"] == "fair":
+                sent = None
+                try:
+                    sent = await self.publish_graphic(game_id, chain_id, line, audit)
+                except Exception as exc:  # the Studio still shows the line if the graphics hub is unreachable
+                    log.warning("graphics publish failed: %s", exc)
+                line_at["sent_to"] = f"{self.graphics_name} ({self.transport})" if sent else None
+                await self._log({"chain_id": chain_id, "line": line, "verdict": "fair", "si": audit["si"],
+                                 "decision": "aired", "by": "policy: Fair lines air automatically", "reason": ""})
+            else:
+                self.queue[chain_id] = {"game_id": game_id, "chain_id": chain_id, "line": line, "audit": audit,
+                                        "status": "pending", "queued_at": time.time()}
+                self._fan_out(game_id, {"type": "queued", "item": self.queue[chain_id]})
+            self._fan_out(game_id, {"type": "line", "chain_id": chain_id, "line": line, "audit": audit,
+                                    "line_latency_s": round(latency, 2), "graphic_sent_to": line_at["sent_to"]})
+
         try:
-            result = await run(Request(chain_id))
+            result = await run(Request(chain_id, on_line=on_line))
             latency = time.time() - published_at
             self.latencies.append(latency)
-            line_latency = (woke - published_at) + result.line_ready_s if result.line_ready_s is not None else None
-            if line_latency is not None:
-                self.line_latencies.append(line_latency)
-            sent = None
-            try:
-                sent = await self.publish_graphic(game_id, chain_id, result)
-            except Exception as exc:  # the Studio still shows the line if the graphics hub is unreachable
-                log.warning("graphics publish failed: %s", exc)
+            if result.status != "ready":
+                await self._log({"chain_id": chain_id, "line": None, "verdict": None, "si": None,
+                                 "decision": "held", "by": "Auditor", "reason": result.held_reason or ""})
+            elif line_at["sent_to"]:
+                versions = {v["id"]: v["text"] for v in result.variants if v["aired"]}
+                with contextlib.suppress(Exception):
+                    await self._send_graphics({"kind": "versions", "game_id": game_id, "chain_id": chain_id,
+                                               "versions": versions, "sent_at": time.time()})
             self._fan_out(game_id, {"type": "agent", "chain_id": chain_id, "latency_s": round(latency, 2),
-                                    "line_latency_s": None if line_latency is None else round(line_latency, 2),
-                                    "graphic_sent_to": (f"{self.graphics_name} ({self.transport})" if sent else None),
+                                    "line_latency_s": None if line_at["latency"] is None else round(line_at["latency"], 2),
+                                    "graphic_sent_to": line_at["sent_to"], "queued": chain_id in self.queue,
                                     "result": asdict(result)})
         except Exception as exc:
             self._fan_out(game_id, {"type": "agent-error", "chain_id": chain_id, "error": str(exc)[:200]})
@@ -218,6 +304,8 @@ class Hub:
             return round(v[min(len(v) - 1, int(p * len(v)))], 2) if v else None
         return {"transport": self.transport, "goals_processed": len(self.latencies),
                 "graphics_hub": self.graphics_name, "graphics_sent": self.graphics_sent,
+                "queued_for_producer": sum(i["status"] == "pending" for i in self.queue.values()),
+                "decisions_logged": len(self.log),
                 "line_p50_s": pct(self.line_latencies, 0.5), "line_p95_s": pct(self.line_latencies, 0.95),
                 "p50_s": pct(self.latencies, 0.5), "p95_s": pct(self.latencies, 0.95)}
 

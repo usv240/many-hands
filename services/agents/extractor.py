@@ -18,7 +18,8 @@ from narrative_core.extraction import Extraction, Mention, Roster, RuleExtractor
 from services.agents import models
 
 READER = (
-    "You read one line of football commentary and report which DEFENDING players it blames for the goal "
+    "Read the commentary in its original language, including Spanish. Quote spans in that language, "
+    "never translate the quoted evidence. Report which DEFENDING players it blames for the goal "
     "or chance, including implied blame: tone, emphasis, implication or criticism of positioning, effort "
     "or decisions. Do not count neutral description or credit. For each blamed player give the shirt "
     "number, the exact words in the line that refer to them (span), and strength: 1 mild criticism, "
@@ -60,15 +61,15 @@ def merge(rules: Extraction, extra: list[Mention]) -> Extraction:
     return Extraction(text=rules.text, mentions=[*best.values(), *groups, *credit], unresolved=rules.unresolved)
 
 
-async def deep_extract(text: str, roster: Roster, team_id: str) -> tuple[Extraction, bool]:
+async def deep_extract(text: str, roster: Roster, team_id: str, *, required: bool = False) -> tuple[Extraction, bool]:
     """Rules plus the model reader. Returns (extraction, model_was_used)."""
     rules = RuleExtractor(roster, team_id).extract(text)
     if not models.available():
         return rules, False
     try:
         extra = await model_mentions(text, roster, team_id)
-    except (TimeoutError, ValueError, KeyError):
-        return rules, False
-    except Exception:  # model or network failure: the rules alone still score the line
+    except Exception as exc:
+        if required:
+            raise RuntimeError("model fairness reader unavailable; publication held") from exc
         return rules, False
     return merge(rules, extra), True

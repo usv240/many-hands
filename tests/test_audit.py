@@ -22,6 +22,13 @@ def test_justified_sole_blame_is_fair():
     assert r.verdict == "fair" and r.justified and r.fair_rewrite is None
 
 
+def test_blame_without_any_counted_mistake_goes_to_a_person():
+    r = audit("Number 5's howler cost them the game.", {}, ROSTER, "cor")
+    assert r.verdict == "watch"
+    assert "neither support nor rule out" in r.reasons[0]
+    assert audit("Six passes cut them open.", {}, ROSTER, "cor").verdict == "fair"
+
+
 def test_neutral_line():
     r = audit("Six passes cut them open.", SHARED, ROSTER, "cor")
     assert r.si == 0.0 and r.verdict == "fair"

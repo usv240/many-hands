@@ -66,14 +66,17 @@ export function audit(text: string, evidence: Shares, roster: Roster, concedingT
   const x = extract(text, roster, concedingTeamId);
   const blame = blameOf(x);
   const si = scapegoatIndex(blame, evidence);
-  const v = verdict(si, policy);
   const r = normalize(evidence);
-  const top = sorted(r)[0]?.[0] ?? null;
   const nb = Object.keys(normalize(blame));
+  // No counted mistake is missing evidence, not proof of innocence: a person decides (see audit.py).
+  const noEvidence = nb.length > 0 && Object.keys(r).length === 0;
+  const v = noEvidence ? "watch" : verdict(si, policy);
+  const top = sorted(r)[0]?.[0] ?? null;
   const justified = Boolean(top && r[top] >= JUSTIFIED_SHARE && nb.length === 1 && nb[0] === top);
   const blamed = sorted(blame)[0]?.[0] ?? null;
   const reasons: string[] = [];
   if (!Object.keys(blame).length) reasons.push("The line blames no one, so it scores 0.");
+  else if (noEvidence) reasons.push("No defender lost the ball in this move, so the evidence can neither support nor rule out this blame. A producer decides.");
   else if (v === "fair") reasons.push("The blame in the line matches the evidence.");
   else {
     const infl = blameInflation(blame, evidence);

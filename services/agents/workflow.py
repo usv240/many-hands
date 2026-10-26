@@ -20,6 +20,7 @@ import asyncio
 import json
 import re
 import time
+from collections.abc import Awaitable, Callable
 from dataclasses import asdict, dataclass, field
 from typing import Any, Never
 
@@ -50,6 +51,9 @@ class Request:
     policy: tuple[float, float] = (0.20, 0.40)
     featured: str | None = None
     simulate_auditor_outage: bool = False
+    # Called with (line, audit) the moment the Auditor approves the main line, before the audience
+    # versions are written, so a live graphic does not wait for them.
+    on_line: Callable[[str, dict], Awaitable[None]] | None = None
 
 
 @dataclass
@@ -235,7 +239,7 @@ class Auditor(Executor):
                 raise RuntimeError("fairness check unavailable (simulated)")
             store = _store()
             roster = store.roster(ev.facts["game_id"])
-            extraction, read_by_model = await deep_extract(d.text, roster, ev.facts["conceding_team_id"])
+            extraction, read_by_model = await deep_extract(d.text, roster, ev.facts["conceding_team_id"], required=True)
             res = audit(d.text, ev.shares, roster, ev.facts["conceding_team_id"], Policy(*ev.request.policy),
                         extraction=extraction, goal=ev.facts["goal"]).to_dict()
         except Exception as exc:
@@ -261,11 +265,21 @@ class Auditor(Executor):
                         Policy(*ev.request.policy), goal=ev.facts["goal"]).to_dict()
             fallback.history.append({"text": fallback.text, "source": "template", "si": res["si"], "verdict": res["verdict"]})
             ev.trace.append(Step("Auditor", f"revisions used up: fair template scored {_si(res['si'])}", 0, fallback.text))
-            ev.line_ready_s = round(time.perf_counter() - ev.started, 2)
+            await _line_ready(ev, fallback.text, res)
             await ctx.send_message(Approved(fallback, res))
         else:
-            ev.line_ready_s = round(time.perf_counter() - ev.started, 2)
+            await _line_ready(ev, d.text, res)
             await ctx.send_message(Approved(d, res))
+
+
+async def _line_ready(ev: Evidence, line: str, res: dict) -> None:
+    ev.line_ready_s = round(time.perf_counter() - ev.started, 2)
+    if ev.request.on_line is None:
+        return
+    try:
+        await ev.request.on_line(line, res)
+    except Exception as exc:  # the audience versions still follow; the caller logs its own failure
+        ev.trace.append(Step("Auditor", "could not hand the line on", 0, type(exc).__name__))
 
 
 PERSONALIZER_RULES = (
@@ -305,19 +319,31 @@ class Personalizer(Executor):
                      ("club", f"Fan of {ev.facts['attacking_team']}"), ("focus", "Player focus"),
                      ("es", "Spanish speaker"))
         texts_by_key = {k: models.clean(str(texts.get(k, ""))) or a.draft.text for k, _ in audiences}
-        # Translations are checked on the English source; every version is read in parallel.
-        sources = {k: (a.draft.text if k == "es" else texts_by_key[k]) for k, _ in audiences}
-        reads = await asyncio.gather(*(deep_extract(sources[k], roster, ev.facts["conceding_team_id"]) for k, _ in audiences))
+        # Check the actual output, including Spanish: checking its source cannot catch a changed translation.
+        reads = await asyncio.gather(
+            *(deep_extract(texts_by_key[k], roster, ev.facts["conceding_team_id"], required=True)
+              for k, _ in audiences), return_exceptions=True)
         variants = []
-        for (key, label), (extraction, _) in zip(audiences, reads, strict=True):
+        for (key, label), reading in zip(audiences, reads, strict=True):
             text = texts_by_key[key]
-            res = audit(sources[key], ev.shares, roster, ev.facts["conceding_team_id"],
+            if isinstance(reading, BaseException):
+                variants.append({"id": key, "audience": label, "text": text, "si": None, "verdict": "held",
+                                 "aired": False, "note": "Fairness reader unavailable; this version is held."})
+                continue
+            extraction, read_by_model = reading
+            res = audit(text, ev.shares, roster, ev.facts["conceding_team_id"],
                         Policy(*ev.request.policy), extraction=extraction, goal=ev.facts["goal"])
-            variants.append({"id": key, "audience": label, "text": text, "si": res.si, "verdict": res.verdict,
-                             "aired": res.verdict != "unfair",
-                             "note": "Checked on the English source before translation." if key == "es" else None})
+            bad_facts = _fact_errors(text, ev.facts)
+            translation_unchecked = key == "es" and text != a.draft.text and not read_by_model
+            notes = bad_facts + (["Translation requires the model reader; this version is held."]
+                                 if translation_unchecked else [])
+            variants.append({"id": key, "audience": label, "text": text, "si": res.si,
+                             "verdict": "unfair" if bad_facts else res.verdict,
+                             "aired": res.verdict != "unfair" and not notes,
+                             "note": " ".join(notes) if notes else (
+                                 "Output checked in Spanish." if key == "es" and read_by_model else None)})
         dropped = sum(not v["aired"] for v in variants)
-        ev.trace.append(Step("Auditor", f"checked every version: {len(variants) - dropped} fair, {dropped} held", 0))
+        ev.trace.append(Step("Auditor", f"checked every version: {len(variants) - dropped} passed, {dropped} held", 0))
         await ctx.yield_output(_result(ev, a.draft.text, a.audit, a.draft, variants))
 
 

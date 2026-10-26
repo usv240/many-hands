@@ -1,16 +1,27 @@
-import { Button } from "@fluentui/react-components";
-import { Live20Regular } from "@fluentui/react-icons";
+import { Button, Field, Input } from "@fluentui/react-components";
+import { Live20Regular, ShieldError20Regular } from "@fluentui/react-icons";
 import { useEffect, useRef, useState } from "react";
 import type { MatchData } from "../engine/types";
-import { type AgentResult, kickoff, LIVE_URL } from "../state/api";
+import { type AgentResult, decide, getLog, kickoff, LIVE_URL } from "../state/api";
 import { Info } from "./Info";
 import { ScoreBadge } from "./viz";
 
-interface LiveGoal { chainId: string; latency: number; lineLatency: number | null; result: AgentResult; minute: number; sentTo: string | null }
+type Verdict = "fair" | "watch" | "unfair";
+
+interface LiveGoal {
+  chainId: string; minute: number;
+  line: string | null; audit: { si: number; verdict: Verdict } | null;
+  lineLatency: number | null;      // goal reaching Event Hubs to the line on air, or queued for a producer
+  latency: number | null;          // goal to all five audience versions
+  sentTo: string | null;
+  status: "aired" | "pending" | "approved" | "rejected" | "held" | "writing";
+  versions: number | null; heldReason: string | null;
+}
 
 /**
  * Plays the match through Azure Event Hubs. Nobody presses a button when a goal goes in: the
- * goal arriving on the stream wakes the agents, and their fair line lands here.
+ * goal arriving on the stream wakes the agents. A Fair line airs at once; anything else waits
+ * here for a producer, and every decision goes into the hash-chained log.
  */
 export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
   const [running, setRunning] = useState(false);
@@ -20,6 +31,7 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
   const [waking, setWaking] = useState<string | null>(null);
   const [goals, setGoals] = useState<LiveGoal[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [log, setLog] = useState<{ ok: boolean; entries: number } | null>(null);
   const source = useRef<EventSource | null>(null);
   const gameId = data.match.game_id;
 
@@ -31,6 +43,19 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
     return r ? `#${r.shirt} ${r.name}` : pid;
   };
   const team = (tid: string) => (tid === data.match.home.team_id ? data.match.home.name : data.match.away.name);
+  const minuteOf = (chainId: string) => data.chains.find((c) => c.chain_id === chainId)?.minute ?? 0;
+  const refreshLog = () => getLog().then((l) => l && setLog({ ok: l.verify.ok, entries: l.verify.entries }));
+
+  const upsert = (chainId: string, patch: Partial<LiveGoal>) => setGoals((gs) => {
+    const i = gs.findIndex((g) => g.chainId === chainId);
+    if (i === -1) {
+      return [{ chainId, minute: minuteOf(chainId), line: null, audit: null, lineLatency: null, latency: null,
+                sentTo: null, status: "writing", versions: null, heldReason: null, ...patch }, ...gs];
+    }
+    const next = [...gs];
+    next[i] = { ...next[i], ...patch };
+    return next;
+  });
 
   const start = async () => {
     setError(null); setGoals([]); setEvents(0);
@@ -46,10 +71,23 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
         setLast(`${minute}' ${team(msg.team_id)}: ${name(msg.player_id)}, ${String(msg.action_type).replace("_", " ")}`);
         if (msg.decisive) setWaking(`${minute}'`);
       }
-      if (msg.type === "agent") {
-        const minute = data.chains.find((c) => c.chain_id === msg.chain_id)?.minute ?? 0;
-        setGoals((g) => [{ chainId: msg.chain_id, latency: msg.latency_s, lineLatency: msg.line_latency_s, result: msg.result, minute, sentTo: msg.graphic_sent_to ?? null }, ...g]);
+      if (msg.type === "line") {
+        upsert(msg.chain_id, { line: msg.line, audit: msg.audit, lineLatency: msg.line_latency_s, sentTo: msg.graphic_sent_to,
+                               status: msg.audit.verdict === "fair" ? "aired" : "pending" });
         setWaking(null);
+        refreshLog();
+      }
+      if (msg.type === "agent") {
+        const r: AgentResult = msg.result;
+        upsert(msg.chain_id, r.status === "held"
+          ? { status: "held", heldReason: r.held_reason, latency: msg.latency_s }
+          : { latency: msg.latency_s, versions: r.variants.filter((v) => v.aired).length });
+        setWaking(null);
+        refreshLog();
+      }
+      if (msg.type === "decided") {
+        upsert(msg.item.chain_id, { status: msg.item.status, sentTo: msg.graphic_sent_to });
+        refreshLog();
       }
       if (msg.type === "full-time") { setRunning(false); es.close(); }
     };
@@ -92,23 +130,66 @@ export function LiveFeed({ data, live }: { data: MatchData; live: boolean }) {
       )}
       {waking && <p className="mh-live-waking" role="status">Goal at {waking} reached Event Hubs. The agents are writing the line.</p>}
       <ol className="mh-live-goals" aria-live="polite">
-        {goals.map((g) => (
-          <li key={g.chainId} className="mh-live-goal">
-            <div className="mh-row mh-between">
-              <strong>{g.minute}'</strong>
-              <span className="mh-live-latency">
-                {g.lineLatency !== null ? `line ready ${g.lineLatency.toFixed(1)} s after the goal, 5 versions ${g.latency.toFixed(1)} s` : `ready ${g.latency.toFixed(1)} s after the goal`}
-              </span>
-            </div>
-            <p>"{g.result.line}"</p>
-            <div className="mh-row mh-wrap">
-              {g.result.audit && <ScoreBadge si={g.result.audit.si} verdict={g.result.audit.verdict} size="small" />}
-              {g.sentTo && <span className="mh-small mh-muted">Sent to the broadcaster's graphics feed: {g.sentTo}</span>}
-            </div>
-          </li>
-        ))}
+        {goals.map((g) => <LiveGoalItem key={g.chainId} g={g} />)}
       </ol>
-      <p className="mh-small mh-muted">A fictional match, sped up: a minute of play every couple of seconds. Nobody presses anything when a goal goes in.</p>
+      {log && (
+        <p className="mh-small mh-muted">
+          Decision log on the server: {log.entries} {log.entries === 1 ? "entry" : "entries"}, {log.ok ? "chain intact" : "chain broken"}.
+          Every record is also written to Event Hubs. <a href="/v1/log" target="_blank" rel="noreferrer">See the log</a>
+        </p>
+      )}
+      <p className="mh-small mh-muted">A fictional match, sped up: a minute of play every couple of seconds. Nobody presses anything when a goal goes in;
+        a Fair line airs on its own, and anything else waits for you.</p>
     </div>
+  );
+}
+
+function LiveGoalItem({ g }: { g: LiveGoal }) {
+  const [reason, setReason] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const send = async (decision: "approve" | "reject") => {
+    setBusy(true); setError(null);
+    try { await decide(g.chainId, decision, reason.trim()); } catch (e) { setError((e as Error).message); } finally { setBusy(false); }
+  };
+
+  const timing = g.lineLatency !== null
+    ? `${g.status === "aired" ? "on air" : "line ready"} ${g.lineLatency.toFixed(1)} s after the goal${g.latency !== null ? `; ${g.versions ?? 0} versions by ${g.latency.toFixed(1)} s` : ""}`
+    : g.latency !== null ? `${g.latency.toFixed(1)} s after the goal` : "the agents are writing";
+
+  return (
+    <li className={`mh-live-goal${g.status === "pending" ? " is-pending" : ""}`}>
+      <div className="mh-row mh-between">
+        <strong>{g.minute}'</strong>
+        <span className="mh-live-latency">{timing}</span>
+      </div>
+      {g.status === "held" ? (
+        <p className="mh-held"><ShieldError20Regular aria-hidden /> Held. Nothing aired. {g.heldReason}</p>
+      ) : g.line && (
+        <>
+          <p>"{g.line}"</p>
+          <div className="mh-row mh-wrap">
+            {g.audit && <ScoreBadge si={g.audit.si} verdict={g.audit.verdict} size="small" />}
+            {g.status === "aired" && g.sentTo && <span className="mh-small mh-muted">Aired automatically: sent to {g.sentTo}</span>}
+            {g.status === "approved" && <span className="mh-small mh-muted">Approved by you with a reason{g.sentTo ? `, sent to ${g.sentTo}` : ""}</span>}
+            {g.status === "rejected" && <span className="mh-small mh-muted">Rejected by you. It did not air.</span>}
+          </div>
+        </>
+      )}
+      {g.status === "pending" && (
+        <div className="mh-live-decide">
+          <p className="mh-small">Not clearly fair, so it waits for you. Nothing airs until you decide.</p>
+          <Field label={<span className="mh-term">Reason, needed to air it<Info id="reasonRequired" /></span>}>
+            <Input value={reason} onChange={(_, d) => setReason(d.value)} placeholder="For example: the replay shows he was left alone" />
+          </Field>
+          <div className="mh-row mh-wrap">
+            <Button size="small" appearance="primary" disabled={busy || !reason.trim()} onClick={() => send("approve")}>Air with this reason</Button>
+            <Button size="small" disabled={busy} onClick={() => send("reject")}>Don't air</Button>
+          </div>
+          {error && <p className="mh-bad mh-small" role="alert">{error}</p>}
+        </div>
+      )}
+    </li>
   );
 }

@@ -69,6 +69,8 @@ export default function Home() {
 
   const ext = results.data?.external;
   const syn = results.data?.synthetic;
+  const det = results.data?.detection.test_half;
+  const pc = (x: number) => `${Math.round(x * 100)}%`;
 
   return (
     <div className="mh-home">
@@ -261,25 +263,27 @@ export default function Home() {
             <dd>to check every goal of a 380-match season with the agents on Microsoft Foundry: about {results.data ? `${(results.data.operations.cost_per_match_usd * 100).toFixed(1)} cents` : "1 cent"} a match. Measured from real token use on {results.data?.operations.moments ?? 22} goals.</dd>
           </div>
           <div>
-            <dt>About 51</dt>
-            <dd>moments in a 380-match season where a one-culprit story would be unfair: 0.5 provider-labelled errors per match, 27 percent of them shared. An estimate from real tournament data.</dd>
+            <dt>{det ? pc(det.called_unfair.precision.value) : "3 in 4"}</dt>
+            <dd>of its Unfair calls were right, on held-out matches where the true cause of every goal is known.
+              Fair lines were called Unfair {det ? pc(det.called_unfair.fair_lines_called_unfair.value) : "2%"} of the time.</dd>
           </div>
           <div>
-            <dt>0</dt>
-            <dd>times it called deserved blame unfair, in 130 real cases where one player truly was responsible.</dd>
+            <dt>About 51</dt>
+            <dd>one-culprit stories a 380-match season that the check would call Unfair: 0.5 provider-labelled errors a match, and
+              27 percent of those lines called Unfair. An estimate from real tournament data.</dd>
           </div>
         </dl>
         <h3 className="mh-subhead">The evidence behind those numbers</h3>
         <div className="mh-facts-row">
           <article className="mh-stat">
-            <p className="mh-stat-num">{ext ? `${ext.justified_false_unfair} of ${ext.justified_cases}` : "..."}</p>
-            <p><Term id="negativeControl">false alarms</Term> on real cases where one player truly was to blame. Fair means fair both ways.</p>
-            <p className="mh-small mh-muted"><Term id="external">Real public data</Term>, provider-labelled errors, Premier League excluded.</p>
+            <p className="mh-stat-num">{det ? `${pc(det.justified_blame_wrongly_flagged.value)} vs ${pc(det.justified_blame_wrongly_flagged_last_touch.value)}` : "..."}</p>
+            <p><Term id="negativeControl">Deserved blame wrongly called Unfair</Term>: Many Hands versus <Term id="lastTouch">last-touch blame</Term>, scored against the known true cause. Fair both ways.</p>
+            <p className="mh-small mh-muted"><Term id="synthetic">Synthetic league</Term>, matches held out from tuning.</p>
           </article>
           <article className="mh-stat">
             <p className="mh-stat-num">{ext ? `${ext.verdicts_if_blamed_alone.unfair} of ${ext.cases}` : "..."}</p>
-            <p>real errors where a single-culprit story would be Unfair, because a teammate's lost ball mattered as much or more.</p>
-            <p className="mh-small mh-muted">About 1 in 4. Same data set.</p>
+            <p>real errors where the check calls a single-culprit story Unfair, because a teammate's lost ball mattered as much or more.</p>
+            <p className="mh-small mh-muted"><Term id="external">Real public data</Term>, provider-labelled errors, Premier League excluded.</p>
           </article>
           <article className="mh-stat">
             <p className="mh-stat-num">{syn ? `${syn.multi_cause.metrics["tv_lam0.0"].toFixed(2)} vs ${syn.multi_cause.metrics.tv_last.toFixed(2)}` : "..."}</p>
@@ -288,8 +292,10 @@ export default function Home() {
           </article>
         </div>
         <p className="mh-note">
-          Where the simple rule wins: last-touch blame names the main culprit more often than we do (90 versus 76 percent on real data).
-          We publish that. Our edge is <em>how much</em>, not <em>who</em>. <Link to="/results">Full results and method</Link>.
+          The limits, measured: last-touch blame names the main culprit more often than we do (90 versus 76 percent on real data), and the
+          check calls only {det ? `${det.called_unfair.recall.hits} of ${det.truly_unfair_lines}` : "1 in 4"} truly unfair lines Unfair outright;
+          {det ? ` ${det.sent_to_a_person.recall.hits} of ${det.truly_unfair_lines}` : " 6 in 10"} at least go to a person. That is why a person
+          decides. <Link to="/results">Full results and method</Link>.
         </p>
       </section>
 
@@ -298,7 +304,7 @@ export default function Home() {
         <h2 id="who">Who uses it, and how</h2>
         <ul className="mh-uses">
           {[
-            { icon: <Tv20Regular />, t: "Broadcasters and streamers", d: "Every graphic and line is checked before it airs, with a human approving.", to: "/studio", cta: "Open the Studio" },
+            { icon: <Tv20Regular />, t: "Broadcasters and streamers", d: "Every line is checked before it airs. Clearly fair lines go out at once; anything else waits for a person.", to: "/studio", cta: "Open the Studio" },
             { icon: <DocumentText20Regular />, t: "Editors and pundits", d: "Paste any line about a goal and see how fair it is, and why.", to: "/check", cta: "Check a line" },
             { icon: <Code20Regular />, t: "AI developers", d: "Add the check to any recap engine through the REST API or the command line.", to: "/developers", cta: "Read the API" },
             { icon: <Bot20Regular />, t: "AI assistants", d: "GitHub Copilot or any MCP client can use our 8 ledger tools.", to: "/developers#mcp", cta: "Connect over MCP" },
