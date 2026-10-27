@@ -9,6 +9,8 @@ Most AI match tools check whether the facts in a line are true. Many Hands check
 
 ![The agents on Microsoft Foundry catch a one-culprit line and rewrite it fairly, with every step timed](docs/gallery/1-home-agents-fix-the-line.png)
 
+**Demo video (1:45):** https://youtu.be/heF5G2Dz5Mk
+
 **Live:** https://ca-manyhands-7kzrrno7qr6zo.orangedune-9d42108b.eastus2.azurecontainerapps.io · Judges: open **Judges start here** in the header for a three-minute path.
 
 | On a match day | |
